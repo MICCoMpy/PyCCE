@@ -71,7 +71,7 @@ def read_orca(fname, isotopes=None, types=None, center=None,
             pass
 
         try:
-            n = find_first_index('Raw EFG matrix', lines, start=ind) + 1
+            n = find_first_index('Raw EFG matrix', lines, start=ind) + 2
             tensor = []
             for _ in range(3):
                 line = lines[n]
