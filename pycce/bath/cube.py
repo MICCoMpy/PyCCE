@@ -52,7 +52,7 @@ class Cube:
         integral (float): Data integrated over cube.
         spin (float): integral / 2 - total spin.
     """
-    _dt = np.dtype([('N', np.unicode_, 16), ('xyz', np.float64, (3,))])
+    _dt = np.dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])
 
     def __init__(self, filename):
 

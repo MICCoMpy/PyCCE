@@ -379,7 +379,7 @@ class BathCell:
         cnumber = int(size * np.linalg.norm(axb) / (axb @ self.cell[:, 2]) + 1)
         # print(anumber, bnumber, cnumber)
 
-        dt = np.dtype([('N', np.unicode_, 16), ('xyz', np.float64, (3,))])
+        dt = np.dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])
         atoms = []
 
         for a in isotopes:

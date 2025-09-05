@@ -3,7 +3,7 @@ from collections import defaultdict
 from collections.abc import MutableMapping
 
 import numpy as np
-from scipy.sparse.sputils import isintlike
+from scipy.sparse._sputils import isintlike
 
 two_layer_dict = lambda: defaultdict(dict)
 

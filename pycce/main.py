@@ -333,7 +333,7 @@ class Simulator:
             Either:
 
             - Instance of BathArray class;
-            - ndarray with ``dtype([('N', np.unicode_, 16), ('xyz', np.float64, (3,))])`` containing names
+            - ndarray with ``dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])`` containing names
               of bath spins (same ones as stored in self.ntype) and positions of the spins in angstroms;
             - the name of the .xyz text file containing 4 columns: name of the bath spin and xyz coordinates in A.
 

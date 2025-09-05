@@ -49,7 +49,7 @@ class BathArray(np.ndarray):
 
     The subclass has fixed structured datatype::
 
-         _dtype_bath = np.dtype([('N', np.unicode_, 16),
+         _dtype_bath = np.dtype([('N', np.str_, 16),
                                  ('xyz', np.float64, (3,)),
                                  ('A', np.float64, (3, 3)),
                                  ('Q', np.float64, (3, 3))])
@@ -162,7 +162,7 @@ class BathArray(np.ndarray):
         else:
             atupl = (center, 3, 3)
 
-        _dtype_bath = np.dtype([('N', np.unicode_, 16),
+        _dtype_bath = np.dtype([('N', np.str_, 16),
                                 ('xyz', np.float64, (3,)),
                                 ('A', np.float64, atupl),
                                 ('Q', np.float64, (3, 3)),
