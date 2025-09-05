@@ -17,27 +17,27 @@ _set_str_kinds = {'U', 'S'}
 _stevens_str_doc = r"""
             dict: Dictionary with additional spin Hamiltonian parameters.
             Key denotes the product of spin operators as:
-            
+
             Either a string containing ``x, y, z, +, -``  where each symbol is a corresponding spin operator:
-            
+
                 - ``x`` == :math:`S_x`
                 - ``y`` == :math:`S_y`
                 - ``z`` == :math:`S_z`
                 - ``p`` == :math:`S_+`
                 - ``m`` == :math:`S_-`
-            
+
             Several symbols is a product of those spin operators.
-            
+
             Or a tuple with indexes (k, q) for Stevens operators
             (see https://www.easyspin.org/documentation/stevensoperators.html).
-            
+
             The item is the coupling parameter in float.
-            
+
             Examples:
-            
+
                 - ``d['pm'] = 2000`` corresponds to the Hamiltonian term
                   :math:`\hat H_{add} = A \hat S_+ \hat S_-` with :math:`A = 2` MHz.
-            
+
                 - ``d[2, 0] = 1.5e6`` corresponds to Stevens operator
                   :math:`B^q_k \hat O^q_k = 3 \hat S_z - s(s+1) \hat I`
                   with :math:`k = 2`, :math:`q = 0`, and :math:`B^q_k = 1.5` GHz. """
@@ -1930,15 +1930,15 @@ _ser = pd.Series((spins['conc'] / 100).values, index=_mi)
 
 common_concentrations = {level: _ser.xs(level).to_dict() for level in _ser.index.levels[0]}
 """
-dict: Nested dict containing natural concentrations of the stable nuclear isotopes.  
+dict: Nested dict containing natural concentrations of the stable nuclear isotopes.
 """
 
 # Dictionary of the common isotopes. Placed in this file to avoid circular dependency
 common_isotopes = SpinDict(*zip(_names, _spins, _gyros, _quads))
 """
-SpinDict: An instance of the ``SpinDict`` dictionary, containing properties for the most of the common isotopes with 
+SpinDict: An instance of the ``SpinDict`` dictionary, containing properties for the most of the common isotopes with
 nonzero spin.
-The isotope is considered common if it is stable and has nonzero concentration in nature.  
+The isotope is considered common if it is stable and has nonzero concentration in nature.
 """
 
 # electron spin

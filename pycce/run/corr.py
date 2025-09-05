@@ -134,7 +134,7 @@ class gCCENoise(RunObject):
     result_operator = operator.iadd
     """Overridden operator which will combine the result of expansion: ``operator.iadd``."""
     contribution_operator = operator.imul
-    """Overridden operator which will combine multiple contributions of the same cluster 
+    """Overridden operator which will combine multiple contributions of the same cluster
     in the optimized approach: ``operator.imul``."""
 
     removal_operator = operator.isub
@@ -211,7 +211,7 @@ class CCENoise(RunObject):
     result_operator = operator.iadd
     """Overridden operator which will combine the result of expansion: ``operator.iadd``."""
     contribution_operator = operator.imul
-    """Overridden operator which will combine multiple contributions of the same cluster 
+    """Overridden operator which will combine multiple contributions of the same cluster
     in the optimized approach: ``operator.imul``."""
 
     removal_operator = operator.isub

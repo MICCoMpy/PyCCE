@@ -51,7 +51,7 @@ PyCCE 1.1
 ++++++++++++++++++
 New version of **PyCCE** includes new cluster solvers and a set of little bugfixes. Main changes include
 
-* Implementation of the master equation-based CCE approaches. 
+* Implementation of the master equation-based CCE approaches.
     Checkout the :doc:`tutorials/mecce` for examples of the usage.
 
 * Various optimization and bugfixes.
@@ -92,17 +92,12 @@ The recommended way to install **PyCCE** is to use **pip**::
 Otherwise you can install  **PyCCE** directly using the source code.
 First copy the repository to the desired folder::
 
-    $ git clone https://github.com/foxfixfax/pycce.git
+    $ git clone https://github.com/MICCoMpy/PyCCE.git
 
 
-Then, execute **pip** in the folder containing **setup.py**::
+Then, execute **pip** in the folder containing **pyproject.toml**::
 
     $ pip install .
-
-or run the python install command::
-
-    $ python setup.py install
-
 
 Requirements
 ----------------

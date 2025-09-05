@@ -513,7 +513,7 @@ class LindbladCCE(CCE):
 
         if self.delays is None:
             return self._no_delays_super()
-        
+
         return self._delays_super()
 
     def _no_pulses_super(self):

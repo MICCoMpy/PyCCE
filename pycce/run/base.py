@@ -109,22 +109,22 @@ class RunObject:
 
     result_operator = operator.imul
     """Operator which will combine the result of expansion,.
-    
+
     Default: ``operator.imul``."""
     contribution_operator = operator.ipow
-    """Operator which will combine multiple contributions of the same cluster 
+    """Operator which will combine multiple contributions of the same cluster
     in the optimized approach.
-    
+
     Default: ``operator.ipow``."""
     removal_operator = operator.itruediv
     """Operator which will remove subcluster contribution from the given cluster contribution.
     First argument cluster contribution, second - subcluster contribution.
-    
+
     Defalut: ``operator.itruediv``."""
     addition_operator = np.prod
     """Group operation which will combine contributions from the different clusters into
     one contribution in the direct approach.
-    
+
     Default: ``numpy.prod``."""
 
     def __init__(self, timespace,
@@ -206,7 +206,7 @@ class RunObject:
         """ Sequence: Sequence object, containing series of pulses, applied to the system."""
 
         self.projected_states = None
-        """ndarray: Array of :math:`S_z` projections of the bath spins after each control pulse, 
+        """ndarray: Array of :math:`S_z` projections of the bath spins after each control pulse,
         involving bath spins.
         """
         self.base_hamiltonian = None
