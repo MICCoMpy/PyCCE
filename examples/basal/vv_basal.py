@@ -4,13 +4,13 @@ script usage:
 mpirun python nv_ensemble.py [-h] [--r_bath R_BATH] [--r_dipole R_DIPOLE] [--order ORDER]
                              [--nbstates NBSTATES] [--start START] [--pulses PULSES]
                              [--magnetic_field MAGNETIC_FIELD]
-                             [param] [values [values ...]] 
+                             [param] [values [values ...]]
 
 positional arguments:
 param                 varied parameter
 values                values of varied parameter
 
-optional arguments:                                                                                                       
+optional arguments:
 -h, --help                          show this help message and exit
 --r_bath R_BATH, -rb R_BATH         cutoff bath radius
 --r_dipole R_DIPOLE, -rd R_DIPOLE   pair cutoff radius
@@ -40,7 +40,7 @@ calc_param = {'magnetic_field': np.array([0., 0., 500.]), 'pulses': 1}
 
 # ZFS parameters of basal divacancy
 MHZ_KHZ = 1e3
-GHZ_KHZ = 1e6 
+GHZ_KHZ = 1e6
 
 D = 1.334 * GHZ_KHZ
 E = 0.0184 * GHZ_KHZ

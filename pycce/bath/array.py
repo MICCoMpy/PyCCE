@@ -17,27 +17,27 @@ _set_str_kinds = {'U', 'S'}
 _stevens_str_doc = r"""
             dict: Dictionary with additional spin Hamiltonian parameters.
             Key denotes the product of spin operators as:
-            
+
             Either a string containing ``x, y, z, +, -``  where each symbol is a corresponding spin operator:
-            
+
                 - ``x`` == :math:`S_x`
                 - ``y`` == :math:`S_y`
                 - ``z`` == :math:`S_z`
                 - ``p`` == :math:`S_+`
                 - ``m`` == :math:`S_-`
-            
+
             Several symbols is a product of those spin operators.
-            
+
             Or a tuple with indexes (k, q) for Stevens operators
             (see https://www.easyspin.org/documentation/stevensoperators.html).
-            
+
             The item is the coupling parameter in float.
-            
+
             Examples:
-            
+
                 - ``d['pm'] = 2000`` corresponds to the Hamiltonian term
                   :math:`\hat H_{add} = A \hat S_+ \hat S_-` with :math:`A = 2` MHz.
-            
+
                 - ``d[2, 0] = 1.5e6`` corresponds to Stevens operator
                   :math:`B^q_k \hat O^q_k = 3 \hat S_z - s(s+1) \hat I`
                   with :math:`k = 2`, :math:`q = 0`, and :math:`B^q_k = 1.5` GHz. """
@@ -49,7 +49,7 @@ class BathArray(np.ndarray):
 
     The subclass has fixed structured datatype::
 
-         _dtype_bath = np.dtype([('N', np.unicode_, 16),
+         _dtype_bath = np.dtype([('N', np.str_, 16),
                                  ('xyz', np.float64, (3,)),
                                  ('A', np.float64, (3, 3)),
                                  ('Q', np.float64, (3, 3))])
@@ -162,7 +162,7 @@ class BathArray(np.ndarray):
         else:
             atupl = (center, 3, 3)
 
-        _dtype_bath = np.dtype([('N', np.unicode_, 16),
+        _dtype_bath = np.dtype([('N', np.str_, 16),
                                 ('xyz', np.float64, (3,)),
                                 ('A', np.float64, atupl),
                                 ('Q', np.float64, (3, 3)),
@@ -1865,7 +1865,7 @@ def _process_key_operator(key, rate, sm):
     r"""
     Process key of the .so or .h dictionaries of the SpinType
     Args:
-        key (str or int): key of the dictionary. Can be either of the following:
+        key (str or int or tuple): key of the dictionary. Can be either of the following:
 
             * Pair of integers defining the Sven operator.
             * String where each symbol corresponds to the spin matrix or operation between them.
@@ -1906,7 +1906,7 @@ import pandas as pd
 
 # try:
 #     url = 'https://raw.githubusercontent.com/StollLab/EasySpin/main/easyspin/private/isotopedata.txt'
-#     all_spins = pd.read_csv(url, delim_whitespace=True, header=None, comment='%',
+#     all_spins = pd.read_csv(url, sep='\s+', header=None, comment='%',
 #                             names=['protons', 'nucleons', 'radioactive', 'symbol', 'name', 'spin', 'g', 'conc', 'q'])
 # except:
 import os
@@ -1914,7 +1914,7 @@ import os
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 filepath = os.path.join(__location__, 'isotopes.txt')
-all_spins = pd.read_csv(filepath, delim_whitespace=True, header=None, comment='%',
+all_spins = pd.read_csv(filepath, sep='\s+', header=None, comment='%',
                         names=['protons', 'nucleons', 'radioactive', 'symbol', 'name', 'spin', 'g', 'conc', 'q'])
 
 # only stable isotopes with nonzero spins
@@ -1930,15 +1930,15 @@ _ser = pd.Series((spins['conc'] / 100).values, index=_mi)
 
 common_concentrations = {level: _ser.xs(level).to_dict() for level in _ser.index.levels[0]}
 """
-dict: Nested dict containing natural concentrations of the stable nuclear isotopes.  
+dict: Nested dict containing natural concentrations of the stable nuclear isotopes.
 """
 
 # Dictionary of the common isotopes. Placed in this file to avoid circular dependency
 common_isotopes = SpinDict(*zip(_names, _spins, _gyros, _quads))
 """
-SpinDict: An instance of the ``SpinDict`` dictionary, containing properties for the most of the common isotopes with 
+SpinDict: An instance of the ``SpinDict`` dictionary, containing properties for the most of the common isotopes with
 nonzero spin.
-The isotope is considered common if it is stable and has nonzero concentration in nature.  
+The isotope is considered common if it is stable and has nonzero concentration in nature.
 """
 
 # electron spin

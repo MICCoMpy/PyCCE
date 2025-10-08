@@ -24,7 +24,7 @@ def read_xyz(xyz, skiprows: int = 2, spin_types=None, isotopes=None, imap=None):
         xyz (ndarray or str):
             Either:
 
-            - ndarray with dtype containing [('N', np.unicode_, 16), ('xyz', np.float64, (3,))], which
+            - ndarray with dtype containing [('N', np.str_, 16), ('xyz', np.float64, (3,))], which
               contains types and positions of bath spins.
             - ndarray with coordinates of the spins.
             - Name of the xyz-file containing isotope name and xyz coordinates.
@@ -57,7 +57,7 @@ def read_xyz(xyz, skiprows: int = 2, spin_types=None, isotopes=None, imap=None):
     elif isinstance(xyz, np.ndarray):
         dataset = xyz
     else:
-        dt_read = np.dtype([('N', np.unicode_, 16), ('xyz', np.float64, (3,))])
+        dt_read = np.dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])
         dataset = np.loadtxt(xyz, dtype=dt_read, skiprows=skiprows)
 
     with warnings.catch_warnings(record=True) as w:

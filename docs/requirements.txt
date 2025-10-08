@@ -1,9 +1,9 @@
-sphinx==7.2.6
+sphinx
 sphinx_rtd_theme
-IPython==7.31.1
-nbsphinx==0.9.3
+IPython
+nbsphinx
 sphinx-mathjax-offline
-numba==0.58.1
+numba
 numpy
 pandas
 scipy

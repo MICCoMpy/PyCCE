@@ -30,14 +30,14 @@ from .utilities import _add_args
 _returns = r"""
 
             Returns:
-    
+
                 ndarray: Computed property."""
 
 _args = r"""
             magnetic_field (ndarray with shape (3,) or callable): Magnetic field vector of form (Bx, By, Bz)
                 or callable with signature ``magnetic_field(pos)``, where ``pos`` is an array with shape (3,) with the
-                position of the spin. 
-                
+                position of the spin.
+
                 Default is **None**. Overrides ``Simulator.magnetic_field`` if provided.
 
             pulses (list or int or Sequence): Number of pulses in CPMG sequence.
@@ -47,7 +47,7 @@ _args = r"""
                 Sequence of the instantaneous ideal control pulses.
                 It can be provided as an instance of ``Sequence`` class or a list with ``Pulse`` objects.
                 (See documentation for pycce.Sequence).
-                
+
                 ``pulses`` can be provided as a list with tuples or dictionaries,
                 each tuple or dictionary is used to initialize ``Pulse`` class instance.
 
@@ -60,12 +60,12 @@ _args = r"""
                    If varied, it should be provided as an array with the same
                    length as ``timespace``.
 
-                E.g. for Hahn-Echo the ``pulses`` can be defined as ``[('x', np.pi)]`` or 
+                E.g. for Hahn-Echo the ``pulses`` can be defined as ``[('x', np.pi)]`` or
                 ``[('x', np.pi, timespace / 2)]``.
 
                 .. note::
-                
-                    If delay is not provided in **all** pulses, assumes even delay of CPMG sequence. 
+
+                    If delay is not provided in **all** pulses, assumes even delay of CPMG sequence.
                     If only **some** delays are provided, assumes ``delay = 0``  in the pulses without delay.
 
                     Then total experiment is assumed to be:
@@ -75,60 +75,60 @@ _args = r"""
                     Where tau is the delay between pulses.
 
                     The sum of delays at each time point should be less or equal to the total time of the experiment
-                    at the same time point, provided in ``timespace`` argument. 
+                    at the same time point, provided in ``timespace`` argument.
 
                 .. warning::
-    
+
                     In conventional CCE calculations, only :math:`pi` pulses
-                    on the central spin are allowed. 
+                    on the central spin are allowed.
 
                 In the calculations of noise autocorrelation this parameter is ignored.
 
                 Default is **None**. Overrides``Simulator.pulses`` if provided.
-            
+
             i (int or ndarray with shape (2s+1, ) or callable): Used in gCCE calculations.
                 Along with ``j`` parameter indicates which density matrix element to compute with gCCE as:
-                
+
                 .. math::
-                
+
                     L=\bra{i}\hat \rho \ket{j}
-                
+
                 By default is equal to :math:`R\ket{0}` state of the ``.center``
                 where :math:`R` is a product of all rotations applied in the pulse sequence.
                 Can be set as a vector in :math:`S_z` basis, the index of the central spin Hamiltonian
-                eigenstate, or as a callable with call signature ``i(dm)``, where ``dm`` is a density matrix of the 
+                eigenstate, or as a callable with call signature ``i(dm)``, where ``dm`` is a density matrix of the
                 central spin. If callable, ``j`` parameter is ignored.
 
             j (int or ndarray with shape (2s+1, ) or callable): Used in gCCE calculations.
                 Along with ``i`` parameter indicates which density matrix element to compute.
-                
+
                 By default is equal to :math:`R\ket{1}` state of the ``.center``
                 where :math:`R` is a product of all rotations applied in the pulse sequence.
                 Can be set as a vector in :math:`S_z` basis, the index of the central spin Hamiltonian
-                eigenstate, or as a callable with call signature ``j(dm)``, where ``dm`` is a density matrix of the 
+                eigenstate, or as a callable with call signature ``j(dm)``, where ``dm`` is a density matrix of the
                 central spin. If callable, ``i`` parameter is ignored.
-    
+
             as_delay (bool): True if time points are delay between pulses (for equispaced pulses),
                 False if time points are total time. Ignored in gCCE if ``pulses`` contains the time fractions.
                 Conventional CCE calculations do not support custom time fractions.
 
                 Default is **False**.
 
-            interlaced (bool): True if use hybrid CCE approach - for each cluster 
+            interlaced (bool): True if use hybrid CCE approach - for each cluster
                 sample over states of the supercluster.
 
                 Default is **False**.
 
             state (ndarray with shape (2s+1,)):
                 Initial state of the central spin, used in gCCE and noise autocorrelation calculations.
-                
+
                 Defaults to :math:`\frac{1}{N}(\ket{0} + \ket{1})` if not set.
-    
+
             bath_state (array-like):
                 List of bath spin states. If ``len(shape) == 1``, contains
                 :math:`I_z` projections of :math:`I_z` eigenstates.
                 Otherwise, contains array of initial density matrices of bath spins.
-    
+
                 Default is **None**. If not set, the code assumes completely random spin bath
                 (density matrix of each nuclear spin is proportional to identity, :math:`\hat {\mathbb{1}}/N`).
 
@@ -136,19 +136,19 @@ _args = r"""
 
                 If provided, sampling of random states is carried and ``bath_states`` values are
                 ignored.
-                    
+
                 Default is 0.
 
             seed (int): Seed for random number generator, used in random bath states sampling.
-                
+
                 Default is **None**.
 
             masked (bool):
                 True if mask numerically unstable points (with coherence > 1)
-                in the averaging over bath states. 
-                
+                in the averaging over bath states.
+
                 .. note::
-                
+
                     It is up to user to check whether the possible instability is due to numerical error
                     or unphysical assumptions of the calculations.
 
@@ -157,48 +157,54 @@ _args = r"""
             parallel_states (bool):
                 True if to use MPI to parallelize the calculations of density matrix equally over
                 present mpi processes for random bath state sampling calculations.
-                
+
                 Compared to ``parallel`` keyword,
                 when this argument is True each process is given a fraction of random bath states.
                 This makes the implementation faster. Works best when the
                 number of bath states is divisible by the number of processes, ``nbstates % size == 0``.
-    
+
                 Default is **False**.
 
             second_order (bool):
                 True if add second order perturbation theory correction
                 to the cluster Hamiltonian in conventional CCE.
                 Relevant only for conventional CCE calculations.
-                
+
                 If set to True sets the qubit states as eigenstates of central spin Hamiltonian
                 from the following procedure. If qubit states are provided as vectors in :math:`S_z` basis,
                 for each qubit state compute the fidelity of the qubit state and
                 all eigenstates of the central spin and chose the one with fidelity higher than ``level_confidence``.
                 If such state is not found, raises an error.
-    
+
                 .. warning::
-    
+
                     Second order corrections are not implemented as mean field.
-                    
+
                     I.e., setting ``second_order=True``
                     and ``nbstates != 0`` leads to the calculation, when mean field effect is accounted only from
                     dipolar interactions within the bath.
-    
+
                 Default is **False**.
-    
+
             level_confidence (float): Maximum fidelity of the qubit state to be considered eigenstate of the
-                central spin Hamiltonian. 
-                
+                central spin Hamiltonian.
+
                 Default is 0.95.
-    
+
             direct (bool):
                 True if use direct approach (requires way more memory but might be more numerically stable).
                 False if use memory efficient approach.
-                
+
                 Default is **False**.
-    
+
             parallel (bool):
                 True if parallelize calculation of cluster contributions over different mpi processes.
+
+                Default is **False**.
+
+            fulldm (bool):
+                Used in gCCE. True if return full density matrix of the central spin.
+                False if only return the computed property.
 
                 Default is **False**."""
 
@@ -327,7 +333,7 @@ class Simulator:
             Either:
 
             - Instance of BathArray class;
-            - ndarray with ``dtype([('N', np.unicode_, 16), ('xyz', np.float64, (3,))])`` containing names
+            - ndarray with ``dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])`` containing names
               of bath spins (same ones as stored in self.ntype) and positions of the spins in angstroms;
             - the name of the .xyz text file containing 4 columns: name of the bath spin and xyz coordinates in A.
 
@@ -406,7 +412,7 @@ class Simulator:
         self._order = order
         self.clusters = None
         """dict: Dictionary containing information about cluster structure of the bath.
-        
+
         Each keys n correspond to the size of the cluster.
         Each ``Simulator.clusters[n]`` contains ``ndarray`` of shape (m, n),
         where m is the number of clusters of given size, n is the size of the cluster.
@@ -447,12 +453,12 @@ class Simulator:
         """int: Number or random bath states to sample over."""
         self.fixstates = None
         r"""dict: If not None, shows which bath states to fix in random bath states.
-        
+
         Each key is the index of bath spin,
         value - fixed :math:`\hat S_z` projection of the mixed state of nuclear spin."""
         self.masked = None
         """bool: True if mask numerically unstable points (with coherence > 1)
-        in the averaging over bath states. 
+        in the averaging over bath states.
 
         .. note::
 
@@ -472,7 +478,9 @@ class Simulator:
         self.timespace = None
         """timespace (ndarray with shape (n,)): Time points at which compute the desired property."""
         self.runner = None
+        # Parameters of gCCE
         self.fulldm = False
+        """bool: True if return full density matrix as the result in the gCCE calculations."""
         self.normalized = True
 
         self.i = None
@@ -1168,11 +1176,11 @@ class Simulator:
         },
         'megcce': {
             'coherence': LindbladgCCE,
-            
+
         },
         'mecce': {
             'coherence': LindbladCCE,
-            
+
         }
     }
 

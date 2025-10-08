@@ -4,13 +4,13 @@ script usage:
 mpirun python nv_ensemble.py [-h] [--r_bath R_BATH] [--r_dipole R_DIPOLE] [--order ORDER]
                              [--nbstates NBSTATES] [--start START] [--pulses PULSES]
                              [--magnetic_field MAGNETIC_FIELD]
-                             [param] [values [values ...]] 
+                             [param] [values [values ...]]
 
 positional arguments:
 param                 varied parameter
 values                values of varied parameter
 
-optional arguments:                                                                                                       
+optional arguments:
 -h, --help                          show this help message and exit
 --r_bath R_BATH, -rb R_BATH         cutoff bath radius
 --r_dipole R_DIPOLE, -rd R_DIPOLE   pair cutoff radius
@@ -44,7 +44,7 @@ beta = np.array([0, 1, 0])
 
 # A script to calculate ensemble average coherence for nv_center in diamond
 # Parallelization here is over different spatial configurations of spin bath
-# However, the results for a single configuration can be parallelized with 
+# However, the results for a single configuration can be parallelized with
 # parallel and parallel_states Simulator keywords
 
 if __name__ == '__main__':

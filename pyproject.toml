@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycce"
+version = "1.1.1"
+authors = [
+    {name = "Nikita Onizhuk", email = "onizhuk@uchicago.edu"},
+]
+description = "A package to compute spin dynamics using CCE method"
+readme = "README.md"
+requires-python = ">=3.9, <4"
+license = "MIT"
+dependencies = [
+    "numpy>=1.16",
+    "scipy>=1.10",
+    "ase",
+    "pandas",
+    "numba>=0.56",
+]
+
+[tool.setuptools.package-data]
+bath = ["*.txt"]
+
+[project.urls]
+Homepage = "https://pycce.readthedocs.io/en/latest/"
+Documentation = "https://pycce.readthedocs.io/en/latest/"
+Repository = "https://github.com/MICCoMpy/PyCCE"

@@ -20,11 +20,11 @@ sys.path.insert(0, os.path.abspath('/home/onizhuk/midway/codes_development/pyCCE
 # -- Project information -----------------------------------------------------
 
 project = 'PyCCE'
-copyright = '2021, Mykyta Onizhuk'
+copyright = '2025, Mykyta Onizhuk'
 author = 'Mykyta Onizhuk'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.1'
+release = '1.1.1'
 
 
 # -- General configuration ---------------------------------------------------

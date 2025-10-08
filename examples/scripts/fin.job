@@ -14,5 +14,5 @@ module load python
 conda activate pycce_env
 module load mpich/3.2
 
-export OMP_NUM_THREADS=1  
+export OMP_NUM_THREADS=1
 mpirun python nv_parallel.py order 1 2 3 4 -s 0
