@@ -51,7 +51,7 @@ by the package itself (see :doc:`parameters` for details):
 - :math:`\mathbf{D}` (:math:`\mathbf{P}`)  is the self-interaction tensor of the central spin (bath spin).
   For the electron spin, the tensor corresponds to the zero-field splitting (ZFS) tensor.
   For nuclear spins corresponds to the quadrupole interactions tensor.
-- :math:`\mathbf{\gamma}_i`$`is the magnetic field interaction tensor of the
+- :math:`\mathbf{\gamma}_i` is the magnetic field interaction tensor of the
   :math:`i`-spin describing the interaction of the spin and the external magnetic field :math:`B`.
 - :math:`\mathbf{A}` is the interaction tensor between central and bath spins.
   In the case of the nuclear spin bath, it corresponds to the hyperfine couplings.
