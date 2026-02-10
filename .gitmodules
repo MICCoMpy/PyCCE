@@ -1,0 +1,3 @@
+[submodule "plugins/aiida-pycce"]
+	path = plugins/aiida-pycce
+	url = https://github.com/mathtoriyama/aiida-pycce
