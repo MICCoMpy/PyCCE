@@ -3,7 +3,7 @@ Quick Start
 ===================================================================
 
 The generic workflow of the simulation includes first the generation of the spin bath in the material,
-and second carrying the CCE dynamics calculations for the qubit interacting with this spin bath.
+and second performing the CCE dynamics calculations for the qubit interacting with this spin bath.
 
 Base Units
 -------------------------------------------------------------------
@@ -58,15 +58,15 @@ The simplest example includes the following steps:
    The hyperfine couplings are automatically generated at this step assuming point dipole-dipole interactions
    between central spin and bath spins.
 
-4. Compute the coherence function of the qubit using ``.compute`` method of the ``Simulator`` object with
+4. Compute the coherence function of the qubit using the ``compute`` method of the ``Simulator`` object with
    conventional CCE.
 
    .. literalinclude:: tutorials/nv_simple.py
       :language: python
       :lines: 11, 12
 
-This function outputs Numpy array with the same shape as the ``time_points`` and
+This function outputs a Numpy array with the same shape as the ``time_points`` and
 contains the coherence function computed at each time step.
-By default ``compute`` method uses the conventional CCE to compute the coherence function.
+By default ``compute`` uses the conventional CCE to compute the coherence function.
 
-More detailed examples of **PyCCE** usage are available in the tutorials.
+More detailed examples of using **PyCCE** are available in the tutorials.

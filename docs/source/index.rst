@@ -43,23 +43,26 @@ PyCCE: A Python Package for CCE Simulations
 **PyCCE** is an open source Python library to simulate the dynamics of
 a spin qubit interacting with a spin bath using the cluster-correlation expansion (CCE) method.
 
+**PyCCE** supports parallelization through mpi4py, and high-throughput
+workflows through `aiida-pycce <https://github.com/MICCoMpy/aiida-pycce>`_.
 
 Major Updates
 -----------------------------
 
 PyCCE 1.1
 ++++++++++++++++++
-New version of **PyCCE** includes new cluster solvers and a set of little bugfixes. Main changes include
+**PyCCE** 1.1 has been released!
+Main changes include:
 
 * Implementation of the master equation-based CCE approaches.
-    Checkout the :doc:`tutorials/mecce` for examples of the usage.
+    Check out :doc:`tutorials/mecce` for examples of the usage.
 
 * Various optimization and bugfixes.
 
 PyCCE 1.0
 ++++++++++++++++++
-The **PyCCE** 1.0 has been released!
-Main changes from the previous version include:
+**PyCCE** 1.0 has been released!
+Main changes include:
 
 * Support for several central spins with the new class ``CenterArray``!
     Check out a tutorial :doc:`tutorials/second_spin` on how to use the new class to study the decoherence
@@ -75,8 +78,8 @@ Main changes from the previous version include:
 * *EXPERIMENTAL FEATURE*. Added ability to define your own single particle Hamiltonian.
     See ``BathArray.h`` and ``Center.h`` in :doc:`bath` and :doc:`center` respectively for further details.
 
-* Significant overhaul of computational expensive parts of the code with Numba. This makes the first run of
-  **PyCCE** quite slow, but after compilation it should run observably faster.
+* Significant overhaul of computational expensive parts of the code with Numba. This introduces a
+  performance overhead to the first run, but after compilation it should run observably faster.
 
 * Various bug fixes and QoL changes.
 
@@ -89,11 +92,10 @@ The recommended way to install **PyCCE** is to use **pip**::
 
     $ pip install pycce
 
-Otherwise you can install  **PyCCE** directly using the source code.
-First copy the repository to the desired folder::
+Otherwise you can install **PyCCE** directly using the source code.
+First clone the repository::
 
     $ git clone https://github.com/MICCoMpy/PyCCE.git
-
 
 Then, execute **pip** in the folder containing **pyproject.toml**::
 
@@ -103,7 +105,7 @@ Requirements
 ----------------
 The following modules are required to run **PyCCE**.
 
-*  `Python <http://www.python.org/>`_ (version >= 3.9).
+* `Python <http://www.python.org/>`_ (version >= 3.9).
 
 * `NumPy <https://numpy.org/>`_ (version >= 1.16).
 
@@ -116,11 +118,11 @@ The following modules are required to run **PyCCE**.
 * `Pandas <https://pandas.pydata.org/>`_.
 
 **PyCCE** inherently supports parallelization with the **mpi4py** package, which requires the installation of MPI.
-However, for serial implementation the **mpi4py** is not required.
+**mpi4py** is not required for serial calculations.
 
 How to cite
 --------------------------
 If you make use of **PyCCE** in a scientific publication, please cite the following paper:
 
-   Mykyta  Onizhuk and Giulia Galli. "PyCCE: A Python Package for Cluster Correlation Expansion Simulations of Spin Qubit Dynamic"
+   Mykyta Onizhuk and Giulia Galli. "PyCCE: A Python Package for Cluster Correlation Expansion Simulations of Spin Qubit Dynamic"
    Adv. Theory Simul. 2021, 2100254 https://onlinelibrary.wiley.com/doi/10.1002/adts.202100254

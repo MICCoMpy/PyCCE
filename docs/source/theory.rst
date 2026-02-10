@@ -67,7 +67,7 @@ Usually, two coherence times are measured to characterize the loss of a qubit co
 :math:`T_2` describes a purely quantum phenomenon - the loss of the phase of the qubit's superposition state.
 
 In the pure dephasing regime (:math:`T_1 >> T_2`) the decoherence of the central spin is completely determined
-by the decay of the off diagonal element of the density matrix of the qubit.
+by the decay of the off-diagonal element of the density matrix of the qubit.
 
 Namely, if the qubit is initially prepared in the
 :math:`\left|{\psi}\right\rangle = \frac{1}{\sqrt{2}}(\left|{0}\right\rangle+e^{i\phi}\left|{1}\right\rangle)` state,
@@ -83,8 +83,7 @@ levels is characterized by the coherence function:
 Where :math:`\hat{\rho}_S(t)` is the density matrix of the central spin and
 :math:`\left|{0}\right\rangle` and :math:`\left|{1}\right\rangle` are qubit levels.
 
-The cluster correlation expansion (CCE) method was first introduced in ref. [#yang2008]_.
-The core idea of the CCE approach is that the spin bath-induced decoherence
+The CCE method was first introduced in ref. [#yang2008]_. The core idea is that the spin bath-induced decoherence
 can be factorized into set of irreducible contributions from the bath spin clusters.
 Written in terms of the coherence function:
 
@@ -121,7 +120,7 @@ in CCE3 - up to triplets of bath spins are included, etc.
 The way the coherence function for each cluster
 is computed slightly varies between depending on whether the conventional or generalized CCE method is used.
 
-In the case of the several central spins, one can apply CCE formalism to compute any off-diagonal element of the
+In the case of several central spins, one can apply the CCE formalism to compute any off-diagonal element of the
 combined density matrix.
 
 Conventional CCE
@@ -146,7 +145,7 @@ the coherence function of the qubit interacting with the cluster :math:`C` is co
 
     L_{C}(t) = Tr[\hat U_C^{(0)}(t)\hat \rho_C \hat U_C^{(1) \dagger}(t)]
 
-Where :math:`\hat U_C^{(\alpha)}(t)` is time propagator defined in terms of the effective Hamiltonian
+Where :math:`\hat U_C^{(\alpha)}(t)` is a time propagator defined in terms of the effective Hamiltonian
 :math:`\hat H_C^{(\alpha)}` and the number of decoupling pulses. Note that :math:`\hat H_C^{(\alpha)}` here includes
 only degrees of freedom of the given cluster.
 

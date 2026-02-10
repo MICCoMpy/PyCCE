@@ -27,3 +27,5 @@ See the `examples` folder for tutorials and scripts of calculations.
 ### Documentation
 
 Full documentation is available online at [Read the Docs](https://pycce.readthedocs.io/en/latest/).
+
+See also [aiida-pycce](https://github.com/MICCoMpy/aiida-pycce), a plugin for running PyCCE in a high-throughput manner using the AiiDA framework.
