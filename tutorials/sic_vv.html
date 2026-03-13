@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VV in SiC &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Shallow donor in Si" href="si_shallow.html" />
+    <link rel="prev" title="NV Center in Diamond" href="diamond_nv.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="diamond_nv.html">NV Center in Diamond</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">VV in SiC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Axial-kk-VV">Axial kk-VV</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Build-BathCell-from-the-ground">Build BathCell from the ground</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Read-Quantum-ESPRESSO-output">Read Quantum ESPRESSO output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Set-up-CCE-Simulator">Set up CCE Simulator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#FID-with-DFT-hyperfine-couplings">FID with DFT hyperfine couplings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#FID-with-hyperfine-couplings-from-point-dipole-approximation">FID with hyperfine couplings from point dipole approximation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Hahn-echo-comparison">Hahn-echo comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Basal-kh-VV-in-SiC">Basal kh-VV in SiC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Setting-up-calculations">Setting up calculations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Free-Induction-Decay-(FID)">Free Induction Decay (FID)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Compare-the-two-results">Compare the two results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Hahn-echo-decay">Hahn-echo decay</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="si_shallow.html">Shallow donor in Si</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classical_noise.html">Correlation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="second_spin.html">Multiple central spins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mecce.html">Dissipative spin bath</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorial.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">VV in SiC</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/sic_vv.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="VV-in-SiC">
+<h1>VV in SiC<a class="headerlink" href="#VV-in-SiC" title="Link to this heading"></a></h1>
+<p>An example of computing Free Induction Decay (FID) and Hahn-echo (HE) with hyperfine couplings from GIPAW for axial and basal divacancies.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ase</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycce</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">8805</span>
+</pre></div>
+</div>
+</div>
+<section id="Axial-kk-VV">
+<h2>Axial kk-VV<a class="headerlink" href="#Axial-kk-VV" title="Link to this heading"></a></h2>
+<p>First we compute FID and HE for axial divacancy.</p>
+<section id="Build-BathCell-from-the-ground">
+<h3>Build BathCell from the ground<a class="headerlink" href="#Build-BathCell-from-the-ground" title="Link to this heading"></a></h3>
+<p>One can set up an <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> instance by providing the parameters of the unit cell, or <code class="docutils literal notranslate"><span class="pre">cell</span></code> argument as 3x3 tensor, where each column defines a, b, c unit cell vectors in cartesian coordinates.</p>
+<p>In this tutorial we use the first approach.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up unit cell with (a, b, c, alpha, beta, gamma)</span>
+<span class="n">sic</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">BathCell</span><span class="p">(</span><span class="mf">3.073</span><span class="p">,</span> <span class="mf">3.073</span><span class="p">,</span> <span class="mf">10.053</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="s1">&#39;deg&#39;</span><span class="p">)</span>
+<span class="c1"># z axis in cell coordinates</span>
+<span class="n">sic</span><span class="o">.</span><span class="n">zdir</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Next, user has to define positions of atoms in the unit cell. It is done with <code class="docutils literal notranslate"><span class="pre">BathCell.add_atoms</span></code> function. It takes an unlimited number of arguments, each argument is a tuple. First element of the tuple is the name of the atom, second - list of xyz coordinates either in cell units (if keyword <code class="docutils literal notranslate"><span class="pre">type='cell'</span></code>, default value) or in Angstrom (if keyword <code class="docutils literal notranslate"><span class="pre">type='angstrom'</span></code>). Returns <code class="docutils literal notranslate"><span class="pre">BathCell.atoms</span></code> dictionary, which contains list of coordinates for each type of elements.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># position of atoms</span>
+<span class="n">sic</span><span class="o">.</span><span class="n">add_atoms</span><span class="p">((</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.1880</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.6880</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.33333333</span><span class="p">,</span> <span class="mf">0.66666667</span><span class="p">,</span> <span class="mf">0.4380</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.66666667</span><span class="p">,</span> <span class="mf">0.33333333</span><span class="p">,</span> <span class="mf">0.9380</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.00000000</span><span class="p">,</span> <span class="mf">0.5000</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.33333333</span><span class="p">,</span> <span class="mf">0.66666667</span><span class="p">,</span> <span class="mf">0.2500</span><span class="p">]),</span>
+              <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.66666667</span><span class="p">,</span> <span class="mf">0.33333333</span><span class="p">,</span> <span class="mf">0.7500</span><span class="p">]));</span>
+</pre></div>
+</div>
+</div>
+<p>Two types of isotopes present in SiC: <span class="math notranslate nohighlight">\(^{29}\)</span>Si and <span class="math notranslate nohighlight">\(^{13}\)</span>C. We add this information with the <code class="docutils literal notranslate"><span class="pre">BathCell.add_isotopes</span></code> function. The code knows most of the concentrations, so this step is actually unnecessary. If no isotopes is provided, the natural concentration of common magnetic isotopes is assumed.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># isotopes</span>
+<span class="n">sic</span><span class="o">.</span><span class="n">add_isotopes</span><span class="p">((</span><span class="s1">&#39;29Si&#39;</span><span class="p">,</span> <span class="mf">0.047</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">))</span>
+
+<span class="c1"># defect position in cell units</span>
+<span class="n">vsi_cell</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.1880</span><span class="p">]</span>
+<span class="n">vc_cell</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Generate bath spin positions</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">vsi_cell</span><span class="p">),</span>
+                                       <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">vc_cell</span><span class="p">)],</span>
+                          <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Read-Quantum-ESPRESSO-output">
+<h3>Read Quantum ESPRESSO output<a class="headerlink" href="#Read-Quantum-ESPRESSO-output" title="Link to this heading"></a></h3>
+<p><strong>PyCCE</strong> provides a helper function <code class="docutils literal notranslate"><span class="pre">read_qe</span></code> in <code class="docutils literal notranslate"><span class="pre">pycce.io</span></code> module to read hyperfine couplings from Quantum ESPRESSO output. <code class="docutils literal notranslate"><span class="pre">read_qe</span></code> takes from 1 to 3 positional arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pwfile</span></code> name of the pw input/output file;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hyperfine</span></code> name of the gipaw output file containing hyperfine couplings;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">efg</span></code> name of the gipaw output file containing electric field tensor calculations.</p></li>
+</ul>
+<p>During its call, <code class="docutils literal notranslate"><span class="pre">read_qe</span></code> will read the cell matrix in pw file and apply it to the coordinates is necessary. However, usually we still need to rotate and translate the Quantum ESPRESSO supercell to allign it with our <code class="docutils literal notranslate"><span class="pre">BathArray</span></code>. To do so we can provide additional keywords arguments <code class="docutils literal notranslate"><span class="pre">center</span></code> and <code class="docutils literal notranslate"><span class="pre">rotation_matrix</span></code>. <code class="docutils literal notranslate"><span class="pre">center</span></code> is the position of (0, 0, 0) point in coordinates of pw file, and <code class="docutils literal notranslate"><span class="pre">rotation_matrix</span></code> is rotation matrix which aligns z-direction of the GIPAW output. This matrix,
+acting on the (0, 0, 1) in Cartesian coordinates of GIPAW output should produce (a, b, c) vector, alligned with zdirection of the BathCell. Keyword argument <code class="docutils literal notranslate"><span class="pre">rm_style</span></code> shows whether <code class="docutils literal notranslate"><span class="pre">rotation_matrix</span></code> contains coordinates of new basis set as rows (<code class="docutils literal notranslate"><span class="pre">'row'</span></code>, common in physics) or columns (<code class="docutils literal notranslate"><span class="pre">'col'</span></code>, common in math).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare rotation matrix to alling with z axis of generated atoms</span>
+<span class="c1"># This matrix, acting on the [0, 0, 1] in Cartesian coordinates of GIPAW output</span>
+<span class="c1"># Should produce [a, b, c] vector, alligned with zdirection of the BathCell</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+
+<span class="c1"># Position of (0,0,0) point in cell coordinates</span>
+<span class="n">center</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="c1"># Read GIPAW results</span>
+<span class="n">exatoms</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">read_qe</span><span class="p">(</span><span class="s1">&#39;axial/pw.in&#39;</span><span class="p">,</span>
+                     <span class="n">hyperfine</span><span class="o">=</span><span class="s1">&#39;axial/gipaw.out&#39;</span><span class="p">,</span>
+                     <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="o">=</span><span class="n">M</span><span class="p">,</span>
+                     <span class="n">rm_style</span><span class="o">=</span><span class="s1">&#39;col&#39;</span><span class="p">,</span>
+                     <span class="n">isotopes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="s1">&#39;Si&#39;</span><span class="p">:</span><span class="s1">&#39;29Si&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">pc.read_qe</span></code> produces instance of <code class="docutils literal notranslate"><span class="pre">BathArray</span></code>, with names of bath spins as the most common isotopes of the following elements (if keyword <code class="docutils literal notranslate"><span class="pre">isotopes</span></code> set to <code class="docutils literal notranslate"><span class="pre">None</span></code>) or from the mapping provided by the <code class="docutils literal notranslate"><span class="pre">isotopes</span></code> argument.</p>
+</section>
+<section id="Set-up-CCE-Simulator">
+<h3>Set up CCE Simulator<a class="headerlink" href="#Set-up-CCE-Simulator" title="Link to this heading"></a></h3>
+<p>In this example we set up a bare <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> and add properties of the spin bath later.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setting up CCE calculations</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">to_cartesian</span><span class="p">(</span><span class="n">vsi_cell</span><span class="p">)</span>
+<span class="n">CCE_order</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">r_bath</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">r_dipole</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">])</span>
+
+<span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Function <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> can be called explicitly to initiallize spin bath. Additional keyword argument <code class="docutils literal notranslate"><span class="pre">external_bath</span></code> takes instance of <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> with hyperfine couplings read from Quantum Espresso. The program then finds the spins with the same name at the same positions (within the range defined by <code class="docutils literal notranslate"><span class="pre">error_range</span></code> keyword argument) in the total bath and sets their hyperfine couplings.</p>
+<p>Finally, we call <code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters</span></code> to find the bath spin clusters in the provided bath.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span><span class="o">.</span><span class="n">read_bath</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">r_bath</span><span class="p">,</span> <span class="n">external_bath</span><span class="o">=</span><span class="n">exatoms</span><span class="p">);</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">generate_clusters</span><span class="p">(</span><span class="n">CCE_order</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="n">r_dipole</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="FID-with-DFT-hyperfine-couplings">
+<h3>FID with DFT hyperfine couplings<a class="headerlink" href="#FID-with-DFT-hyperfine-couplings" title="Link to this heading"></a></h3>
+<p>We provide <code class="docutils literal notranslate"><span class="pre">pulses</span></code> argument directly to the compute function instead of during initiallization of the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_space</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">501</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">ldft</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="FID-with-hyperfine-couplings-from-point-dipole-approximation">
+<h3>FID with hyperfine couplings from point dipole approximation<a class="headerlink" href="#FID-with-hyperfine-couplings-from-point-dipole-approximation" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdcalc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
+                      <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="n">r_bath</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">CCE_order</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="n">r_dipole</span><span class="p">)</span>
+<span class="n">lpd</span> <span class="o">=</span> <span class="n">pdcalc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Plot the results and and verify that the predictions are significantly different.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">lpd</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;point dipole&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">ldft</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DFT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_sic_vv_21_0.png" src="../_images/tutorials_sic_vv_21_0.png" />
+</div>
+</div>
+</section>
+<section id="Hahn-echo-comparison">
+<h3>Hahn-echo comparison<a class="headerlink" href="#Hahn-echo-comparison" title="Link to this heading"></a></h3>
+<p>Now we compare the predictions for Hahn-echo signal with different hyperfine couplings.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">he_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">501</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">])</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">he_ldft</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">he_time</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="n">B</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">he_lpd</span> <span class="o">=</span> <span class="n">pdcalc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">he_time</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="n">B</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Plot the results and compare. We observe that electron spin echo modulations differ significantly, while the observed decay is about the same.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">he_time</span><span class="p">,</span> <span class="n">he_ldft</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DFT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">he_time</span><span class="p">,</span> <span class="n">he_lpd</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;point dipole&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_sic_vv_25_0.png" src="../_images/tutorials_sic_vv_25_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Basal-kh-VV-in-SiC">
+<h2>Basal kh-VV in SiC<a class="headerlink" href="#Basal-kh-VV-in-SiC" title="Link to this heading"></a></h2>
+<p>The basal divacancy’s Hamiltonian includes both D and E terms, which allows for mixing between +1 and -1 spin levels at zero field.</p>
+<p>Thus, either the generalized CCE should be used, or additional perturbational Hamiltonian terms are to be added. Here we consider the generalized CCE framework.</p>
+<p>First, prepare rotation matrix for DFT results. The same supercell was used to compute hyperfine couplings, however z-axis of the electron spin qubit is aligned with Si-C bond, therefore we will need to rotate the DFT supercell accordingly.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Coordinates of vacancies in cell coordinates (note that Vsi is not located in the first unitcell)</span>
+<span class="n">vsi_cell</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.0620</span><span class="p">])</span>
+<span class="n">vc_cell</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="n">sic</span><span class="o">.</span><span class="n">zdir</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Rotation matrix for DFT supercell</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">rotmatrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">sic</span><span class="o">.</span><span class="n">to_cartesian</span><span class="p">(</span><span class="n">vsi_cell</span> <span class="o">-</span> <span class="n">vc_cell</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Total spin bath can be initiallized by simply setting z direction of the <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> object.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sic</span><span class="o">.</span><span class="n">zdir</span> <span class="o">=</span> <span class="n">vsi_cell</span> <span class="o">-</span> <span class="n">vc_cell</span>
+
+<span class="c1"># Generate bath spin positions</span>
+<span class="n">sic</span><span class="o">.</span><span class="n">add_isotopes</span><span class="p">((</span><span class="s1">&#39;29Si&#39;</span><span class="p">,</span> <span class="mf">0.047</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">))</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">vsi_cell</span><span class="p">),</span>
+                                       <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">vc_cell</span><span class="p">)],</span>
+                          <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Read DFT results with <code class="docutils literal notranslate"><span class="pre">read_qe</span></code> function. To rotate in the correct frame we need to apply both changes of basis consequently</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+
+<span class="c1"># Position of (0,0,0) point in cell coordinates</span>
+<span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.59401</span><span class="p">,</span> <span class="mf">0.50000</span><span class="p">,</span> <span class="mf">0.50000</span><span class="p">])</span>
+
+<span class="c1"># Read GIPAW results</span>
+<span class="n">exatoms</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">read_qe</span><span class="p">(</span><span class="s1">&#39;basal/pw.in&#39;</span><span class="p">,</span>
+                     <span class="n">hyperfine</span><span class="o">=</span><span class="s1">&#39;basal/gipaw.out&#39;</span><span class="p">,</span>
+                     <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">R</span><span class="p">),</span>
+                     <span class="n">rm_style</span><span class="o">=</span><span class="s1">&#39;col&#39;</span><span class="p">,</span>
+                     <span class="n">isotopes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="s1">&#39;Si&#39;</span><span class="p">:</span><span class="s1">&#39;29Si&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<p>To check whether our rotations produced correct results we can find the indexes of the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> and DFT output with <code class="docutils literal notranslate"><span class="pre">pc.same_bath_indexes</span></code> function. It returns a tuple, containing the indexes of elements in the two <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instances with the same position and name. First element of the tuple - indexes of first argument, second - of the second. For that we generate supecell with <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> class, containing 100% isotopes, and count the number of found indexes - iut should be equal
+to the size of DFT supercell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># isotopes</span>
+<span class="n">sic</span><span class="o">.</span><span class="n">add_isotopes</span><span class="p">((</span><span class="s1">&#39;29Si&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">allcell</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">vsi_cell</span><span class="p">),</span>
+                                       <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">vc_cell</span><span class="p">)],</span>
+                            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+<span class="n">indexes</span><span class="p">,</span> <span class="n">ext_indexes</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">same_bath_indexes</span><span class="p">(</span><span class="n">allcell</span><span class="p">,</span> <span class="n">exatoms</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="n">indexes</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> same elements.&quot;</span>
+      <span class="sa">f</span><span class="s2">&quot; Size of the DFT supercell is </span><span class="si">{</span><span class="n">exatoms</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+There are 1438 same elements. Size of the DFT supercell is 1438
+</pre></div></div>
+</div>
+<section id="Setting-up-calculations">
+<h3>Setting up calculations<a class="headerlink" href="#Setting-up-calculations" title="Link to this heading"></a></h3>
+<p>Now we can safely setup calculations of coherence function with DFT couplings. We will compare results with or without bath state sampling.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mf">1.334</span> <span class="o">*</span> <span class="mf">1e6</span>
+<span class="n">E</span> <span class="o">=</span> <span class="mf">0.0184</span> <span class="o">*</span> <span class="mf">1e6</span>
+<span class="n">magnetic_field</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">external_bath</span><span class="o">=</span><span class="n">exatoms</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="n">E</span><span class="p">,</span>
+                    <span class="n">magnetic_field</span><span class="o">=</span><span class="n">magnetic_field</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">r_bath</span><span class="o">=</span><span class="n">r_bath</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">CCE_order</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="n">r_dipole</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The code automatically picks up the two lowest eigenstates of the central spin hamiltonian as qubit states.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Simulator for center array of size 1.
+magnetic field:
+array([0., 0., 0.])
+
+Parameters of cluster expansion:
+r_bath: 40
+r_dipole: 8
+order: 2
+
+Bath consists of 761 spins.
+
+Clusters include:
+761  clusters of order 1.
+1870  clusters of order 2.
+
+</pre></div></div>
+</div>
+<p>We can use the CenterArray, stored in <code class="docutils literal notranslate"><span class="pre">Simulator.center</span></code> attribute, to take a look at the qubit states in the absence of nuclear spin bath.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">generate_states</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;0 state: </span><span class="si">{</span><span class="n">calc</span><span class="o">.</span><span class="n">alpha</span><span class="o">.</span><span class="n">real</span><span class="si">}</span><span class="s1">; 1 state: </span><span class="si">{</span><span class="n">calc</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">real</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0 state: [ 0. -1.  0.]; 1 state: [ 0.70711  0.      -0.70711]
+</pre></div></div>
+</div>
+</section>
+<section id="Free-Induction-Decay-(FID)">
+<h3>Free Induction Decay (FID)<a class="headerlink" href="#Free-Induction-Decay-(FID)" title="Link to this heading"></a></h3>
+<p>Now, use the generalized CCE to compute FID of the coherence function at different CCE orders.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Number of pulses</span>
+<span class="n">time_space</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span> <span class="c1"># Time points at which to compute</span>
+
+<span class="n">orders</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">lgen</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">r_bath</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">r_dipole</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">external_bath</span><span class="o">=</span><span class="n">exatoms</span><span class="p">,</span>
+                    <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="n">E</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">r_bath</span><span class="o">=</span><span class="n">r_bath</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="n">r_dipole</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">:</span>
+    <span class="n">calc</span><span class="o">.</span><span class="n">generate_clusters</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span>
+                     <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;coherence&#39;</span><span class="p">,</span> <span class="n">as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">lgen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+
+<span class="n">lgen</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lgen</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">time_space</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">orders</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<p>We see that the results do not converge, but rather start to diverge. Bath sampling (setting <code class="docutils literal notranslate"><span class="pre">nbstates</span></code> to some value) will help with that.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lgen</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_sic_vv_44_0.png" src="../_images/tutorials_sic_vv_44_0.png" />
+</div>
+</div>
+<p>Note, that this approach is <code class="docutils literal notranslate"><span class="pre">nbstates</span></code> times more expensive than the gCCE, therefore the following calculation will take a couple of minutes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orders</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">lgcce</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">r_bath</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">r_dipole</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">:</span>
+    <span class="n">calc</span><span class="o">.</span><span class="n">generate_clusters</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+    <span class="n">l</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">nbstates</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span>
+                     <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;coherence&#39;</span><span class="p">,</span> <span class="n">as_delay</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">lgcce</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+
+<span class="n">lgcce</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lgcce</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">time_space</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">orders</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Compare-the-two-results">
+<h3>Compare the two results<a class="headerlink" href="#Compare-the-two-results" title="Link to this heading"></a></h3>
+<p>The gCCE results are converged at 1st order. Note that we used only a small number of bath states (30), thus the calculations are not converged with respect to the number of bath states. Calculations with higher number of bath states (~100) will produce correct results.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lgen</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lgcce</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_sic_vv_48_0.png" src="../_images/tutorials_sic_vv_48_0.png" />
+</div>
+</div>
+</section>
+<section id="Hahn-echo-decay">
+<h3>Hahn-echo decay<a class="headerlink" href="#Hahn-echo-decay" title="Link to this heading"></a></h3>
+<p>Using the similar procedure to the one used for FID, we can compute the Hahn-echo decay.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r_bath</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">r_dipole</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Number of pulses</span>
+
+<span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">external_bath</span><span class="o">=</span><span class="n">exatoms</span><span class="p">,</span>
+                    <span class="n">pulses</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="n">E</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">r_bath</span><span class="o">=</span><span class="n">r_bath</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="n">r_dipole</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span> <span class="c1"># time points (in ms)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">helgen</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;coherence&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note the number of nbstates leads to significantly increased time of the calculation. The interface to mpi implementation is provided with keywords <code class="docutils literal notranslate"><span class="pre">parallel</span></code> (general) or <code class="docutils literal notranslate"><span class="pre">parallel_states</span></code>(bath state sampling run-specific). However it requires <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> installed and a run on several cores.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">helgcce</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">time_space</span><span class="p">,</span> <span class="n">nbstates</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                       <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;coherence&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">helgcce</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;gCCE with mean field&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">helgen</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;gCCE&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_sic_vv_55_0.png" src="../_images/tutorials_sic_vv_55_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="diamond_nv.html" class="btn btn-neutral float-left" title="NV Center in Diamond" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="si_shallow.html" class="btn btn-neutral float-right" title="Shallow donor in Si" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

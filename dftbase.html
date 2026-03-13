@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ES Interface &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Utility Functions" href="utilities.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ES Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quantum-espresso">Quantum ESPRESSO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#orca">ORCA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.io.base">Base class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.base.DFTCoordinates"><code class="docutils literal notranslate"><span class="pre">DFTCoordinates</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.io.base.DFTCoordinates.get_angstrom"><code class="docutils literal notranslate"><span class="pre">DFTCoordinates.get_angstrom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.io.base.DFTCoordinates.to_angstrom"><code class="docutils literal notranslate"><span class="pre">DFTCoordinates.to_angstrom()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.base.change_to_angstrom"><code class="docutils literal notranslate"><span class="pre">change_to_angstrom()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.base.find_first_index"><code class="docutils literal notranslate"><span class="pre">find_first_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.base.fortran_value"><code class="docutils literal notranslate"><span class="pre">fortran_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.base.set_isotopes"><code class="docutils literal notranslate"><span class="pre">set_isotopes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.base.yield_index"><code class="docutils literal notranslate"><span class="pre">yield_index()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ES Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dftbase.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="es-interface">
+<h1>ES Interface<a class="headerlink" href="#es-interface" title="Link to this heading"></a></h1>
+<p>Each of the interfaces uses subclass of the <code class="docutils literal notranslate"><span class="pre">DFTCoordinates</span></code> class to parse the output.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The interfaces are in beta stage. Please let us know if you encounter any errors.</p>
+</div>
+<section id="quantum-espresso">
+<h2>Quantum ESPRESSO<a class="headerlink" href="#quantum-espresso" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">PWCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_angstrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Coordinates of the system from the PW data of Quantum Espresso. Subclass of the DFTCoordinates.</p>
+<p>With initiallization reads either output or input of PW module of QE.</p>
+<dl>
+<dt>Args:</dt><dd><p>filename (str): name of the PW input or output.
+pwfile (str):</p>
+<blockquote>
+<div><p>Name of PW input or output file.
+If the file doesn’t have proper extension, parameter pw_type should indicate the type.</p>
+</div></blockquote>
+<p>pwtype (str): Type of the coord_f. if not listed, will be inferred from extension of pwfile.
+to_angstrom (bool): True if automatically convert the units of <code class="docutils literal notranslate"><span class="pre">cell</span></code> and <code class="docutils literal notranslate"><span class="pre">coordinates</span></code> to Angstrom.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parse_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_angstrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Method to read coordinates of atoms from PW input into the PWCoordinates instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): the name of the output file.
+to_angstrom (bool): True if automatically convert the units of <code class="docutils literal notranslate"><span class="pre">cell</span></code> and <code class="docutils literal notranslate"><span class="pre">coordinates</span></code> to Angstrom.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parse_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_angstrom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Method to read coordinates of atoms from PW output into the PWCoordinates instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): the name of the output file.
+to_angstrom (bool): True if automatically convert the units of <code class="docutils literal notranslate"><span class="pre">cell</span></code> and <code class="docutils literal notranslate"><span class="pre">coordinates</span></code> to Angstrom.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">cell_from_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sdict</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Function to obtain cell from namelist SYSTEM read from PW input.</p>
+<dl>
+<dt>Args:</dt><dd><p>sdict (dict): Dictinary generated from namelist SYSTEM of PW input.</p>
+</dd>
+<dt>Returns:</dt><dd><dl>
+<dt>ndarray with shape (3,3):</dt><dd><p>Cell is 3x3 matrix with entries:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">a_x</span> <span class="n">b_x</span> <span class="n">c_x</span><span class="p">]</span>
+ <span class="p">[</span><span class="n">a_y</span> <span class="n">b_y</span> <span class="n">c_y</span><span class="p">]</span>
+ <span class="p">[</span><span class="n">a_z</span> <span class="n">b_z</span> <span class="n">c_z</span><span class="p">]],</span>
+</pre></div>
+</div>
+<p>where a, b, c are crystallographic vectors,
+and x, y, z are their coordinates in the cartesian reference frame.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">celldms_from_abc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ibrav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abc_list</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Obtain celldms from ibrav value and a, b, c, cosab, cosac, cosbc parameters.</p>
+<p>Using ibrav value and abc parameters from PW input generate celldm array, necessary to construct cell parameters.
+For details about abc and ibrav values see PW input documentation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ibrav (int): ibrav parameter of PW input.
+abc_list (list): List, of 6 parameters:  a, b, c, cosab, cosac, cosbc</p>
+</dd>
+<dt>Returns:</dt><dd><p>celldm (list): list of 6 values, from which cell can be generated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">get_ctype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lin</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Get coordinates type from the line of QE input/output.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>str: Line from QE input/output containing string with coordinates type.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: type of the coordinates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">read_efg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Function to read electric field gradient tensors from GIPAW output.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): Name of the GIPAW EFG-containing output.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, 3,3): Array of EFG tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">read_gipaw_tensors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Helper function to read GIPAW tensors from the list of lines.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>lines (list of str): List of strings contraining lines from the file. Output of open(file).readlines().
+keyword (str): Keyword in the line which indicates the beginning of the tensor data block.
+start (int): Index of the line which indicates the beginning of the tensor data block.
+conversion (float): Conversion factor from GIPAW units to the ones, used in this package.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, 3, 3): Array of tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">read_hyperfine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Function to read hyperfine couplings from GIPAW output.</p>
+<dl>
+<dt>Args:</dt><dd><p>filename (str): Name of the GIPAW hyperfine output.
+spin (float): Spin of the central spin. Default 1.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: Tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>ndarray with shape (n,)</em>: Array of Fermi contact terms.</p></li>
+<li><p><em>ndarray with shape (n, 3,3)</em>: Array of spin dipolar hyperfine tensors.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">read_qe_namelists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_string</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Read Fortran-like namelists from the large string.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input_string (str): String representation of the QE input file.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Dictionary, containing dicts for each namelist found in the input string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="orca">
+<h2>ORCA<a class="headerlink" href="#orca" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.io.orca.</span></span><span class="sig-name descname"><span class="pre">ORCACoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orca_output</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Coordinates of the system from the ORCA output. Subclass of the DFTCoordinates.</p>
+<p>With initialization reads output of the ORCA.</p>
+<dl>
+<dt>Args:</dt><dd><p>orca_output (str or list of str): either name of the output file or list of lines read from that file.</p>
+</dd>
+<dt>Attributes:</dt><dd><p>alat (float): The lattice parameter in angstrom.
+cell (ndarray with shape (3, 3)):</p>
+<blockquote>
+<div><p>cell is 3x3 matrix with entries:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}[&amp;[a_x\ b_x\ c_x]\\
+&amp;[a_y\ b_y\ c_y]\\
+&amp;[a_z\ b_z\ c_z]]\end{split}\]</div>
+<p>where a, b, c are crystallographic vectors,
+and x, y, z are their coordinates in the cartesian reference frame.</p>
+</div></blockquote>
+<p>coordinates (ndarray with shape (n, 3)): array with the coordinates of atoms in the cell.
+names (ndarray with shape (n,)): array with the names of atoms in the cell.
+cell_units (str): Units of cell coordinates: ‘bohr’, ‘angstrom’, ‘alat’.
+coordinates_units (str): Units of atom coordinates: ‘crystal’, ‘bohr’, ‘angstrom’, ‘alat’.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">read_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orca_output</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Method to read coordinates of atoms from ORCA output into the ORCACoordinates instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>orca_output (str or list of str): either name of the output file or list of lines read from that file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycce.io.base">
+<span id="base-class"></span><h2>Base class<a class="headerlink" href="#module-pycce.io.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.io.base.DFTCoordinates">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.io.base.</span></span><span class="sig-name descname"><span class="pre">DFTCoordinates</span></span><a class="headerlink" href="#pycce.io.base.DFTCoordinates" title="Link to this definition"></a></dt>
+<dd><p>Abstract class of a container of the DFT output coordinates.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>alat (float): The lattice parameter in angstrom.
+cell (ndarray with shape (3, 3)):</p>
+<blockquote>
+<div><p>cell is 3x3 matrix with entries:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}[&amp;[a_x\ b_x\ c_x]\\
+&amp;[a_y\ b_y\ c_y]\\
+&amp;[a_z\ b_z\ c_z]]\end{split}\]</div>
+<p>where a, b, c are crystallographic vectors
+and x, y, z are their coordinates in the cartesian reference frame.</p>
+</div></blockquote>
+<p>coordinates (ndarray with shape (n, 3)): Array with the coordinates of atoms in the cell.</p>
+<p>names (ndarray with shape (n,)): Array with the names of atoms in the cell.</p>
+<p>cell_units (str): Units of cell coordinates: ‘bohr’, ‘angstrom’, ‘alat’.</p>
+<p>coordinates_units (str): Units of atom coordinates: ‘crystal’, ‘bohr’, ‘angstrom’, ‘alat’.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.io.base.DFTCoordinates.get_angstrom">
+<span class="sig-name descname"><span class="pre">get_angstrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.DFTCoordinates.get_angstrom" title="Link to this definition"></a></dt>
+<dd><p>Change given coordinates to angstrom.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>coordinates (ndarray with shape (n, 3) or (3,)): Coordinates to change.
+units (str): Initial units of the coordinates.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray (n, 3): Coordinates in angstrom.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.io.base.DFTCoordinates.to_angstrom">
+<span class="sig-name descname"><span class="pre">to_angstrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.DFTCoordinates.to_angstrom" title="Link to this definition"></a></dt>
+<dd><p>Method to transform cell and coordinates units to angstroms.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>inplace (bool): if True changes attributes inplace. Otherwise returns copy.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>DFTCoordinates or subclass:</dt><dd><p>Instance of the subclass with units of coordinates and cell of Angstroms.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.base.change_to_angstrom">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.base.</span></span><span class="sig-name descname"><span class="pre">change_to_angstrom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.change_to_angstrom" title="Link to this definition"></a></dt>
+<dd><p>Change coordinates to angstrom.</p>
+<dl>
+<dt>Args:</dt><dd><p>coordinates (ndarray with shape (n, 3) or (3,)): Coordinates to change.
+units (str): Initial units of the coordinates.
+alat (float): The lattice parameter in angstrom.</p>
+<dl>
+<dt>cell (ndarray with shape (3,3)):</dt><dd><p>cell is 3x3 matrix with entries:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}[&amp;[a_x\ b_x\ c_x]\\
+&amp;[a_y\ b_y\ c_y]\\
+&amp;[a_z\ b_z\ c_z]]\end{split}\]</div>
+<p>where a, b, c are crystallographic vectors,
+and x, y, z are their coordinates in the cartesian reference frame.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, 3): Coordinates in angstrom.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.base.find_first_index">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.base.</span></span><span class="sig-name descname"><span class="pre">find_first_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.find_first_index" title="Link to this definition"></a></dt>
+<dd><p>Function to find first appearance of the index in the list of lines.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>word (str): Word to find in the line.
+lines (list of str): List of strings contraining lines from the file. Output of open(file).readlines().
+start (int): First index from which to start search.
+case_sensitive (bool): If True looks for the exact match. Otherwise the search is case insensitive.</p>
+</dd>
+<dt>Returns:</dt><dd><p>i (int): Index of the first line from the start containing word.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.base.fortran_value">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.base.</span></span><span class="sig-name descname"><span class="pre">fortran_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.fortran_value" title="Link to this definition"></a></dt>
+<dd><p>Get value from Fortran-type variable.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>value (str): Value read from Fortran-type input.</p>
+</dd>
+<dt>Returns:</dt><dd><p>value (bool, str, float): value in Python format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.base.set_isotopes">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.base.</span></span><span class="sig-name descname"><span class="pre">set_isotopes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.set_isotopes" title="Link to this definition"></a></dt>
+<dd><p>Function to set the most common isotopes for the array containing DFT output. If some other isotope
+is specified, the A tensors are scaled accordingly.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>array (BathArray): Array with DFT spins.
+isotopes (dict): Dictionary with chosen isotopes.
+inplace (bool): True if change the array inplace.
+spin_types (SpinDict): If provided, allows for custom defined <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instances.</p>
+</dd>
+<dt>Returns:</dt><dd><p>array (BathArray): Array with DFT spins with correct isotopes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.base.yield_index">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.base.</span></span><span class="sig-name descname"><span class="pre">yield_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.base.yield_index" title="Link to this definition"></a></dt>
+<dd><p>Generator which yields indexes of the lines containing specific word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>word (str): Word to find in the line.
+lines (list of str): List of strings contraining lines from the file. Output of open(file).readlines().
+start (int): First index from which to start search.
+case_sensitive (bool): If True looks for the exact match. Otherwise the search is case insensitive.</p>
+</dd>
+<dt>Yields:</dt><dd><p>i (int): Index of the line containing word.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="utilities.html" class="btn btn-neutral float-left" title="Utility Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

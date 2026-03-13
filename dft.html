@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electronic Structure Output &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CCE Calculators" href="calculators.html" />
+    <link rel="prev" title="Hamiltonian Parameters Input" href="parameters.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Electronic Structure Output</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.io.qe">Quantum ESPRESSO interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.qe.read_qe"><code class="docutils literal notranslate"><span class="pre">read_qe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.io.orca">ORCA interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.io.orca.read_orca"><code class="docutils literal notranslate"><span class="pre">read_orca()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Electronic Structure Output</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dft.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="electronic-structure-output">
+<h1>Electronic Structure Output<a class="headerlink" href="#electronic-structure-output" title="Link to this heading"></a></h1>
+<p>Each of the interfaces includes the function that should be used to read
+electronic structure calculations output into <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instance.</p>
+<section id="module-pycce.io.qe">
+<span id="quantum-espresso-interface"></span><h2>Quantum ESPRESSO interface<a class="headerlink" href="#module-pycce.io.qe" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.qe.read_qe">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.qe.</span></span><span class="sig-name descname"><span class="pre">read_qe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperfine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">efg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">find_isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.qe.read_qe" title="Link to this definition"></a></dt>
+<dd><p>Function to read PW/GIPAW output from Quantum ESPRESSO into BathArray.</p>
+<p>Changes the names of the atoms to the most abundant isotopes if <code class="docutils literal notranslate"><span class="pre">find_isotopes</span></code> set to True.
+If that is not the desired outcome, user can define which isotopes to use using keyword isotopes.
+If <code class="docutils literal notranslate"><span class="pre">find_isotopes</span></code> is False, then keep the original names even when <code class="docutils literal notranslate"><span class="pre">isotopes</span></code> argument is provided.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>pwfile (str):</dt><dd><p>Name of PW input or output file.
+If the file doesn’t have proper extension, parameter pw_type should indicate the type.</p>
+</dd>
+</dl>
+<p>hyperfine (str): name of the GIPAW hyperfine output.
+efg (str): Name of the gipaw electric field tensor output.
+s (float): Spin of the central spin. Default 1.
+pwtype (str): Type of the <code class="docutils literal notranslate"><span class="pre">pwfile</span></code>. if not listed, will be inferred from extension of pwfile.
+types (SpinDict or list of tuples): SpinDict containing SpinTypes of isotopes or input to make one.
+isotopes (dict): Optional.</p>
+<blockquote>
+<div><p>Dictionary with entries: {“element” : “isotope”}, where “element” is the name of the element
+in DFT output, “isotope” is the name of the isotope.</p>
+</div></blockquote>
+<p>center (ndarray of shape (3,)): Position of (0, 0, 0) point in input coordinates.
+center_type (str): Type of the coordinates provided in center argument.</p>
+<blockquote>
+<div><p>Possible value include: ‘bohr’, ‘angstrom’, ‘crystal’, ‘alat’. Default assumes the same as in PW file.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>rotation_matrix (ndarray of shape (3,3)):</dt><dd><p>Rotation matrix to rotate basis. For details see utilities.transform.</p>
+</dd>
+<dt>rm_style (str):</dt><dd><p>Indicates how rotation matrix should be interpreted.
+Can take values “col” or “row”. Default “col”</p>
+</dd>
+</dl>
+<p>find_isotopes (bool): If true, sets isotopes instead of names of the atoms.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>BathArray:</dt><dd><p>BathArray containing atoms with hyperfine couplings and quadrupole tensors from QE output.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.io.orca">
+<span id="orca-interface"></span><h2>ORCA interface<a class="headerlink" href="#module-pycce.io.orca" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.io.orca.read_orca">
+<span class="sig-prename descclassname"><span class="pre">pycce.io.orca.</span></span><span class="sig-name descname"><span class="pre">read_orca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">find_isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.io.orca.read_orca" title="Link to this definition"></a></dt>
+<dd><p>Function to read ORCA output containing the hyperfines couplings and EFG tensors.</p>
+<p>if <code class="docutils literal notranslate"><span class="pre">find_isotopes</span></code> is set to True changes the names of the atoms to the most abundant isotopes.
+If that is not the desired outcome, user can define which isotopes to use using keyword isotopes.</p>
+<dl>
+<dt>Args:</dt><dd><p>fname (str): file name of the ORCA output.
+isotopes (dict): Optional.</p>
+<blockquote>
+<div><p>Dictionary with entries:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;element&quot;</span> <span class="p">:</span> <span class="s2">&quot;isotope&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where “element” is the name of the element in DFT output, “isotope” is the name of the isotope.</p>
+</div></blockquote>
+<p>types (SpinDict or list of tuples): SpinDict containing SpinTypes of isotopes or input to make one.
+center (ndarray of shape (3,)): position of (0, 0, 0) point in the DFT coordinates.
+rotation_matrix (ndarray of shape (3,3)):</p>
+<blockquote>
+<div><p>Rotation matrix to rotate basis. For details see utilities.transform.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>rm_style (str):</dt><dd><p>Indicates how rotation matrix should be interpreted.
+Can take values “col” or “row”. Default “col”</p>
+</dd>
+</dl>
+<p>find_isotopes (bool): If true, sets isotopes instead of names of the atoms.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>BathArray:</dt><dd><p>Array of bath spins with hyperfine couplings and quadrupole tensors from Orca output.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="parameters.html" class="btn btn-neutral float-left" title="Hamiltonian Parameters Input" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="calculators.html" class="btn btn-neutral float-right" title="CCE Calculators" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

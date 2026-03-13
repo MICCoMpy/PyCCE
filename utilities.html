@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utility Functions &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ES Interface" href="dftbase.html" />
+    <link rel="prev" title="Hamiltonian Functions" href="hamiltonian.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utility Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.bath.map">Interaction map</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.map.InteractionMap"><code class="docutils literal notranslate"><span class="pre">InteractionMap</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.map.InteractionMap.from_dict"><code class="docutils literal notranslate"><span class="pre">InteractionMap.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.map.InteractionMap.indexes"><code class="docutils literal notranslate"><span class="pre">InteractionMap.indexes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.map.InteractionMap.items"><code class="docutils literal notranslate"><span class="pre">InteractionMap.items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.map.InteractionMap.keys"><code class="docutils literal notranslate"><span class="pre">InteractionMap.keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.map.InteractionMap.shift"><code class="docutils literal notranslate"><span class="pre">InteractionMap.shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.map.InteractionMap.subspace"><code class="docutils literal notranslate"><span class="pre">InteractionMap.subspace()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.filter">Noise filter functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.filter.filterfunc"><code class="docutils literal notranslate"><span class="pre">filterfunc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.filter.gaussian_phase"><code class="docutils literal notranslate"><span class="pre">gaussian_phase()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.sm">Spin matrix generators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.MatrixDict"><code class="docutils literal notranslate"><span class="pre">MatrixDict</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.sm.MatrixDict.keys"><code class="docutils literal notranslate"><span class="pre">MatrixDict.keys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.SpinMatrix"><code class="docutils literal notranslate"><span class="pre">SpinMatrix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.dimensions_spinvectors"><code class="docutils literal notranslate"><span class="pre">dimensions_spinvectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.numba_gen_sm"><code class="docutils literal notranslate"><span class="pre">numba_gen_sm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.spinvec"><code class="docutils literal notranslate"><span class="pre">spinvec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.stevo"><code class="docutils literal notranslate"><span class="pre">stevo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.sm.vecs_from_dims"><code class="docutils literal notranslate"><span class="pre">vecs_from_dims()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.utilities">Other</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.expand"><code class="docutils literal notranslate"><span class="pre">expand()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.gen_state_list"><code class="docutils literal notranslate"><span class="pre">gen_state_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.normalize"><code class="docutils literal notranslate"><span class="pre">normalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.outer"><code class="docutils literal notranslate"><span class="pre">outer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.partial_inner_product"><code class="docutils literal notranslate"><span class="pre">partial_inner_product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.partial_trace"><code class="docutils literal notranslate"><span class="pre">partial_trace()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.rotate_coordinates"><code class="docutils literal notranslate"><span class="pre">rotate_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.rotate_tensor"><code class="docutils literal notranslate"><span class="pre">rotate_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.rotmatrix"><code class="docutils literal notranslate"><span class="pre">rotmatrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.shorten_dimensions"><code class="docutils literal notranslate"><span class="pre">shorten_dimensions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.tensor_vdot"><code class="docutils literal notranslate"><span class="pre">tensor_vdot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.vec_tensor_vec"><code class="docutils literal notranslate"><span class="pre">vec_tensor_vec()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.vector_from_s"><code class="docutils literal notranslate"><span class="pre">vector_from_s()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.utilities.vvdot"><code class="docutils literal notranslate"><span class="pre">vvdot()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Utility Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utilities.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="utility-functions">
+<h1>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading"></a></h1>
+<p>Here are the various functions used throughout the <strong>PyCCE</strong> code. There is no real structure in this section.</p>
+<section id="module-pycce.bath.map">
+<span id="interaction-map"></span><h2>Interaction map<a class="headerlink" href="#module-pycce.bath.map" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.bath.map.</span></span><span class="sig-name descname"><span class="pre">InteractionMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.map.InteractionMap" title="Link to this definition"></a></dt>
+<dd><p>Dict-like object containing information about tensor interactions between two spins.</p>
+<p>Each key is a tuple of two spin indexes.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>rows (array-like with shape (n, )):</dt><dd><p>Indexes of the bath spins, appearing on the left in the pairwise interaction.</p>
+</dd>
+<dt>columns (array-like with shape (n, )):</dt><dd><p>Indexes of the bath spins, appearing on the right in the pairwise interaction.</p>
+</dd>
+<dt>tensors (array-like with shape (n, 3, 3)):</dt><dd><p>Tensors of pairwise interactions between two spins with the indexes in <code class="docutils literal notranslate"><span class="pre">rows</span></code> and <code class="docutils literal notranslate"><span class="pre">columns</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Attributes:</dt><dd><p>mapping (dict): Actual dictionary storing the data.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap.from_dict">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presorted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.map.InteractionMap.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Generate InteractionMap from the dictionary.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>dictionary (dict): Dictionary with tensors.</p>
+<p>presorted (bool): If true, assumes that the keys in the dictionary were already presorted.</p>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><p>InteractionMap: New instance generated from the dictionary.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap.indexes">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">indexes</span></span><a class="headerlink" href="#pycce.bath.map.InteractionMap.indexes" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (n, 2): Array with the indexes of pairs of spins, for which the tensors are stored.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">items</span></span></span><a class="headerlink" href="#pycce.bath.map.InteractionMap.items" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="headerlink" href="#pycce.bath.map.InteractionMap.keys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap.shift">
+<span class="sig-name descname"><span class="pre">shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.map.InteractionMap.shift" title="Link to this definition"></a></dt>
+<dd><p>Add an offset <code class="docutils literal notranslate"><span class="pre">start</span></code> to the indexes. If <code class="docutils literal notranslate"><span class="pre">inplace</span></code> is False, returns the copy of InteractionMap.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>start (int): Offset in indexes.
+inplace (bool): If True, makes changes inplace. Otherwise returns copy of the map.</p>
+</dd>
+<dt>Returns:</dt><dd><p>InteractionMap: Map with shifted indexes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.map.InteractionMap.subspace">
+<span class="sig-name descname"><span class="pre">subspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.map.InteractionMap.subspace" title="Link to this definition"></a></dt>
+<dd><p>Get new InteractionMap with indexes readressed from array. Within the subspace indexes are renumbered.</p>
+<p>Examples:</p>
+<blockquote>
+<div><p>The subspace of [3,4,7] indexes will contain InteractionMap only within [3,4,7] elements
+with new indexes [0, 1, 2].</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">im</span> <span class="o">=</span> <span class="n">InteractionMap</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">im</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">im</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">im</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">im</span><span class="p">[</span><span class="n">k</span><span class="p">],)</span>
+<span class="go">(0, 3)</span>
+<span class="go">[[1. 0. 0.]</span>
+<span class="go"> [0. 1. 0.]</span>
+<span class="go"> [0. 0. 1.]]</span>
+<span class="go">(3, 7)</span>
+<span class="go"> [[1. 1. 1.]</span>
+<span class="go">  [1. 1. 1.]</span>
+<span class="go">  [1. 1. 1.]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">subspace</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">sim</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">sim</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+<span class="go">(0, 2)</span>
+<span class="go">[[1. 1. 1.]</span>
+<span class="go"> [1. 1. 1.]</span>
+<span class="go"> [1. 1. 1.]]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>array (ndarray): Either bool array containing True for elements within the subspace</dt><dd><p>or array of indexes presented in the subspace.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>InteractionMap: The map for the subspace.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycce.filter">
+<span id="noise-filter-functions"></span><h2>Noise filter functions<a class="headerlink" href="#module-pycce.filter" title="Link to this heading"></a></h2>
+<p>Module with helper functions to obtain CPMG coherence from the noise autocorrelation function.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.filter.filterfunc">
+<span class="sig-prename descclassname"><span class="pre">pycce.filter.</span></span><span class="sig-name descname"><span class="pre">filterfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npulses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.filter.filterfunc" title="Link to this definition"></a></dt>
+<dd><p>Time-domain filter function for the given CPMG sequence.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ts (ndarray with shape (n,)): Time points at which filter function will be computed.
+tau (float): Delay between pulses.
+npulses (int): Number of pulses in CPMG sequence.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n,): Filter function for the given CPMG sequence.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.filter.gaussian_phase">
+<span class="sig-prename descclassname"><span class="pre">pycce.filter.</span></span><span class="sig-name descname"><span class="pre">gaussian_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npulses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'khz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.filter.gaussian_phase" title="Link to this definition"></a></dt>
+<dd><p>Compute average random phase squared assuming Gaussian noise.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>timespace (ndarray with shape (n,)): Time points at which correlation function was computed.
+corr (ndarray with shape (n,)): Noise autocorrelation function.
+npulses (int): Number of pulses in CPMG sequence.
+units (str): If units contain frequency or angular frequency (‘rad’ in <code class="docutils literal notranslate"><span class="pre">units</span></code>).</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n,): Random phase accumulated by the qubit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.sm">
+<span id="spin-matrix-generators"></span><h2>Spin matrix generators<a class="headerlink" href="#module-pycce.sm" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.sm.MatrixDict">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">MatrixDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">spins</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.MatrixDict" title="Link to this definition"></a></dt>
+<dd><p>Class for storing the SpinMatrix objects.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.sm.MatrixDict.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">a</span> <span class="pre">set-like</span> <span class="pre">object</span> <span class="pre">providing</span> <span class="pre">a</span> <span class="pre">view</span> <span class="pre">on</span> <span class="pre">D's</span> <span class="pre">keys</span></span></span><a class="headerlink" href="#pycce.sm.MatrixDict.keys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.sm.SpinMatrix">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">SpinMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.SpinMatrix" title="Link to this definition"></a></dt>
+<dd><p>Class containing the spin matrices in Sz basis.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>s (float): Total spin.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.sm.dimensions_spinvectors">
+<span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">dimensions_spinvectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">central_spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.dimensions_spinvectors" title="Link to this definition"></a></dt>
+<dd><p>Generate two arrays, containing dimensions of the spins in the cluster and the vectors with spin matrices.</p>
+<dl>
+<dt>Args:</dt><dd><p>bath (BathArray with shape (n,)): Array of the n spins within cluster.
+central_spin (CenterArray, optional): If provided, include dimensions of the central spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: <em>tuple</em> containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>ndarray with shape (n,)</strong>: Array with dimensions for each spin.</p></li>
+<li><p><strong>list</strong>: List with vectors of spin matrices for each spin in the cluster
+(Including central spin if <code class="docutils literal notranslate"><span class="pre">central_spin</span></code> is not None). Each with  shape (3, N, N) where
+<code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">prod(dimensions)</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.sm.numba_gen_sm">
+<span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">numba_gen_sm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.numba_gen_sm" title="Link to this definition"></a></dt>
+<dd><p>Numba-friendly spin matrix.
+Args:</p>
+<blockquote>
+<div><p>dim (int): dimensions of the spin marix.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.sm.spinvec">
+<span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">spinvec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.spinvec" title="Link to this definition"></a></dt>
+<dd><p>Generate single spin vector, given the index and dimensions of all spins in the cluster.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>j (int): Index of the spin.
+dimensions (ndarray with shape (n,)): Dimensions of spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, X, X): Spin vector of <span class="math notranslate nohighlight">\(j\)</span>-sth spin in full Hilbert space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.sm.stevo">
+<span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">stevo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.stevo" title="Link to this definition"></a></dt>
+<dd><p>Stevens operators (from I.D. Ryabov, Journal of Magnetic Resonance 140, 141–145 (1999)).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sm (SpinMatrix): Spin matrices of the given spin.
+k (int): <span class="math notranslate nohighlight">\(k\)</span> index of the Stevens operator.
+q (int): <span class="math notranslate nohighlight">\(q\)</span> index of the Stevens operator.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Stevens operator representation in <span class="math notranslate nohighlight">\(S_z\)</span> basis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.sm.vecs_from_dims">
+<span class="sig-prename descclassname"><span class="pre">pycce.sm.</span></span><span class="sig-name descname"><span class="pre">vecs_from_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.sm.vecs_from_dims" title="Link to this definition"></a></dt>
+<dd><p>Generate ndarray of spin vectors, given the array of spin dimensions.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dimensions (ndarray with shape (n,)): Dimensions of spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, 3, X, X): Array of spin vectors in full Hilbert space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.utilities">
+<span id="other"></span><h2>Other<a class="headerlink" href="#module-pycce.utilities" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.expand">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.expand" title="Link to this definition"></a></dt>
+<dd><p>Expand matrix M from it’s own dimensions to the total Hilbert space.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>matrix (ndarray with shape (dim[i], dim[i])): Inital matrix.
+i (int): Index of the spin dimensions in <code class="docutils literal notranslate"><span class="pre">dim</span></code> parameter.
+dim (ndarray): Array pf dimensions of all spins present in the cluster.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (prod(dim), prod(dim)): Expanded matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.gen_state_list">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">gen_state_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.gen_state_list" title="Link to this definition"></a></dt>
+<dd><p>Generate list of states from <span class="math notranslate nohighlight">\(S_z\)</span> projections of the pure states.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>states (ndarray with shape (n,)): Array of <span class="math notranslate nohighlight">\(S_z\)</span> projections.
+dims (ndarray with shape (n,)): Array of the dimensions of the spins in the cluster.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List: list of state vectors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.normalize">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.normalize" title="Link to this definition"></a></dt>
+<dd><p>Normalize vector to 1.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vec (ndarray with shape (n, )): Vector to be normalized.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, ): Normalized vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.outer">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">outer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.outer" title="Link to this definition"></a></dt>
+<dd><p>Outer product of two complex vectors <span class="math notranslate nohighlight">\(\ket{s_1}ra{s_2}\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>s1 (ndarray with shape (n, )): First vector.
+s2 (ndarray with shape (m, )): Second vector.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, m): Outer product.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.partial_inner_product">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">partial_inner_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">avec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.partial_inner_product" title="Link to this definition"></a></dt>
+<dd><p>Returns partial inner product <span class="math notranslate nohighlight">\(\ket{b}=\bra{a}\ket{\psi}\)</span>, where <span class="math notranslate nohighlight">\(\ket{a}\)</span> provided by
+<code class="docutils literal notranslate"><span class="pre">avec</span></code> contains degrees of freedom to be “traced out” and <span class="math notranslate nohighlight">\(\ket{\psi}\)</span> provided by <code class="docutils literal notranslate"><span class="pre">total</span></code>
+is the total statevector.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>avec (ndarray with shape (a,)):
+total (ndarray with shape (a*b,)):
+dimensions (ndarray with shape (n,)):
+index ():</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.partial_trace">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">partial_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dmarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.partial_trace" title="Link to this definition"></a></dt>
+<dd><p>Compute partial trace of the operator (or array of operators).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dmarray (ndarray with shape (N, N) or (m, N, N):
+dimensions (array-like): Array of all dimensions of the system.
+sel (int or array-like): Index or indexes of dimensions to keep.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n) or (m, n, n): Partially traced operator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.rotate_coordinates">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">rotate_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.rotate_coordinates" title="Link to this definition"></a></dt>
+<dd><p>Rootate coordinates in real space, given rotation matrix.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xyz (ndarray with shape (…, 3)): Array of coordinates.
+rotation (ndarray with shape (3, 3)): Rotation matrix.
+cell (ndarray with shape (3, 3)): Cell matrix if coordinates are given in cell coordinates.
+style (str): Can be ‘row’ or ‘col’. Determines how rotation matrix and cell matrix are initialized.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (…, 3)): Array of rotated coordinates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.rotate_tensor">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">rotate_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.rotate_tensor" title="Link to this definition"></a></dt>
+<dd><p>Rootate tensor in real space, given rotation matrix.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>tensor (ndarray with shape (3, 3)): Tensor to be rotated.
+rotation (ndarray with shape (3, 3)): Rotation matrix.
+style (str): Can be ‘row’ or ‘col’. Determines how rotation matrix is initialized.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, 3): Rotated tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.rotmatrix">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">rotmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.rotmatrix" title="Link to this definition"></a></dt>
+<dd><p>Generate 3D rotation matrix which applied on initial vector will produce vector, aligned with final vector.</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">rotmatrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">array([0.577, 0.577, 0.577])</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>initial_vector (ndarray with shape(3, )): Initial vector.
+final_vector (ndarray with shape (3, )): Final vector.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, 3): Rotation matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.shorten_dimensions">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">shorten_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">central_number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.shorten_dimensions" title="Link to this definition"></a></dt>
+<dd><p>Combine the dimensions, corresponding to the central spins.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dimensions (ndarray with shape (n, )): Array of the dimensions of the spins in the cluster.
+central_number (int): Number of central spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n - central_number): Array of the shortened dimensions;</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.tensor_vdot">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">tensor_vdot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.tensor_vdot" title="Link to this definition"></a></dt>
+<dd><p>Compute product of the tensor and spin vector.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>tensor (ndarray with shape (3, 3)): Tensor in real space.
+ivec (ndarray with shape (3, n, n)): Spin vector.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, n, n): Right-side tensor vector product <span class="math notranslate nohighlight">\(Tv\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.vec_tensor_vec">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">vec_tensor_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.vec_tensor_vec" title="Link to this definition"></a></dt>
+<dd><p>Compute product v &#64; T &#64; v.
+Args:</p>
+<blockquote>
+<div><p>v1 (ndarray with shape (3, n, n)): Leftmost expanded spin vector.
+tensor (ndarray with shape (3, 3)): 3x3 interaction tensor in real space.
+v2 (ndarray with shape (3, n, n)): Rightmost expanded spin vector.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Product <span class="math notranslate nohighlight">\(vTv\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.vector_from_s">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">vector_from_s</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.vector_from_s" title="Link to this definition"></a></dt>
+<dd><p>Generate vector state from <span class="math notranslate nohighlight">\(S_z\)</span> projection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>s (float): <span class="math notranslate nohighlight">\(S_z\)</span> projection.
+d (int): Dimensions of the given spin.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (d, ): State vector of a pure state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.utilities.vvdot">
+<span class="sig-prename descclassname"><span class="pre">pycce.utilities.</span></span><span class="sig-name descname"><span class="pre">vvdot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.utilities.vvdot" title="Link to this definition"></a></dt>
+<dd><p>Compute product of two spin vectors.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vec_1 (ndarray with shape (3, N, N)): First spin vector.
+vec_2 (ndarray with shape (3, N, N)): Second spin vector.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (N, N): Product of two vectors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hamiltonian.html" class="btn btn-neutral float-left" title="Hamiltonian Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dftbase.html" class="btn btn-neutral float-right" title="ES Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

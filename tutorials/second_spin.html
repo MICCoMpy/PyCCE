@@ -1,0 +1,808 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiple central spins &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dissipative spin bath" href="mecce.html" />
+    <link rel="prev" title="Correlation function" href="classical_noise.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="diamond_nv.html">NV Center in Diamond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sic_vv.html">VV in SiC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="si_shallow.html">Shallow donor in Si</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classical_noise.html">Correlation function</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Multiple central spins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Two-NV-Centers-in-Diamond">Two NV Centers in Diamond</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Generating-the-CenterArray-object">Generating the <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Decoherence-of-entangled-state">Decoherence of entangled state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Entanglement-between-two-NVs">Entanglement between two NVs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Si:Bi-donor">Si:Bi donor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Away-from-avoided-crossings">Away from avoided crossings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Near-avoided-crossings">Near avoided crossings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mecce.html">Dissipative spin bath</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorial.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Multiple central spins</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/second_spin.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Multiple-central-spins">
+<h1>Multiple central spins<a class="headerlink" href="#Multiple-central-spins" title="Link to this heading"></a></h1>
+<p>Instead of one central spin, the PyCCE can be used to consider the dynamics of <em>N</em> central spins.</p>
+<p>Then the central spin Hamiltonian and spin-bath Hamiltonian are written as:</p>
+<p><span class="math">\begin{equation}
+\hat H_S = \sum_i \mathbf{S_i D_i S_i} + \mathbf{S_i \gamma_{S_i} B} + \sum_{i < j} \mathbf{S_i K_{ij} S_j}
+\end{equation}</span></p>
+<p>Where <span class="math notranslate nohighlight">\(\mathbf{K_{ij}}\)</span> are interaction tensors between central spins <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p>The central spin-bath couplings can be defined as:</p>
+<p><span class="math">\begin{equation}
+\hat H_{SB} = \sum_{i,l} \mathbf{S_{i} A_{il} I_{l}}
+\end{equation}</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>pycce
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>ase
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycce</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ase</span>
+
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">8805</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Two-NV-Centers-in-Diamond">
+<h2>Two NV Centers in Diamond<a class="headerlink" href="#Two-NV-Centers-in-Diamond" title="Link to this heading"></a></h2>
+<p>First example is two NV centers in diamond. We begin by considering two non-interacting electron spins in the nuclear spin bath.</p>
+<p>We generate the nuclear <span class="math notranslate nohighlight">\(^{13}\)</span>C spin bath using a well-defined procedure.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">bulk</span>
+
+<span class="c1"># Generate unitcell from ase</span>
+<span class="n">diamond</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">read_ase</span><span class="p">(</span><span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;diamond&#39;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">diamond</span><span class="o">.</span><span class="n">zdir</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">bath</span> <span class="o">=</span> <span class="n">diamond</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<section id="Generating-the-CenterArray-object">
+<h3>Generating the <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> object<a class="headerlink" href="#Generating-the-CenterArray-object" title="Link to this heading"></a></h3>
+<p>The properties of the NVs are stored in the <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> object contains the properties of all central spins in the system. In this example, we prepare the array consisting of two electron spin-1, with the same ZFS and gyromagnetic ratio.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mf">2.4e6</span>  <span class="c1"># in kHz</span>
+<span class="n">gyro</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">ci</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">gyro</span>  <span class="c1"># gyromagnetic ratio of electron in rad/G/ms</span>
+
+<span class="c1"># Generate an array of two central spins,</span>
+<span class="c1"># each with the same D and gyromagnetic ratio value,</span>
+<span class="c1"># separated by 100 nm.</span>
+<span class="n">nvs</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">CenterArray</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">D</span><span class="o">=</span><span class="p">[</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">],</span>
+                     <span class="n">position</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]],</span>
+                     <span class="n">gyro</span><span class="o">=</span><span class="p">[</span><span class="n">gyro</span><span class="p">,</span> <span class="n">gyro</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">nvs</span><span class="p">)</span>  <span class="c1"># Print properties of the central spin array</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CenterArray
+(s: [1. 1.],
+xyz:
+[[   0.    0.    0.]
+ [   0.    0. 1000.]],
+zfs:
+[[[-800000.       0.       0.]
+  [      0. -800000.       0.]
+  [      0.       0. 1600000.]]
+
+ [[-800000.       0.       0.]
+  [      0. -800000.       0.]
+  [      0.       0. 1600000.]]],
+gyro:
+[[[-17608.5971     -0.         -0.    ]
+  [    -0.     -17608.5971     -0.    ]
+  [    -0.         -0.     -17608.5971]]
+
+ [[-17608.5971     -0.         -0.    ]
+  [    -0.     -17608.5971     -0.    ]
+  [    -0.         -0.     -17608.5971]]])
+</pre></div></div>
+</div>
+<p>You can access the properties of the central spins (and modify them) as items in <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">nvs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">nvs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">gyro</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="mi">1000</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nvs</span><span class="p">)</span>
+<span class="n">nvs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">gyro</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">pc</span><span class="o">.</span><span class="n">ELECTRON_GYRO</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Center
+(s: 1.0,
+xyz:
+[0. 0. 0.],
+zfs:
+[[-800000.       0.       0.]
+ [      0. -800000.       0.]
+ [      0.       0. 1600000.]],
+gyro:
+-17608.59705)
+
+CenterArray
+(s: [1. 1.],
+xyz:
+[[   0.    0.    0.]
+ [   0.    0. 1000.]],
+zfs:
+[[[-800000.       0.       0.]
+  [      0. -800000.       0.]
+  [      0.       0. 1600000.]]
+
+ [[-800000.       0.       0.]
+  [      0. -800000.       0.]
+  [      0.       0. 1600000.]]],
+gyro:
+[[[   989.9394    629.7526    554.6254]
+  [   641.9013    943.0174     56.2197]
+  [   568.4803    978.1593    265.0863]]
+
+ [[-17608.5971     -0.         -0.    ]
+  [    -0.     -17608.5971     -0.    ]
+  [    -0.         -0.     -17608.5971]]])
+</pre></div></div>
+</div>
+<p>For illustrative purposes, we will use identical nuclear spin environment for two NVs. For that we create a copy of the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code>, shift it by 1000 angstroms, and concatenate two arrays.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> instance is provided as a <code class="docutils literal notranslate"><span class="pre">spin</span></code> keyword to the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object. It can be later accesed as <code class="docutils literal notranslate"><span class="pre">Simulator.center</span></code> attribute.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bath2</span> <span class="o">=</span> <span class="n">bath</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">bath2</span><span class="o">.</span><span class="n">z</span> <span class="o">+=</span> <span class="mi">1000</span>
+
+<span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="n">nvs</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">bath</span><span class="p">,</span> <span class="n">bath2</span><span class="p">]),</span>
+                    <span class="n">r_bath</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Simulator for center array of size 2.
+magnetic field:
+array([  0.,   0., 500.])
+
+Parameters of cluster expansion:
+r_bath: [40, 40]
+r_dipole: 6
+order: 2
+
+Bath consists of 1046 spins.
+
+Clusters include:
+1046  clusters of order 1.
+836  clusters of order 2.
+
+</pre></div></div>
+</div>
+<p>When the number of central spins is greater than one, hyperfine couplings in the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> have an additional dimension, corresponding to the two sets of the hyperfine couplings.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">bath</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">bath</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1046, 2, 3, 3)
+[[[ 2.3048  1.1078 -0.6608]
+  [ 1.1078 -1.0451 -0.1988]
+  [-0.6608 -0.1988 -1.2597]]
+
+ [[-0.      0.      0.    ]
+  [ 0.     -0.      0.    ]
+  [ 0.      0.      0.    ]]]
+</pre></div></div>
+</div>
+</section>
+<section id="Decoherence-of-entangled-state">
+<h3>Decoherence of entangled state<a class="headerlink" href="#Decoherence-of-entangled-state" title="Link to this heading"></a></h3>
+<p>Let’s do some calculations! Note that <code class="docutils literal notranslate"><span class="pre">gcce</span></code> method in this case includes a lot (9-fold) larger Hilbert space, so it will take a bit longer.</p>
+<p>Here we compute the coherence function, defined as a decay of the offdiagonal element of the density matrix:</p>
+<p><span class="math">\begin{equation}
+L=\langle 0 | \hat \rho | 1 \rangle
+\end{equation}</span></p>
+<p>Where <span class="math notranslate nohighlight">\(| 0 \rangle\)</span> and <span class="math notranslate nohighlight">\(| 1 \rangle\)</span> are defined as eigenstates of the central spin Hamiltonian introduced above.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 00 state</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># -10 state</span>
+<span class="n">cce</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">gcce</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">cce</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">calc</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># 0-1 state</span>
+<span class="n">cce</span><span class="p">[</span><span class="s1">&#39;02&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;02&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">calc</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># -1 -1 state</span>
+<span class="o">%</span><span class="k">time</span> cce[&#39;03&#39;] = calc.compute(ts, pulses=1)
+<span class="o">%</span><span class="k">time</span> gcce[&#39;03&#39;] = calc.compute(ts, method=&#39;gcce&#39;, pulses=1)
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/onizhuk/midway/codes_development/pyCCE/pycce/h/functions.py:298: NumbaPerformanceWarning: <span class="ansi-bold">&#39;@&#39; is faster on contiguous arrays, called on (array(complex128, 2d, A), array(complex128, 2d, A))</span>
+  hself = vec_tensor_vec(svec, tensor, svec)
+/home/onizhuk/midway/codes_development/pyCCE/pycce/h/functions.py:298: NumbaPerformanceWarning: <span class="ansi-bold">&#39;@&#39; is faster on contiguous arrays, called on (array(complex128, 2d, A), array(complex128, 2d, A))</span>
+  hself = vec_tensor_vec(svec, tensor, svec)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CPU times: user 1.72 s, sys: 20.3 ms, total: 1.74 s
+Wall time: 629 ms
+CPU times: user 2min 22s, sys: 1.99 s, total: 2min 24s
+Wall time: 24.4 s
+</pre></div></div>
+</div>
+<p>As expected, in the case of decoupled NV centers the coherence of the bell state decays as a product of separated NVs decoherence.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">cce</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;01 CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;01 gCCE&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">cce</span><span class="p">[</span><span class="s1">&#39;02&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;02 CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;02&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;02 gCCE&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">cce</span><span class="p">[</span><span class="s1">&#39;03&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;03 CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;03&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;03 gCCE&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;02&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span> <span class="o">*</span> <span class="n">gcce</span><span class="p">[</span><span class="s1">&#39;01&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;01*02&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_second_spin_16_0.png" src="../_images/tutorials_second_spin_16_0.png" />
+</div>
+</div>
+</section>
+<section id="Entanglement-between-two-NVs">
+<h3>Entanglement between two NVs<a class="headerlink" href="#Entanglement-between-two-NVs" title="Link to this heading"></a></h3>
+<p>We can use the PyCCE to predict how the entanglement evolves between two dipolarly coupled electron spins, initially prepared in the product state:</p>
+<p><span class="math">\begin{equation}
+| \Psi \rangle = \frac{1}{2} (| 0 \rangle + | -1 \rangle) \otimes (| 0 \rangle + | -1 \rangle)
+\end{equation}</span></p>
+<p>We add interaction between two NVs by calling <code class="docutils literal notranslate"><span class="pre">nvs.point_dipole</span></code> method, that generates interaction tensors from point dipole approximation. We can also directly set interaction tensors by calling <code class="docutils literal notranslate"><span class="pre">nvs.add_interaction</span></code> method or modifiying <code class="docutils literal notranslate"><span class="pre">nvs.imap</span></code> attribute.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nvs</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">CenterArray</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">D</span><span class="o">=</span><span class="p">[</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">],</span>
+                     <span class="n">position</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">]],</span>
+                     <span class="n">gyro</span><span class="o">=</span><span class="p">[</span><span class="n">gyro</span><span class="p">,</span> <span class="n">gyro</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">nvs</span><span class="o">.</span><span class="n">point_dipole</span><span class="p">()</span> <span class="c1"># Add interactions</span>
+
+<span class="n">zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">one</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">nvs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">zero</span> <span class="c1"># Set qubit levels</span>
+<span class="n">nvs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">one</span>
+<span class="n">nvs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">one</span>
+<span class="n">nvs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">zero</span>
+
+<span class="c1"># Generate product state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">zero</span> <span class="o">+</span> <span class="n">one</span><span class="p">,</span> <span class="n">zero</span> <span class="o">+</span> <span class="n">one</span><span class="p">))</span>
+<span class="n">nvs</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initial amplitudes in Sz x Sz basis:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">nvs</span><span class="o">.</span><span class="n">state</span><span class="p">))</span> <span class="c1"># Initial state</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Interaction tensor:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nvs</span><span class="o">.</span><span class="n">imap</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="c1"># in kHz</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Initial amplitudes in Sz x Sz basis: [0.  0.  0.  0.  0.5 0.5 0.  0.5 0.5]
+Interaction tensor:
+[[ 416.3281   -0.       -0.    ]
+ [  -0.      416.3281   -0.    ]
+ [  -0.       -0.     -832.6562]]
+</pre></div></div>
+</div>
+<p>We will use negativity (<a class="reference external" href="https://en.wikipedia.org/wiki/Negativity_(quantum_mechanics">https://en.wikipedia.org/wiki/Negativity_(quantum_mechanics</a>)) as a metric of entanglement, defined as:</p>
+<p>$ <span class="math">\mathcal{N}`(:nbsphinx-math:</span>rho`) <span class="math">\equiv `:nbsphinx-math:</span>frac{||rho^{Gamma_A}||_1-1}{2}`$</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#          0      1     2     3      4     5     6       7       8</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;1-1&#39;</span><span class="p">,</span> <span class="s1">&#39;01&#39;</span><span class="p">,</span> <span class="s1">&#39;00&#39;</span><span class="p">,</span> <span class="s1">&#39;0-1&#39;</span><span class="p">,</span> <span class="s1">&#39;-11&#39;</span><span class="p">,</span> <span class="s1">&#39;-10&#39;</span><span class="p">,</span> <span class="s1">&#39;-1-1&#39;</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pltdm</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to plot nonzero elements of the density matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\langle$&#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">+</span><span class="sa">r</span><span class="s1">&#39;$|\rho|$&#39;</span><span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">states</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;$\rangle$&#39;</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dm</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">partial_transpose</span><span class="p">(</span><span class="n">dm0</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get partial transpose of the density matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ish</span> <span class="o">=</span> <span class="n">dm0</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">indexes</span><span class="p">[</span><span class="n">which</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">which</span>
+    <span class="n">indexes</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="n">which</span><span class="p">]</span> <span class="o">=</span> <span class="n">which</span>
+    <span class="k">return</span> <span class="n">dm0</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">dim</span><span class="p">,</span> <span class="o">*</span><span class="n">dim</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">*</span><span class="n">indexes</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ish</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">negativities</span><span class="p">(</span><span class="n">dms</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute negativity for an array of density matrices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">negs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">dm</span> <span class="ow">in</span> <span class="n">dms</span><span class="p">:</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">partial_transpose</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">tr_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="nb">ord</span><span class="o">=</span><span class="s1">&#39;nuc&#39;</span><span class="p">)</span>
+        <span class="n">negs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tr_norm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">negs</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rz</span><span class="p">(</span><span class="n">dm</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set density matrix elements equal to zero at zero timepoint to zero.</span>
+<span class="sd">    Removes numerical instabilities when we divide by a near-zero value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">((</span><span class="n">dm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dm</span><span class="o">.</span><span class="n">shape</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">dm</span>
+</pre></div>
+</div>
+</div>
+<p>First, compute the entanglement without dynamical decoupling pulses applied.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tfid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">nvs</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">bath</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                 <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">dmfid</span> <span class="o">=</span> <span class="n">rz</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">tfid</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">fulldm</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">pltdm</span><span class="p">(</span><span class="n">tfid</span><span class="p">,</span> <span class="n">dmfid</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tfid</span><span class="p">,</span> <span class="n">negativities</span><span class="p">(</span><span class="n">dmfid</span><span class="p">))</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;DM element&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Negativity&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_second_spin_23_0.png" src="../_images/tutorials_second_spin_23_0.png" />
+</div>
+</div>
+<p>Compare that to the case, when <span class="math notranslate nohighlight">\(\pi\)</span> pulse is applied to each of the electron spins.</p>
+<p>To create such pulse sequence, we specify the <code class="docutils literal notranslate"><span class="pre">which</span></code> keyword argument of the <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> class with indexes of both NVs in the <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pulse, flipping simultaneously the two NVs</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">the</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">nvs</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">bath</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                 <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="n">dm_short</span> <span class="o">=</span> <span class="n">rz</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">tfid</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">fulldm</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">dm</span> <span class="o">=</span> <span class="n">rz</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">the</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">fulldm</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>As expected, we find a significantly prolonged entanglement between two electron spins.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">pltdm</span><span class="p">(</span><span class="n">tfid</span><span class="p">,</span> <span class="n">dm_short</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tfid</span><span class="p">,</span> <span class="n">negativities</span><span class="p">(</span><span class="n">dm_short</span><span class="p">))</span>
+
+<span class="n">pltdm</span><span class="p">(</span><span class="n">the</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">the</span><span class="p">,</span> <span class="n">negativities</span><span class="p">(</span><span class="n">dm</span><span class="p">))</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;DM element&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.26</span><span class="p">))</span>
+    <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Negativity&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_second_spin_27_0.png" src="../_images/tutorials_second_spin_27_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Si:Bi-donor">
+<h2>Si:Bi donor<a class="headerlink" href="#Si:Bi-donor" title="Link to this heading"></a></h2>
+<p>We use the PyCCE framework to reproduce paper: PHYSICAL REVIEW B 91, 245416 (2015) by S. J. Balian et al. Here, <span class="math notranslate nohighlight">\(^{209}\)</span>Bi nuclear spin 9/2 and electron spin 1/2 interact very strongly (~1.5 GHz hyperfine), with many avoided crossings arising and leading to clock transitions. The qubit states is chosen as a two energy levels of the hybrid electron and nuclear spins system.</p>
+<p>First, we prepare a <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>, containing the properties of two central spins.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aiso</span> <span class="o">=</span> <span class="mf">1.4754e6</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">aiso</span> <span class="c1"># Isotropic interaction tensor</span>
+<span class="n">ebi</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">CenterArray</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+                     <span class="n">gyro</span><span class="o">=</span><span class="p">[</span><span class="n">pc</span><span class="o">.</span><span class="n">ci</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">gyro</span><span class="p">,</span> <span class="n">pc</span><span class="o">.</span><span class="n">ci</span><span class="p">[</span><span class="s1">&#39;209Bi&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">gyro</span><span class="p">],</span>
+                     <span class="n">imap</span><span class="o">=</span><span class="n">im</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>For visualization purposes, plot a diagram of the energies of the hybrid system as a function of magnetic field. Here the chosen qubit levels are highlighted with black points.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ens</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>  <span class="c1"># applied magnetic field</span>
+<span class="k">for</span> <span class="n">mf</span> <span class="ow">in</span> <span class="n">ms</span><span class="p">:</span>
+    <span class="n">ebi</span><span class="o">.</span><span class="n">generate_states</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">mf</span><span class="p">])</span>
+    <span class="n">ens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ebi</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span>
+
+<span class="n">ens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ens</span><span class="p">)</span>
+
+<span class="n">lowerdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ens</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">10</span><span class="p">]</span><span class="o">/</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ms</span><span class="o">/</span><span class="mf">1e4</span><span class="p">,</span>
+                       <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">higherdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ens</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ms</span><span class="o">/</span><span class="mf">1e4</span><span class="p">,</span>
+                        <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">ens</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">lowerdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">higherdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lowerdf</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">higherdf</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;B (T)&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;E (GHz)&#39;</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_second_spin_31_0.png" src="../_images/tutorials_second_spin_31_0.png" />
+</div>
+</div>
+<p>Now we define the calculations of hyperfine couplings for the electron spin.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PHYSICAL REVIEW B 68, 115322 (2003)</span>
+<span class="c1">#  https://link.springer.com/content/pdf/10.1007%2FBF02725533.pdf for Bi</span>
+<span class="n">n_parameter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.029</span><span class="o">/</span><span class="mf">0.069</span><span class="p">)</span>
+<span class="c1"># https://journals.aps.org/pr/pdf/10.1103/PhysRev.114.1219</span>
+<span class="n">a_parameter</span> <span class="o">=</span> <span class="mf">25.09</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">factor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_parameter</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a_parameter</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">14.43</span><span class="p">):</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">z</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">bottom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">top</span> <span class="o">/</span> <span class="n">bottom</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">contact_si</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">gamma_n</span><span class="p">,</span> <span class="n">gamma_e</span><span class="o">=</span><span class="n">pc</span><span class="o">.</span><span class="n">ELECTRON_GYRO</span><span class="p">,</span>
+               <span class="n">a_lattice</span><span class="o">=</span><span class="mf">5.43</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="mi">186</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_parameter</span><span class="p">,</span>
+               <span class="n">a</span><span class="o">=</span><span class="n">a_parameter</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">14.43</span><span class="p">):</span>
+
+    <span class="n">k0</span> <span class="o">=</span> <span class="mf">0.85</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">a_lattice</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">/</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">gamma_n</span> <span class="o">*</span> <span class="n">gamma_e</span> <span class="o">*</span> <span class="n">pc</span><span class="o">.</span><span class="n">HBAR_MU0_O4PI</span> <span class="o">*</span> <span class="n">nu</span>
+    <span class="n">xpart</span> <span class="o">=</span> <span class="n">factor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k0</span> <span class="o">*</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ypart</span> <span class="o">=</span> <span class="n">factor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k0</span> <span class="o">*</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">zpart</span> <span class="o">=</span> <span class="n">factor</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">k0</span> <span class="o">*</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pre</span> <span class="o">*</span> <span class="p">(</span><span class="n">xpart</span> <span class="o">+</span> <span class="n">ypart</span> <span class="o">+</span> <span class="n">zpart</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">bath</span><span class="p">):</span>
+    <span class="n">na</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span>
+    <span class="n">aiso</span> <span class="o">=</span> <span class="n">contact_si</span><span class="p">(</span><span class="n">bath</span><span class="o">.</span><span class="n">xyz</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">bath</span><span class="o">.</span><span class="n">gyro</span><span class="p">)</span> <span class="c1"># Contact term</span>
+    <span class="c1"># Generate dipolar terms</span>
+    <span class="n">bath</span><span class="o">.</span><span class="n">from_center</span><span class="p">(</span><span class="n">ebi</span><span class="p">)</span>
+    <span class="c1"># Add contact term for electron spni</span>
+    <span class="n">bath</span><span class="o">.</span><span class="n">A</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)[</span><span class="n">na</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">aiso</span><span class="p">[:,</span> <span class="n">na</span><span class="p">,</span> <span class="n">na</span><span class="p">]</span>
+<br/></pre></div>
+</div>
+</div>
+<p>And prepare the spin bath using <code class="docutils literal notranslate"><span class="pre">ase</span></code> interface.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">si</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">read_ase</span><span class="p">(</span><span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Away-from-avoided-crossings">
+<h3>Away from avoided crossings<a class="headerlink" href="#Away-from-avoided-crossings" title="Link to this heading"></a></h3>
+<p>Chosen energy levels 6 &lt;-&gt; 14 give raise to the clock transition (CT) at ~800 G. First compute the coherence avay from CT at 3200 G. It will take some time, as the bath is large.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">sicalc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">ebi</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                      <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">3200</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                      <span class="n">hyperfine</span><span class="o">=</span><span class="n">func</span><span class="p">)</span>
+<span class="n">orders</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">:</span>
+    <span class="n">sicalc</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sicalc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">nts</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+
+<span class="n">dfoff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">nts</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">orders</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfoff</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_second_spin_38_0.png" src="../_images/tutorials_second_spin_38_0.png" />
+</div>
+</div>
+</section>
+<section id="Near-avoided-crossings">
+<h3>Near avoided crossings<a class="headerlink" href="#Near-avoided-crossings" title="Link to this heading"></a></h3>
+<p>Now compare that to the coherence near the CT ( -4G from CT). Note, that number of clusters considered here is already rather large, so the calculations will take a minute or two.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+
+<span class="n">sicalc</span><span class="o">.</span><span class="n">magnetic_field</span> <span class="o">=</span> <span class="mi">791</span>
+<span class="n">orders</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">:</span>
+    <span class="n">sicalc</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sicalc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+
+<span class="n">dfat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">orders</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfat</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_second_spin_41_0.png" src="../_images/tutorials_second_spin_41_0.png" />
+</div>
+</div>
+<p>Exactly at CT one needs even higher <code class="docutils literal notranslate"><span class="pre">order</span></code>, larger <code class="docutils literal notranslate"><span class="pre">r_bath</span></code> and <code class="docutils literal notranslate"><span class="pre">r_dipole</span></code>, and random bath state sampling to get accurate results. It is left as an exersize to the reader to try and converge the coherence at clock transition.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classical_noise.html" class="btn btn-neutral float-left" title="Correlation function" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mecce.html" class="btn btn-neutral float-right" title="Dissipative spin bath" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

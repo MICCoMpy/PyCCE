@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dissipative spin bath &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spin Bath" href="../bath.html" />
+    <link rel="prev" title="Multiple central spins" href="second_spin.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="diamond_nv.html">NV Center in Diamond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sic_vv.html">VV in SiC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="si_shallow.html">Shallow donor in Si</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classical_noise.html">Correlation function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="second_spin.html">Multiple central spins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Dissipative spin bath</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setup-the-simulator-properties">Setup the simulator properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Dissipation-in-the-bath">Dissipation in the bath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Dissipation-in-the-central-spin">Dissipation in the central spin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorial.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Dissipative spin bath</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/mecce.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Dissipative-spin-bath">
+<h1>Dissipative spin bath<a class="headerlink" href="#Dissipative-spin-bath" title="Link to this heading"></a></h1>
+<p>In this tutorial we will go over the steps needed to simulate the decoherence of a central spin coupled to a dissipative, interacting spin baths governed by Lindblad Master equation using CCE method (ME-CCE) within the <strong>PyCCE</strong> module. Two methods of interest include:</p>
+<ul class="simple">
+<li><p>Master Equation CCE (ME-CCE).</p></li>
+<li><p>Master Equation gCCE (ME-gCCE).</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(\newcommand{\bra}[1]{\left\langle {#1} \right|}\)</span> <span class="math notranslate nohighlight">\(\newcommand{\ket}[1]{\left| {#1} \right\rangle}\)</span> <span class="math notranslate nohighlight">\(\newcommand{\Tr}{\mathrm{Tr}}\)</span></p>
+<p>The Lindblad master equation of the overall system can be written as:</p>
+<p><span class="math">\begin{equation}
+\frac{d}{dt} \hat \rho=-\frac{i}{\hbar}[\hat H, \hat \rho]+\sum_i{\gamma_i (\hat L_i \hat \rho \hat L_i^\dagger - \frac{1}{2}\{\hat L_i^\dagger \hat L_i, \hat \rho \})},
+\end{equation}</span></p>
+<p>where <span class="math notranslate nohighlight">\(\hat \rho\)</span> is the density matrix of the system, <span class="math notranslate nohighlight">\(\hat H\)</span> is the Hamiltonian, and <span class="math notranslate nohighlight">\(\hat L_i\)</span> are jump operators with corresponding dissipation rates <span class="math notranslate nohighlight">\(\gamma_i\)</span>.</p>
+<p>Within the conventional CCE framework, the coherence of the central spin is recovered from the trace of the partial inner product <span class="math notranslate nohighlight">\(\hat \rho_{01} (t) =\bra{0}\hat \rho (t)\ket{1}\)</span> as <span class="math notranslate nohighlight">\(\mathcal{L}(t)=\Tr [\hat \rho_{01} (t)]/\Tr [\hat \rho_{01} (0)]\)</span>. The evolution of <span class="math notranslate nohighlight">\(\hat \rho_{01}\)</span> by solving the following:</p>
+<p><span class="math">\begin{equation}
+\frac{d}{dt} \hat \rho_{01} (t) = \mathfrak{I} \cdot \hat \rho_{01} (t)= -\frac{i}{\hbar} \hat H^{(0)} \hat \rho_{01}(t)  + \frac{i}{\hbar} \hat \rho_{01}(t) \hat H^{(1)} +  \sum_i{\gamma_i (\hat L_i \hat \rho \hat L_i^\dagger - \frac{1}{2}\{\hat L_i^\dagger \hat L_i, \hat \rho \})},
+\end{equation}</span></p>
+<p>Within the generalized CCE framework, one needs to solve full Lindbladian for each cluster including central spin.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycce</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+</pre></div>
+</div>
+</div>
+<section id="Setup-the-simulator-properties">
+<h2>Setup the simulator properties<a class="headerlink" href="#Setup-the-simulator-properties" title="Link to this heading"></a></h2>
+<p>As an example we consider the dissipative electron spin bath. First, we generate electron spin bath with concentration <span class="math notranslate nohighlight">\(\rho=10^{16}\)</span> cm<span class="math notranslate nohighlight">\(^{-3}\)</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">electrons</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">random_bath</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">5e3</span><span class="p">,</span> <span class="mf">5e3</span><span class="p">,</span> <span class="mf">5e3</span><span class="p">],</span> <span class="n">density</span><span class="o">=</span><span class="mf">1e16</span><span class="p">,</span>
+                         <span class="n">density_units</span><span class="o">=</span><span class="s1">&#39;cm-3&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Density in 1/cm^3</span>
+</pre></div>
+</div>
+</div>
+<p>The properties of the central spin-1/2 are stored in the <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">center</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">CenterArray</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CenterArray
+(s: [0.5],
+xyz:
+[[0. 0. 0.]],
+zfs:
+[[[0. 0. 0.]
+  [0. 0. 0.]
+  [0. 0. 0.]]],
+gyro:
+[[[-17608.59705     -0.          -0.     ]
+  [    -0.      -17608.59705     -0.     ]
+  [    -0.          -0.      -17608.59705]]])
+</pre></div></div>
+</div>
+<p>To run the simulations we need to setup the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">electrons</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mf">1.4e3</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mf">0.7e3</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Simulator for center array of size 1.
+magnetic field:
+array([  0.,   0., 300.])
+
+Parameters of cluster expansion:
+r_bath: 1400.0
+r_dipole: 700.0
+order: 2
+
+Bath consists of 104 spins.
+
+Clusters include:
+104  clusters of order 1.
+539  clusters of order 2.
+
+</pre></div></div>
+</div>
+<p>As a reference we compute the coherence with conventional CCE assuming no dissipation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
+<span class="n">lcce</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;cce&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">lcce</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 0, &#39;Time (ms)&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_mecce_10_1.png" src="../_images/tutorials_mecce_10_1.png" />
+</div>
+</div>
+</section>
+<section id="Dissipation-in-the-bath">
+<h2>Dissipation in the bath<a class="headerlink" href="#Dissipation-in-the-bath" title="Link to this heading"></a></h2>
+<p>In this example we assume that each electron spin in the bath decays into completely random state with the characteristic decay time <span class="math notranslate nohighlight">\(T_1=0.5\)</span> ms. To add dissipation we use the method <code class="docutils literal notranslate"><span class="pre">.add_single_jump</span></code> method of the <code class="docutils literal notranslate"><span class="pre">calc.bath</span></code> object. Note because we have a single bath type (same name of all spins) the <code class="docutils literal notranslate"><span class="pre">which</span></code> keyword of the method is unnecessary.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">et1</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># in ms</span>
+<span class="n">decay_rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">et1</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># in rad / ms</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">bath</span><span class="o">.</span><span class="n">add_single_jump</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">decay_rate</span><span class="p">)</span>  <span class="c1"># p for creation operator S+</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">bath</span><span class="o">.</span><span class="n">add_single_jump</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">decay_rate</span><span class="p">)</span>  <span class="c1"># m for annihilation operator S-</span>
+</pre></div>
+</div>
+</div>
+<p>The dissipators are stored in the <code class="docutils literal notranslate"><span class="pre">.so</span></code> attribute of the given spin type in the units of <span class="math notranslate nohighlight">\(kHz^{1/2}\)</span> (square root to match how one sets up the simulations in the Qutip, but note that it’s not in radial frequencies):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span><span class="o">.</span><span class="n">bath</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;p&#39;: 0.3989422804014327, &#39;m&#39;: 0.3989422804014327}
+</pre></div></div>
+</div>
+<p>We can compute the coherence with ME-CCE to account for these dissipative dynamics:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lmecce</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mecce&#39;</span><span class="p">)</span>
+
+<span class="n">calc</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">lmecce_1</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mecce&#39;</span><span class="p">)</span> <span class="c1"># Coherence at first order</span>
+</pre></div>
+</div>
+</div>
+<p>By comparing the full calculation with ME-CCE to the product of ME-CCE calculation of first order (ME-CCE1) and CCE2 we can directly see the interplay between single spin incoherent dynamics and the coherent flips:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">lcce</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">lmecce</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ME-CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="p">(</span><span class="n">lmecce_1</span> <span class="o">*</span> <span class="n">lcce</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ME-CCE1 * CCE2&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_mecce_19_0.png" src="../_images/tutorials_mecce_19_0.png" />
+</div>
+</div>
+<p>We find that the exact accounting for both coherent and incoherent processes leads to a singificantly different qualitative behaviour of the coherence.</p>
+</section>
+<section id="Dissipation-in-the-central-spin">
+<h2>Dissipation in the central spin<a class="headerlink" href="#Dissipation-in-the-central-spin" title="Link to this heading"></a></h2>
+<p>To account for the central spin coupling to its own Markovian bath we need to use gCCE flavor of the ME approach.</p>
+<p>We set up the dissipation on the central spin in the similar way as the bath spins, by calling <code class="docutils literal notranslate"><span class="pre">.add_single_jump</span></code> method of the <code class="docutils literal notranslate"><span class="pre">calc.center</span></code> object. As an example, consider pure dephasing of the central spin due to the Markovian environment.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t2</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># in ms</span>
+<span class="n">decay_rate</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">t2</span> <span class="c1"># in rad / ms</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">bath</span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">so</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span> <span class="c1"># Remove bath spin dissipators</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">add_single_jump</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">decay_rate</span><span class="p">)</span>  <span class="c1"># z for operator Sz</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">detuning</span> <span class="o">=</span> <span class="mf">1e6</span> <span class="c1"># Detune central spin from the spin bath</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">lmegcce</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;megcce&#39;</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>And now we show that central spin dissipators are trivial to deal with and can be factorized out. We can divide the obtained coherence curve by the expected markovian dephasing, and recover the coherence curve limited purely by the interactions with the bath.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lcce</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lmegcce</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ME-gCCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lmegcce</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">ts</span><span class="o">/</span><span class="n">t2</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ME-gCCE / exp(-t/T2)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_mecce_25_0.png" src="../_images/tutorials_mecce_25_0.png" />
+</div>
+</div>
+<p>Note that calculations with the ME-based methods are significantly more expensive, as we need to solve the eigenvalue problem for the <span class="math notranslate nohighlight">\(N^4\)</span> matrix where <span class="math notranslate nohighlight">\(N\)</span> is the size of the Hilbert space, compared to <span class="math notranslate nohighlight">\(N^2\)</span> in the case of the closed system.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="second_spin.html" class="btn btn-neutral float-left" title="Multiple central spins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bath.html" class="btn btn-neutral float-right" title="Spin Bath" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyCCE: A Python Package for CCE Simulations &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Theoretical Background" href="theory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PyCCE: A Python Package for CCE Simulations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pycce-a-python-package-for-cce-simulations">
+<h1>PyCCE: A Python Package for CCE Simulations<a class="headerlink" href="#pycce-a-python-package-for-cce-simulations" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<figure class="align-left">
+<a class="reference external image-reference" href="index.html"><img alt="_images/logo.png" height="71" src="_images/logo.png" width="213" />
+</a>
+</figure>
+<p><strong>PyCCE</strong> is an open source Python library to simulate the dynamics of
+a spin qubit interacting with a spin bath using the cluster-correlation expansion (CCE) method.</p>
+<p><strong>PyCCE</strong> supports parallelization through mpi4py, and high-throughput
+workflows through <a class="reference external" href="https://github.com/MICCoMpy/aiida-pycce">aiida-pycce</a>.</p>
+<section id="major-updates">
+<h2>Major updates<a class="headerlink" href="#major-updates" title="Link to this heading"></a></h2>
+<section id="pycce-1-1">
+<h3>PyCCE 1.1<a class="headerlink" href="#pycce-1-1" title="Link to this heading"></a></h3>
+<p><strong>PyCCE</strong> 1.1 has been released!
+Main changes include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Implementation of the master equation-based CCE approaches.</dt><dd><p>Check out <a class="reference internal" href="tutorials/mecce.html"><span class="doc">Dissipative spin bath</span></a> for examples of the usage.</p>
+</dd>
+</dl>
+</li>
+<li><p>Various optimization and bugfixes.</p></li>
+</ul>
+</section>
+<section id="pycce-1-0">
+<h3>PyCCE 1.0<a class="headerlink" href="#pycce-1-0" title="Link to this heading"></a></h3>
+<p><strong>PyCCE</strong> 1.0 has been released!
+Main changes include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Support for several central spins with the new class <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>!</dt><dd><p>Check out a tutorial <a class="reference internal" href="tutorials/second_spin.html"><span class="doc">Multiple central spins</span></a> on how to use the new class to study the decoherence
+of the hybrid qubit or entanglement of dipolarly coupled qubits.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Direct definition of the bath spin states with <code class="docutils literal notranslate"><span class="pre">BathArray.state</span></code> attribute.</dt><dd><p>Check out the updated tutorial <a class="reference internal" href="tutorials/diamond_nv.html"><span class="doc">NV Center in Diamond</span></a> to see how one can use this functionality
+to study the effect of spin polarization on Hahn-echo signal.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Expanded the control over pulse sequences.</dt><dd><p>See documentation for <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> class in <a class="reference internal" href="simulator.html"><span class="doc">Running the Simulations</span></a> for details.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><em>EXPERIMENTAL FEATURE</em>. Added ability to define your own single particle Hamiltonian.</dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">BathArray.h</span></code> and <code class="docutils literal notranslate"><span class="pre">Center.h</span></code> in <a class="reference internal" href="bath.html"><span class="doc">Spin Bath</span></a> and <a class="reference internal" href="center.html"><span class="doc">Central Spins</span></a> respectively for further details.</p>
+</dd>
+</dl>
+</li>
+<li><p>Significant overhaul of computational expensive parts of the code with Numba. This introduces a
+performance overhead to the first run, but after compilation it should run observably faster.</p></li>
+<li><p>Various bug fixes and QoL changes.</p></li>
+</ul>
+<p>This is a major update. If you find any issues ot bugs, please let us know as soon as possible!</p>
+</section>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>The recommended way to install <strong>PyCCE</strong> is to use <strong>pip</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install pycce
+</pre></div>
+</div>
+<p>Otherwise you can install <strong>PyCCE</strong> directly using the source code.
+First clone the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/MICCoMpy/PyCCE.git
+</pre></div>
+</div>
+<p>Then, execute <strong>pip</strong> in the folder containing <strong>pyproject.toml</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install .
+</pre></div>
+</div>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>The following modules are required to run <strong>PyCCE</strong>.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python.org/">Python</a> (version &gt;= 3.9).</p></li>
+<li><p><a class="reference external" href="https://numpy.org/">NumPy</a> (version &gt;= 1.16).</p></li>
+<li><p><a class="reference external" href="https://scipy.org/">SciPy</a> (version &gt;= 1.10).</p></li>
+<li><p><a class="reference external" href="https://numba.pydata.org/">Numba</a> (version &gt;= 0.56).</p></li>
+<li><p><a class="reference external" href="https://ase-lib.org/">Atomic Simulation Environment (ASE)</a>.</p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/">Pandas</a>.</p></li>
+</ul>
+<p><strong>PyCCE</strong> inherently supports parallelization with the <strong>mpi4py</strong> package, which requires the installation of MPI.
+<strong>mpi4py</strong> is not required for serial calculations.</p>
+</section>
+<section id="how-to-cite">
+<h2>How to cite<a class="headerlink" href="#how-to-cite" title="Link to this heading"></a></h2>
+<p>If you make use of <strong>PyCCE</strong> in a scientific publication, please cite the following paper:</p>
+<blockquote>
+<div><p>Mykyta Onizhuk and Giulia Galli. “PyCCE: A Python Package for Cluster Correlation Expansion Simulations of Spin Qubit Dynamic”
+Adv. Theory Simul. 2021, 2100254 <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1002/adts.202100254">https://onlinelibrary.wiley.com/doi/10.1002/adts.202100254</a></p>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="theory.html" class="btn btn-neutral float-right" title="Theoretical Background" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

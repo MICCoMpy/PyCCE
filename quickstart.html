@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorial.html" />
+    <link rel="prev" title="Theoretical Background" href="theory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#base-units">Base units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-example">Simple example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<p>The generic workflow of the simulation includes first the generation of the spin bath in the material,
+and second performing the CCE dynamics calculations for the qubit interacting with this spin bath.</p>
+<section id="base-units">
+<h2>Base units<a class="headerlink" href="#base-units" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>All coupling constants are given in <span class="math notranslate nohighlight">\(\mathrm{kHz}\)</span>.</p></li>
+<li><p>Timesteps are in millisecond (<span class="math notranslate nohighlight">\(\mathrm{ms}\)</span>).</p></li>
+<li><p>Distances are in angstrom (<span class="math notranslate nohighlight">\(\mathrm{A}\)</span>).</p></li>
+<li><p>Gyromagnetic ratios are given in <span class="math notranslate nohighlight">\(\mathrm{rad}\cdot\mathrm{ms}^{-1}\cdot\mathrm{G}^{-1}\)</span>.</p></li>
+<li><p>Quadrupole constants are given in <span class="math notranslate nohighlight">\(\mathrm{barn}\)</span> (<span class="math notranslate nohighlight">\(10^{-28}\ \mathrm{m}^2\)</span>).</p></li>
+<li><p>Magnetic field is given in Gauss (<span class="math notranslate nohighlight">\(\mathrm{G}\)</span>).</p></li>
+</ul>
+</section>
+<section id="simple-example">
+<h2>Simple example<a class="headerlink" href="#simple-example" title="Link to this heading"></a></h2>
+<p>The simplest example includes the following steps:</p>
+<ol class="arabic">
+<li><p>Generate the <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> object.
+Here we use the interface with <code class="docutils literal notranslate"><span class="pre">ase</span></code> which can effortlessly generate unit cells of many
+materials. As an example, we import the diamond structure.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycce</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">bulk</span>
+
+<span class="n">cell</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">BathCell</span><span class="o">.</span><span class="n">from_ase</span><span class="p">(</span><span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;diamond&#39;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> object, generate spin bath
+of the most common isotopes in the material. Here we generate the spin bath
+of size 200 Angstrom and remove one carbon, where the spin of interest is located, from the diamond crystal lattice.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>This function returns the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instance, which contains names of the bath spins in <code class="docutils literal notranslate"><span class="pre">'N'</span></code>, their coordinates
+in angstrom in <code class="docutils literal notranslate"><span class="pre">'xyz'</span></code>, empty arrays of hyperfine couplings in <span class="math notranslate nohighlight">\(\mathrm{kHz}\)</span> in <code class="docutils literal notranslate"><span class="pre">'A'</span></code>,
+and quadrupole couplings in <span class="math notranslate nohighlight">\(\mathrm{kHz}\)</span> in <code class="docutils literal notranslate"><span class="pre">'Q'</span></code> namefields.
+The hyperfine couplings will be generated by <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> in the next step. For alternative ways to define
+hyperfine couplings see <a class="reference internal" href="parameters.html"><span class="doc">Hamiltonian Parameters Input</span></a>.</p>
+</li>
+<li><p>Setup the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> using the generated spin bath.
+The first required argument <code class="docutils literal notranslate"><span class="pre">spin</span></code> is the total spin of the central spin or the <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> instance,
+containing properties of the central spins.
+<code class="docutils literal notranslate"><span class="pre">r_bath</span></code>, <code class="docutils literal notranslate"><span class="pre">r_dipole</span></code> and <code class="docutils literal notranslate"><span class="pre">order</span></code> are convergence parameters
+(see the <a class="reference internal" href="tutorial.html"><span class="doc">Tutorials</span></a> for examples of convergence),
+<code class="docutils literal notranslate"><span class="pre">magnetic_field</span></code> is the external applied magnetic field along the z-axis,
+and <code class="docutils literal notranslate"><span class="pre">pulses</span></code> is the number of decoupling <span class="math notranslate nohighlight">\(\pi\)</span> pulses in Carr-Purcell-Meiboom-Gill (CPMG) sequence
+or a more complicated sequence, set with <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> objects.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                    <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The hyperfine couplings are automatically generated at this step assuming point dipole-dipole interactions
+between central spin and bath spins.</p>
+</li>
+<li><p>Compute the coherence function of the qubit using the <code class="docutils literal notranslate"><span class="pre">compute</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object with
+conventional CCE.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">time_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">coherence</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">time_points</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This function outputs a Numpy array with the same shape as the <code class="docutils literal notranslate"><span class="pre">time_points</span></code> and
+contains the coherence function computed at each time step.
+By default <code class="docutils literal notranslate"><span class="pre">compute</span></code> uses the conventional CCE to compute the coherence function.</p>
+<p>More detailed examples of using <strong>PyCCE</strong> are available in the tutorials.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="theory.html" class="btn btn-neutral float-left" title="Theoretical Background" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

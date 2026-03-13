@@ -1,0 +1,1682 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCE Calculators &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hamiltonian Functions" href="hamiltonian.html" />
+    <link rel="prev" title="Electronic Structure Output" href="dft.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CCE Calculators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.run.base">Base class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.RunObject"><code class="docutils literal notranslate"><span class="pre">RunObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.addition_operator"><code class="docutils literal notranslate"><span class="pre">RunObject.addition_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.as_delay"><code class="docutils literal notranslate"><span class="pre">RunObject.as_delay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.base_hamiltonian"><code class="docutils literal notranslate"><span class="pre">RunObject.base_hamiltonian</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.bath"><code class="docutils literal notranslate"><span class="pre">RunObject.bath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.center"><code class="docutils literal notranslate"><span class="pre">RunObject.center</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.cluster"><code class="docutils literal notranslate"><span class="pre">RunObject.cluster</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.cluster_evolved_states"><code class="docutils literal notranslate"><span class="pre">RunObject.cluster_evolved_states</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.clusters"><code class="docutils literal notranslate"><span class="pre">RunObject.clusters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.contribution_operator"><code class="docutils literal notranslate"><span class="pre">RunObject.contribution_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.delays"><code class="docutils literal notranslate"><span class="pre">RunObject.delays</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.direct"><code class="docutils literal notranslate"><span class="pre">RunObject.direct</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.from_simulator"><code class="docutils literal notranslate"><span class="pre">RunObject.from_simulator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.generate_pulses"><code class="docutils literal notranslate"><span class="pre">RunObject.generate_pulses()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.generate_supercluser_states"><code class="docutils literal notranslate"><span class="pre">RunObject.generate_supercluser_states()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.get_hamiltonian_variable_bath_state"><code class="docutils literal notranslate"><span class="pre">RunObject.get_hamiltonian_variable_bath_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.hamiltonian"><code class="docutils literal notranslate"><span class="pre">RunObject.hamiltonian</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.has_states"><code class="docutils literal notranslate"><span class="pre">RunObject.has_states</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.initial_states_mask"><code class="docutils literal notranslate"><span class="pre">RunObject.initial_states_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.interlaced_kernel"><code class="docutils literal notranslate"><span class="pre">RunObject.interlaced_kernel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.interlaced_run"><code class="docutils literal notranslate"><span class="pre">RunObject.interlaced_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.kernel"><code class="docutils literal notranslate"><span class="pre">RunObject.kernel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.magnetic_field"><code class="docutils literal notranslate"><span class="pre">RunObject.magnetic_field</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.masked"><code class="docutils literal notranslate"><span class="pre">RunObject.masked</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.nbstates"><code class="docutils literal notranslate"><span class="pre">RunObject.nbstates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.parallel"><code class="docutils literal notranslate"><span class="pre">RunObject.parallel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.parallel_states"><code class="docutils literal notranslate"><span class="pre">RunObject.parallel_states</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.postprocess"><code class="docutils literal notranslate"><span class="pre">RunObject.postprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.preprocess"><code class="docutils literal notranslate"><span class="pre">RunObject.preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.projected_states"><code class="docutils literal notranslate"><span class="pre">RunObject.projected_states</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.pulses"><code class="docutils literal notranslate"><span class="pre">RunObject.pulses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.removal_operator"><code class="docutils literal notranslate"><span class="pre">RunObject.removal_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.result"><code class="docutils literal notranslate"><span class="pre">RunObject.result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.result_operator"><code class="docutils literal notranslate"><span class="pre">RunObject.result_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.rotations"><code class="docutils literal notranslate"><span class="pre">RunObject.rotations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.run"><code class="docutils literal notranslate"><span class="pre">RunObject.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.run_with_total_bath"><code class="docutils literal notranslate"><span class="pre">RunObject.run_with_total_bath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.sampling_interlaced_run"><code class="docutils literal notranslate"><span class="pre">RunObject.sampling_interlaced_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.sampling_run"><code class="docutils literal notranslate"><span class="pre">RunObject.sampling_run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.seed"><code class="docutils literal notranslate"><span class="pre">RunObject.seed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.store_states"><code class="docutils literal notranslate"><span class="pre">RunObject.store_states</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.base.RunObject.timespace"><code class="docutils literal notranslate"><span class="pre">RunObject.timespace</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.combine_cluster_central"><code class="docutils literal notranslate"><span class="pre">combine_cluster_central()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.from_central_state"><code class="docutils literal notranslate"><span class="pre">from_central_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.from_none"><code class="docutils literal notranslate"><span class="pre">from_none()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.from_sigma"><code class="docutils literal notranslate"><span class="pre">from_sigma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.from_states"><code class="docutils literal notranslate"><span class="pre">from_states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.generate_initial_state"><code class="docutils literal notranslate"><span class="pre">generate_initial_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.generate_rotated_projected_states"><code class="docutils literal notranslate"><span class="pre">generate_rotated_projected_states()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.pulse_bath_rotation"><code class="docutils literal notranslate"><span class="pre">pulse_bath_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.rand_state"><code class="docutils literal notranslate"><span class="pre">rand_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.base.simple_propagator"><code class="docutils literal notranslate"><span class="pre">simple_propagator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.run.cce">Conventional CCE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.cce.CCE"><code class="docutils literal notranslate"><span class="pre">CCE</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.compute_result"><code class="docutils literal notranslate"><span class="pre">CCE.compute_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.energies"><code class="docutils literal notranslate"><span class="pre">CCE.energies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.energy_alpha"><code class="docutils literal notranslate"><span class="pre">CCE.energy_alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.energy_beta"><code class="docutils literal notranslate"><span class="pre">CCE.energy_beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.generate_hamiltonian"><code class="docutils literal notranslate"><span class="pre">CCE.generate_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.initial_pulses"><code class="docutils literal notranslate"><span class="pre">CCE.initial_pulses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.level_confidence"><code class="docutils literal notranslate"><span class="pre">CCE.level_confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.postprocess"><code class="docutils literal notranslate"><span class="pre">CCE.postprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.preprocess"><code class="docutils literal notranslate"><span class="pre">CCE.preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.projections_alpha"><code class="docutils literal notranslate"><span class="pre">CCE.projections_alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.projections_alpha_all"><code class="docutils literal notranslate"><span class="pre">CCE.projections_alpha_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.projections_beta"><code class="docutils literal notranslate"><span class="pre">CCE.projections_beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.projections_beta_all"><code class="docutils literal notranslate"><span class="pre">CCE.projections_beta_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.propagators"><code class="docutils literal notranslate"><span class="pre">CCE.propagators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.pulses"><code class="docutils literal notranslate"><span class="pre">CCE.pulses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.second_order"><code class="docutils literal notranslate"><span class="pre">CCE.second_order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.cce.CCE.use_pulses"><code class="docutils literal notranslate"><span class="pre">CCE.use_pulses</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.cce.propagate_propagators"><code class="docutils literal notranslate"><span class="pre">propagate_propagators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.cce.simple_propagators"><code class="docutils literal notranslate"><span class="pre">simple_propagators()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.run.gcce">Generalized CCE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.gcce.gCCE"><code class="docutils literal notranslate"><span class="pre">gCCE</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.compute_result"><code class="docutils literal notranslate"><span class="pre">gCCE.compute_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.dm0"><code class="docutils literal notranslate"><span class="pre">gCCE.dm0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.fulldm"><code class="docutils literal notranslate"><span class="pre">gCCE.fulldm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.generate_hamiltonian"><code class="docutils literal notranslate"><span class="pre">gCCE.generate_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.normalization"><code class="docutils literal notranslate"><span class="pre">gCCE.normalization</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.postprocess"><code class="docutils literal notranslate"><span class="pre">gCCE.postprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.preprocess"><code class="docutils literal notranslate"><span class="pre">gCCE.preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.process_dm"><code class="docutils literal notranslate"><span class="pre">gCCE.process_dm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.propagator"><code class="docutils literal notranslate"><span class="pre">gCCE.propagator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.gcce.gCCE.zero_cluster"><code class="docutils literal notranslate"><span class="pre">gCCE.zero_cluster</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.gcce.rotation_propagator"><code class="docutils literal notranslate"><span class="pre">rotation_propagator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.run.corr">Noise autocorrelation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.corr.CCENoise"><code class="docutils literal notranslate"><span class="pre">CCENoise</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.addition_operator"><code class="docutils literal notranslate"><span class="pre">CCENoise.addition_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.compute_result"><code class="docutils literal notranslate"><span class="pre">CCENoise.compute_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.contribution_operator"><code class="docutils literal notranslate"><span class="pre">CCENoise.contribution_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.generate_hamiltonian"><code class="docutils literal notranslate"><span class="pre">CCENoise.generate_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.postprocess"><code class="docutils literal notranslate"><span class="pre">CCENoise.postprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.preprocess"><code class="docutils literal notranslate"><span class="pre">CCENoise.preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.removal_operator"><code class="docutils literal notranslate"><span class="pre">CCENoise.removal_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.CCENoise.result_operator"><code class="docutils literal notranslate"><span class="pre">CCENoise.result_operator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.corr.compute_correlations"><code class="docutils literal notranslate"><span class="pre">compute_correlations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.corr.correlation_it_j0"><code class="docutils literal notranslate"><span class="pre">correlation_it_j0()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.corr.gCCENoise"><code class="docutils literal notranslate"><span class="pre">gCCENoise</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.addition_operator"><code class="docutils literal notranslate"><span class="pre">gCCENoise.addition_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.compute_result"><code class="docutils literal notranslate"><span class="pre">gCCENoise.compute_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.contribution_operator"><code class="docutils literal notranslate"><span class="pre">gCCENoise.contribution_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.generate_hamiltonian"><code class="docutils literal notranslate"><span class="pre">gCCENoise.generate_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.postprocess"><code class="docutils literal notranslate"><span class="pre">gCCENoise.postprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.preprocess"><code class="docutils literal notranslate"><span class="pre">gCCENoise.preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.removal_operator"><code class="docutils literal notranslate"><span class="pre">gCCENoise.removal_operator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.corr.gCCENoise.result_operator"><code class="docutils literal notranslate"><span class="pre">gCCENoise.result_operator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cluster-correlation-expansion-decorators">Cluster-correlation expansion decorators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.combine_clusters"><code class="docutils literal notranslate"><span class="pre">combine_clusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.connected_components"><code class="docutils literal notranslate"><span class="pre">connected_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.expand_clusters"><code class="docutils literal notranslate"><span class="pre">expand_clusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.find_subclusters"><code class="docutils literal notranslate"><span class="pre">find_subclusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.find_valid_subclusters"><code class="docutils literal notranslate"><span class="pre">find_valid_subclusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.generate_clusters"><code class="docutils literal notranslate"><span class="pre">generate_clusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.find_clusters.make_graph"><code class="docutils literal notranslate"><span class="pre">make_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.clusters.cluster_expansion_decorator"><code class="docutils literal notranslate"><span class="pre">cluster_expansion_decorator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.clusters.direct_approach"><code class="docutils literal notranslate"><span class="pre">direct_approach()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.clusters.interlaced_decorator"><code class="docutils literal notranslate"><span class="pre">interlaced_decorator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.clusters.optimized_approach"><code class="docutils literal notranslate"><span class="pre">optimized_approach()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.mc.generate_bath_state"><code class="docutils literal notranslate"><span class="pre">generate_bath_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.mc.monte_carlo_method_decorator"><code class="docutils literal notranslate"><span class="pre">monte_carlo_method_decorator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CCE Calculators</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/calculators.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cce-calculators">
+<h1>CCE Calculators<a class="headerlink" href="#cce-calculators" title="Link to this heading"></a></h1>
+<p>Documentation for the calculator objects called by <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object.</p>
+<section id="module-pycce.run.base">
+<span id="base-class"></span><h2>Base class<a class="headerlink" href="#module-pycce.run.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">RunObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clusters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbstates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">masked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject" title="Link to this definition"></a></dt>
+<dd><p>Abstract class of the CCE simulation runner.</p>
+<p>Implements cluster correlation expansion, interlaced averaging, and sampling over random bath states.
+Requires definition of the following methods, from which the kernel will be automatically created:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.generate_hamiltonian(self)</span></code> method which, using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+computes cluster hamiltonian stored in <code class="docutils literal notranslate"><span class="pre">self.cluster_hamiltonian</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.compute_result(self)</span></code> method which, using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code>, computes the resulting
+quantity for the given cluster.</p></li>
+</ul>
+</div></blockquote>
+<p>Alternatively, user can define the kernel manually. Then the following methods have to be overridden:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.kernel(self,</span> <span class="pre">cluster,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code> method which takes indexes of the bath spins in the given
+cluster as a first positional argument. This method is required for usual CCE runs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.interlaced_kernel(self,</span> <span class="pre">cluster,</span> <span class="pre">supercluster,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code> method which takes
+indexes of the bath spins in the given cluster as a first positional argument, indexes of the supercluster
+as a second positional argument. This method is required for interlaced CCE runs.</p></li>
+</ul>
+</div></blockquote>
+<p>Args:</p>
+<blockquote>
+<div><p>timespace (ndarray with shape (t, )): Time delay values at which to compute propagators.</p>
+<dl class="simple">
+<dt>clusters (dict):</dt><dd><p>Clusters included in different CCE orders of structure <code class="docutils literal notranslate"><span class="pre">{int</span> <span class="pre">order:</span> <span class="pre">ndarray([[i,j],[i,j]])}</span></code>.</p>
+</dd>
+</dl>
+<p>bath (BathArray with shape (n,)): Array of <em>n</em> bath spins.</p>
+<p>magnetic_field (ndarray): Magnetic field of type <code class="docutils literal notranslate"><span class="pre">magnetic_field</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>.</p>
+<dl class="simple">
+<dt>alpha (int or ndarray with shape (2s+1, )): <span class="math notranslate nohighlight">\(\ket{0}\)</span> state of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span></dt><dd><p>basis or the index of eigenstate to be used as one.</p>
+</dd>
+<dt>beta (int or ndarray with shape (2s+1, )): <span class="math notranslate nohighlight">\(\ket{1}\)</span> state of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis</dt><dd><p>or the index of the eigenstate to be used as one.</p>
+</dd>
+<dt>state (ndarray with shape (2s+1, )):</dt><dd><p>Initial state of the central spin, used in gCCE and noise autocorrelation calculations.
+Defaults to <span class="math notranslate nohighlight">\(\frac{1}{N}(\ket{0} + \ket{1})\)</span> if not set <strong>OR</strong> if alpha and beta are provided as
+indexes.</p>
+</dd>
+</dl>
+<p>spin (float): Value of the central spin.</p>
+<p>zfs (ndarray with shape (3,3)): Zero Field Splitting tensor of the central spin.</p>
+<dl>
+<dt>gyro (float or ndarray with shape (3, 3)):</dt><dd><p>Gyromagnetic ratio of the central spin</p>
+<p><strong>OR</strong></p>
+<p>tensor corresponding to interaction between magnetic field and
+central spin.</p>
+</dd>
+<dt>as_delay (bool):</dt><dd><p>True if time points are delay between pulses, False if time points are total time.</p>
+</dd>
+</dl>
+<p>nbstates (int): Number of random bath states to sample over in bath state sampling runs.</p>
+<p>bath_state (ndarray): Array of bath states in any accepted format.</p>
+<p>seed (int): Seed for the random number generator in bath states sampling.</p>
+<dl class="simple">
+<dt>masked (bool):</dt><dd><p>True if mask numerically unstable points (with result &gt; result[0]) in the sampling over bath states
+False if not. Default True.</p>
+</dd>
+<dt>projected_bath_state (ndarray with shape (n,)):</dt><dd><p>Array with z-projections of the bath spins states.
+Overridden in runs with random bath state sampling.</p>
+</dd>
+<dt>parallel (bool):</dt><dd><p>True if parallelize calculation of cluster contributions over different mpi processes.
+Default False.</p>
+</dd>
+<dt>direct (bool):</dt><dd><p>True if use direct approach in run (requires way more memory but might be more numerically stable).
+False if use memory efficient approach. Default False.</p>
+</dd>
+<dt>parallel_states (bool):</dt><dd><p>True if use MPI to parallelize the calculations of density matrix
+for each random bath state.</p>
+</dd>
+</dl>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: Additional keyword arguments to be set as the attributes of the given object.</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.addition_operator">
+<span class="sig-name descname"><span class="pre">addition_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.addition_operator" title="Link to this definition"></a></dt>
+<dd><p>Group operation which will combine contributions from the different clusters into
+one contribution in the direct approach.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">numpy.prod</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.as_delay">
+<span class="sig-name descname"><span class="pre">as_delay</span></span><a class="headerlink" href="#pycce.run.base.RunObject.as_delay" title="Link to this definition"></a></dt>
+<dd><p>bool: True if time points are delay between pulses, False if time points are total time.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.base_hamiltonian">
+<span class="sig-name descname"><span class="pre">base_hamiltonian</span></span><a class="headerlink" href="#pycce.run.base.RunObject.base_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Hamiltonian: Hamiltonian of the given cluster without mean field additions.
+In conventional CCE, also excludes additions from central spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.bath">
+<span class="sig-name descname"><span class="pre">bath</span></span><a class="headerlink" href="#pycce.run.base.RunObject.bath" title="Link to this definition"></a></dt>
+<dd><p>BathArray with shape (n,): Array of <em>n</em> bath spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.center">
+<span class="sig-name descname"><span class="pre">center</span></span><a class="headerlink" href="#pycce.run.base.RunObject.center" title="Link to this definition"></a></dt>
+<dd><p>CenterArray: Properties of the central spin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.cluster">
+<span class="sig-name descname"><span class="pre">cluster</span></span><a class="headerlink" href="#pycce.run.base.RunObject.cluster" title="Link to this definition"></a></dt>
+<dd><p>BathArray: Array of the bath spins inside the given cluster.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.cluster_evolved_states">
+<span class="sig-name descname"><span class="pre">cluster_evolved_states</span></span><a class="headerlink" href="#pycce.run.base.RunObject.cluster_evolved_states" title="Link to this definition"></a></dt>
+<dd><p>ndarray or bool: State of the cluster after the evolution</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.clusters">
+<span class="sig-name descname"><span class="pre">clusters</span></span><a class="headerlink" href="#pycce.run.base.RunObject.clusters" title="Link to this definition"></a></dt>
+<dd><p>dict: Clusters included in different CCE orders of structure <code class="docutils literal notranslate"><span class="pre">{int</span> <span class="pre">order:</span> <span class="pre">ndarray([[i,j],[i,j]])}</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.contribution_operator">
+<span class="sig-name descname"><span class="pre">contribution_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.contribution_operator" title="Link to this definition"></a></dt>
+<dd><p>Operator which will combine multiple contributions of the same cluster
+in the optimized approach.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">operator.ipow</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.delays">
+<span class="sig-name descname"><span class="pre">delays</span></span><a class="headerlink" href="#pycce.run.base.RunObject.delays" title="Link to this definition"></a></dt>
+<dd><p>list or None: List with delays before each pulse or None if equispaced.
+Generated by <code class="docutils literal notranslate"><span class="pre">.generate_pulses</span></code> method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.direct">
+<span class="sig-name descname"><span class="pre">direct</span></span><a class="headerlink" href="#pycce.run.base.RunObject.direct" title="Link to this definition"></a></dt>
+<dd><p>bool: True if use direct approach in run (requires way more memory but might be more numerically stable).
+False if use memory efficient approach. Default False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.from_simulator">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_simulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sim</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.from_simulator" title="Link to this definition"></a></dt>
+<dd><p>Class method to generate <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> from the properties of <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sim (Simulator): Object, whose properties will be used to initialize <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> instance.
+<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs: Additional keyword arguments that will replace ones, recovered from the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>RunObject: New instance of <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.generate_pulses">
+<span class="sig-name descname"><span class="pre">generate_pulses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.generate_pulses" title="Link to this definition"></a></dt>
+<dd><p>Generate list of matrix representations of the rotations, induced by the sequence of the pulses.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple: <em>tuple</em> containing:</p>
+<ul class="simple">
+<li><p><strong>list</strong> or <strong>None</strong>: List with delays before each pulse or None if equispaced.</p></li>
+<li><p><strong>list</strong>: List with matrix representations of the rotation from each pulse.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.generate_supercluser_states">
+<span class="sig-name descname"><span class="pre">generate_supercluser_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supercluster</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.generate_supercluser_states" title="Link to this definition"></a></dt>
+<dd><p>Helper function to generate all possible pure states of the given supercluster.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>supercluster (ndarray with shape (n, )): Indexes of the bath spins in the supercluster.</p>
+</dd>
+<dt>Yields:</dt><dd><p>ndarray with shape (n, ): Pure state of the given supercluster.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.get_hamiltonian_variable_bath_state">
+<span class="sig-name descname"><span class="pre">get_hamiltonian_variable_bath_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.get_hamiltonian_variable_bath_state" title="Link to this definition"></a></dt>
+<dd><p>Generate Hamiltonian in case of the complicated pulse sequence.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>index (int): Index of the flips of spin states.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Hamiltonian with mean field additions from the given set of projected states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.hamiltonian">
+<span class="sig-name descname"><span class="pre">hamiltonian</span></span><a class="headerlink" href="#pycce.run.base.RunObject.hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Full cluster Hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.has_states">
+<span class="sig-name descname"><span class="pre">has_states</span></span><a class="headerlink" href="#pycce.run.base.RunObject.has_states" title="Link to this definition"></a></dt>
+<dd><p>bool: Whether there are states provided in the bath during the run.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.initial_states_mask">
+<span class="sig-name descname"><span class="pre">initial_states_mask</span></span><a class="headerlink" href="#pycce.run.base.RunObject.initial_states_mask" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Bool array of the states, initially present in the bath.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.interlaced_kernel">
+<span class="sig-name descname"><span class="pre">interlaced_kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supercluster</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.interlaced_kernel" title="Link to this definition"></a></dt>
+<dd><p>Central kernel that will be called in the cluster-expanded calculations
+with interlaced averaging of bath spin states.</p>
+<dl>
+<dt>Args:</dt><dd><p>cluster (ndarray): Indexes of the bath spins in the given cluster.</p>
+<dl class="simple">
+<dt>supercluster (ndarray): Indexes of the bath spins in the supercluster of the given cluster.</dt><dd><p>Supercluster is the union of all clusters in <code class="docutils literal notranslate"><span class="pre">.clusters</span></code> attribute, for which given cluster
+is a subset.</p>
+</dd>
+</dl>
+<p><a href="#id5"><span class="problematic" id="id6">*</span></a>args: Positional arguments of the kernel.</p>
+<p><a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs: Keyword arguments of the kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.interlaced_run">
+<span class="sig-name descname"><span class="pre">interlaced_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.interlaced_run" title="Link to this definition"></a></dt>
+<dd><p>Method that runs cluster-expanded single calculation with interlaced averaging of bath spin states.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id9"><span class="problematic" id="id10">*</span></a>args: Positional arguments of the interlaced kernel.
+<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs: Keyword arguments of the interlaced kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.kernel">
+<span class="sig-name descname"><span class="pre">kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.kernel" title="Link to this definition"></a></dt>
+<dd><p>Central kernel that will be called in the cluster-expanded calculations.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cluster (ndarray): Indexes of the bath spins in the given cluster.
+<a href="#id13"><span class="problematic" id="id14">*</span></a>args: Positional arguments of the kernel.
+<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs: Keyword arguments of the kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.magnetic_field">
+<span class="sig-name descname"><span class="pre">magnetic_field</span></span><a class="headerlink" href="#pycce.run.base.RunObject.magnetic_field" title="Link to this definition"></a></dt>
+<dd><p>ndarray or callable: Magnetic field of type <code class="docutils literal notranslate"><span class="pre">magnetic_field</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>,
+or a function that takes position as an argument.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.masked">
+<span class="sig-name descname"><span class="pre">masked</span></span><a class="headerlink" href="#pycce.run.base.RunObject.masked" title="Link to this definition"></a></dt>
+<dd><p>bool: True if mask numerically unstable points (with result &gt; result[0]) in the sampling over bath states
+False if not. Default True.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.nbstates">
+<span class="sig-name descname"><span class="pre">nbstates</span></span><a class="headerlink" href="#pycce.run.base.RunObject.nbstates" title="Link to this definition"></a></dt>
+<dd><p>int: Number of random bath states to sample over in bath state sampling runs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.parallel">
+<span class="sig-name descname"><span class="pre">parallel</span></span><a class="headerlink" href="#pycce.run.base.RunObject.parallel" title="Link to this definition"></a></dt>
+<dd><p>bool: True if parallelize calculation of cluster contributions over different mpi processes.
+Default False.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.parallel_states">
+<span class="sig-name descname"><span class="pre">parallel_states</span></span><a class="headerlink" href="#pycce.run.base.RunObject.parallel_states" title="Link to this definition"></a></dt>
+<dd><p>bool: True if use MPI to parallelize the calculations of density matrix
+for each random bath state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.postprocess">
+<span class="sig-name descname"><span class="pre">postprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.postprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called after cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called before cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.projected_states">
+<span class="sig-name descname"><span class="pre">projected_states</span></span><a class="headerlink" href="#pycce.run.base.RunObject.projected_states" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of <span class="math notranslate nohighlight">\(S_z\)</span> projections of the bath spins after each control pulse,
+involving bath spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.pulses">
+<span class="sig-name descname"><span class="pre">pulses</span></span><a class="headerlink" href="#pycce.run.base.RunObject.pulses" title="Link to this definition"></a></dt>
+<dd><p>Sequence: Sequence object, containing series of pulses, applied to the system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.removal_operator">
+<span class="sig-name descname"><span class="pre">removal_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.removal_operator" title="Link to this definition"></a></dt>
+<dd><p>Operator which will remove subcluster contribution from the given cluster contribution.
+First argument cluster contribution, second - subcluster contribution.</p>
+<p>Defalut: <code class="docutils literal notranslate"><span class="pre">operator.itruediv</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.result">
+<span class="sig-name descname"><span class="pre">result</span></span><a class="headerlink" href="#pycce.run.base.RunObject.result" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Result of the calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.result_operator">
+<span class="sig-name descname"><span class="pre">result_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.result_operator" title="Link to this definition"></a></dt>
+<dd><p>Operator which will combine the result of expansion,.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">operator.imul</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.rotations">
+<span class="sig-name descname"><span class="pre">rotations</span></span><a class="headerlink" href="#pycce.run.base.RunObject.rotations" title="Link to this definition"></a></dt>
+<dd><p>list: List with matrix representations of the rotation from each pulse.
+Generated by <code class="docutils literal notranslate"><span class="pre">.generate_pulses</span></code> method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.run" title="Link to this definition"></a></dt>
+<dd><p>Method that runs cluster-expanded single calculation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id17"><span class="problematic" id="id18">*</span></a>args: Positional arguments of the kernel.
+<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs: Keyword arguments of the kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.run_with_total_bath">
+<span class="sig-name descname"><span class="pre">run_with_total_bath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.run_with_total_bath" title="Link to this definition"></a></dt>
+<dd><p>Numerical simulation using the full bath. Emulates kernel with preprocess and postprocess added.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id21"><span class="problematic" id="id22">*</span></a>args: Positional arguments of the kernel.
+<a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs: Keyword arguments of the kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.sampling_interlaced_run">
+<span class="sig-name descname"><span class="pre">sampling_interlaced_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.sampling_interlaced_run" title="Link to this definition"></a></dt>
+<dd><p>Method that runs bath sampling calculations with interlaced averaging of bath spin states.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id25"><span class="problematic" id="id26">*</span></a>args: Positional arguments of the interlaced kernel.
+<a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs: Keyword arguments of the interlaced kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.sampling_run">
+<span class="sig-name descname"><span class="pre">sampling_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.RunObject.sampling_run" title="Link to this definition"></a></dt>
+<dd><p>Method that runs bath sampling calculations.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id29"><span class="problematic" id="id30">*</span></a>args: Positional arguments of the kernel.
+<a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs: Keyword arguments of the kernel.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Results of the calculations.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#pycce.run.base.RunObject.seed" title="Link to this definition"></a></dt>
+<dd><p>int:  Seed for the random number generator in bath states sampling.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.store_states">
+<span class="sig-name descname"><span class="pre">store_states</span></span><a class="headerlink" href="#pycce.run.base.RunObject.store_states" title="Link to this definition"></a></dt>
+<dd><p>bool: True if store the intermediate state of the cluster.  Default False.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.base.RunObject.timespace">
+<span class="sig-name descname"><span class="pre">timespace</span></span><a class="headerlink" href="#pycce.run.base.RunObject.timespace" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (t, ): Time points at which result will be computed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.combine_cluster_central">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">combine_cluster_central</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">central_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.combine_cluster_central" title="Link to this definition"></a></dt>
+<dd><p>Combine bath spin states and the state of central spin.
+Args:</p>
+<blockquote>
+<div><p>cluster_state (ndarray with shape (n,) or (n, n)): State vector or density matrix of the bath spins.
+central_state (ndarray with shape (m,) or (m, m)): State vector or density matrix of the central spins.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (mn, ) or (mn, mn): State vector or density matrix of the full system.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.from_central_state">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">from_central_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">central_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.from_central_state" title="Link to this definition"></a></dt>
+<dd><p>Generate density matrix of the system if all spins apart from central spin are in completely mixed state.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dimensions (ndarray with shape (n,)): Array of the dimensions of the spins in the cluster.
+central_state (ndarray with shape (x,)): Density matrix of central spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (N, N): Density matrix for the whole cluster.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.from_none">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">from_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.from_none" title="Link to this definition"></a></dt>
+<dd><p>Generate density matrix of the systems if all spins are in completely mixed state.
+Args:</p>
+<blockquote>
+<div><p>dimensions (ndarray with shape (n,)): Array of the dimensions of the spins in the cluster.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (N, N): Density matrix for the whole cluster.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.from_sigma">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">from_sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.from_sigma" title="Link to this definition"></a></dt>
+<dd><p>Generate spin vector from dictionary with spin matrices.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sigma (dict): Dictionary, which contains spin matrices of form <code class="docutils literal notranslate"><span class="pre">{'x':</span> <span class="pre">Sx,</span> <span class="pre">'y':</span> <span class="pre">Sy,</span> <span class="pre">'z':</span> <span class="pre">Sz}</span></code>.
+i (int): Index of the spin in the order of <code class="docutils literal notranslate"><span class="pre">dims</span></code>.
+dims (ndarray with shape (N,)): Dimensions of the spins in the given cluster.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, n, n): Spin vector in a full Hilbert space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.from_states">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">from_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.from_states" title="Link to this definition"></a></dt>
+<dd><p>Generate density matrix of the systems if all spins are in pure states.
+Args:</p>
+<blockquote>
+<div><p>states (array-like): Array of the pure spin states.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (N, N): Spin vector for the whole cluster.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.generate_initial_state">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">generate_initial_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">central_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.generate_initial_state" title="Link to this definition"></a></dt>
+<dd><p>Generate initial state of the cluster.</p>
+<dl>
+<dt>Args:</dt><dd><p>dimensions (ndarray with shape (n, )): Dimensions of all spins in the cluster.
+states (BathState, optional): States of the bath spins. If None, assumes completely random state.
+central_state (ndarray): State of the central spin. If None, assumes that no central spin is present</p>
+<blockquote>
+<div><p>in the Hilbert space of the cluster.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (N,) or (N, N): State vector or density matrix of the cluster.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.generate_rotated_projected_states">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">generate_rotated_projected_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.generate_rotated_projected_states" title="Link to this definition"></a></dt>
+<dd><p>Generate projected states after each control pulse, involving bath spins.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bath (BathArray with shape (n, )): Array of bath spins.
+pulses (Sequence): Sequence of pulses.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>ndarray with shape (n, x):</dt><dd><p>Array of <span class="math notranslate nohighlight">\(S_z\)</span> projections of bath spin states after each pulse, involving bath spins.
+Each <span class="math notranslate nohighlight">\(i\)</span>-th column is projections before the <span class="math notranslate nohighlight">\(i\)</span>-th pulse involving bath spins.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.pulse_bath_rotation">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">pulse_bath_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pulse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.pulse_bath_rotation" title="Link to this definition"></a></dt>
+<dd><p>Generate rotation of the bath spins from the given pulse.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pulse (Pulse): Control pulse.
+vectors (ndarray with shape (n, 3, N, N): Array of spin vectors.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (x, x): Matrix representation of the spin rotation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.rand_state">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">rand_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.rand_state" title="Link to this definition"></a></dt>
+<dd><p>Generate random state of the spin.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>d (int): Dimensions of the spin.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (d, d): Density matrix of the random state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.base.simple_propagator">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.base.</span></span><span class="sig-name descname"><span class="pre">simple_propagator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hamiltonian</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.base.simple_propagator" title="Link to this definition"></a></dt>
+<dd><p>Generate a simple propagator <span class="math notranslate nohighlight">\(U=\exp[-\frac{i}{\hbar} \hat H]\)</span> from the Hamiltonian.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>timespace (ndarray with shape (n, )): Time points at which to evaluate the propagator.
+hamiltonian (ndarray with shape (N, N)): Hamiltonian of the system.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (n, N, N): Propagators, evaluated at each timepoint.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.run.cce">
+<span id="conventional-cce"></span><h2>Conventional CCE<a class="headerlink" href="#module-pycce.run.cce" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.cce.</span></span><span class="sig-name descname"><span class="pre">CCE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.CCE" title="Link to this definition"></a></dt>
+<dd><p>Class for running conventional CCE simulations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Subclass of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> abstract class.</p>
+</div>
+<dl>
+<dt>Args:</dt><dd><p><a href="#id33"><span class="problematic" id="id34">*</span></a>args: Positional arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+<dl class="simple">
+<dt>pulses (int or Sequence):</dt><dd><p>number of pulses in CPMG sequence or instance of Sequence object.
+For now, only CPMG sequences are supported in conventional CCE simulations.</p>
+</dd>
+<dt>second_order (bool):</dt><dd><p>True if add second order perturbation theory correction to the cluster Hamiltonian.
+If set to True sets the qubit states as eigenstates of central spin Hamiltonian from the following
+procedure. If qubit states are provided as vectors in <span class="math notranslate nohighlight">\(S_z\)</span> basis,
+for each qubit state compute the fidelity of the qubit state and
+all eigenstates of the central spin and chose the one with fidelity higher than <code class="docutils literal notranslate"><span class="pre">level_confidence</span></code>.
+If such state is not found, raises an error.</p>
+</dd>
+<dt>level_confidence (float): Maximum fidelity of the qubit state to be considered eigenstate of the</dt><dd><p>central spin Hamiltonian. Default 0.95.</p>
+</dd>
+</dl>
+<p><a href="#id35"><span class="problematic" id="id36">**</span></a>kwargs: Keyword arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.compute_result">
+<span class="sig-name descname"><span class="pre">compute_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.CCE.compute_result" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute the coherence function as overlap in the bath evolution.</p>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Computed coherence.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.energies">
+<span class="sig-name descname"><span class="pre">energies</span></span><a class="headerlink" href="#pycce.run.cce.CCE.energies" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (2s+1, ): All eigen energies of the central spin Hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.energy_alpha">
+<span class="sig-name descname"><span class="pre">energy_alpha</span></span><a class="headerlink" href="#pycce.run.cce.CCE.energy_alpha" title="Link to this definition"></a></dt>
+<dd><p>float: Eigen energy of the alpha state in the central spin Hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.energy_beta">
+<span class="sig-name descname"><span class="pre">energy_beta</span></span><a class="headerlink" href="#pycce.run.cce.CCE.energy_beta" title="Link to this definition"></a></dt>
+<dd><p>float: Eigen energy of the beta state in the central spin Hamiltonian.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.generate_hamiltonian">
+<span class="sig-name descname"><span class="pre">generate_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.CCE.generate_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute the two projected cluster hamiltonians.</p>
+<p>Returns:</p>
+<blockquote>
+<div><p>tuple: Tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Hamiltonian</strong>:
+Cluster hamiltonian when qubit in the alpha state.</p></li>
+<li><p><strong>Hamiltonian</strong>:
+Cluster hamiltonian when qubit in the alpha state.</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.initial_pulses">
+<span class="sig-name descname"><span class="pre">initial_pulses</span></span><a class="headerlink" href="#pycce.run.cce.CCE.initial_pulses" title="Link to this definition"></a></dt>
+<dd><p>int or Sequence: Input pulses</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.level_confidence">
+<span class="sig-name descname"><span class="pre">level_confidence</span></span><a class="headerlink" href="#pycce.run.cce.CCE.level_confidence" title="Link to this definition"></a></dt>
+<dd><p>float: Maximum fidelity of the qubit state to be considered eigenstate of the central spin hamiltonian.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.postprocess">
+<span class="sig-name descname"><span class="pre">postprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.CCE.postprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called after cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.CCE.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called before cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.projections_alpha">
+<span class="sig-name descname"><span class="pre">projections_alpha</span></span><a class="headerlink" href="#pycce.run.cce.CCE.projections_alpha" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3,): Vector with spin operator matrix elements
+of type <span class="math notranslate nohighlight">\([\bra{0}\hat S_x\ket{0}, \bra{0}\hat S_y\ket{0}, \bra{0}\hat S_z\ket{0}]\)</span>, where
+<span class="math notranslate nohighlight">\(\ket{0}\)</span> is the alpha qubit state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.projections_alpha_all">
+<span class="sig-name descname"><span class="pre">projections_alpha_all</span></span><a class="headerlink" href="#pycce.run.cce.CCE.projections_alpha_all" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (2s+1, 3): Array of vectors with spin operator matrix elements
+of type <span class="math notranslate nohighlight">\([\bra{0}\hat S_x\ket{i}, \bra{0}\hat S_y\ket{i}, \bra{0}\hat S_z\ket{i}]\)</span>, where
+<span class="math notranslate nohighlight">\(\ket{0}\)</span> is the alpha qubit state,
+<span class="math notranslate nohighlight">\(\ket{i}\)</span> are all eigenstates of the central spin hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.projections_beta">
+<span class="sig-name descname"><span class="pre">projections_beta</span></span><a class="headerlink" href="#pycce.run.cce.CCE.projections_beta" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3,): Vectors with spin operator matrix elements
+of type <span class="math notranslate nohighlight">\([\bra{1}\hat S_x\ket{1}, \bra{1}\hat S_y\ket{1}, \bra{1}\hat S_z\ket{1}]\)</span>, where
+<span class="math notranslate nohighlight">\(\ket{1}\)</span> is the beta qubit state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.projections_beta_all">
+<span class="sig-name descname"><span class="pre">projections_beta_all</span></span><a class="headerlink" href="#pycce.run.cce.CCE.projections_beta_all" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (2s+1, 3): Array of vectors with spin operator matrix elements
+of type <span class="math notranslate nohighlight">\([\bra{1}\hat S_x\ket{i}, \bra{1}\hat S_y\ket{i}, \bra{1}\hat S_z\ket{i}]\)</span>, where
+<span class="math notranslate nohighlight">\(\ket{1}\)</span> is the beta qubit state,
+<span class="math notranslate nohighlight">\(\ket{i}\)</span> are all eigenstates of the central spin hamiltonian.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.propagators">
+<span class="sig-name descname"><span class="pre">propagators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.CCE.propagators" title="Link to this definition"></a></dt>
+<dd><p>Generate two propagators, conditioned on the qubit state.</p>
+<dl>
+<dt>Returns:</dt><dd><p>tuple: <em>tuple</em> containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>ndarray with shape (t, n, n)</strong>:
+Matrix representation of the propagator conditioned on the alpha qubit state for each time point.</p></li>
+<li><p><strong>ndarray with shape (t, n, n)</strong>:
+Matrix representation of the propagator conditioned on the beta qubit state for each time point.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.pulses">
+<span class="sig-name descname"><span class="pre">pulses</span></span><a class="headerlink" href="#pycce.run.cce.CCE.pulses" title="Link to this definition"></a></dt>
+<dd><p>int or Sequence: If input Sequence contains only pi pulses at even delay, stores number of pulses.
+Otherwise stores full <code class="docutils literal notranslate"><span class="pre">Sequence</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.second_order">
+<span class="sig-name descname"><span class="pre">second_order</span></span><a class="headerlink" href="#pycce.run.cce.CCE.second_order" title="Link to this definition"></a></dt>
+<dd><p>bool: True if add second order perturbation theory correction to the cluster hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.cce.CCE.use_pulses">
+<span class="sig-name descname"><span class="pre">use_pulses</span></span><a class="headerlink" href="#pycce.run.cce.CCE.use_pulses" title="Link to this definition"></a></dt>
+<dd><p>bool: True if use full <code class="docutils literal notranslate"><span class="pre">Sequence</span></code>. False if use only number of pulses.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.cce.propagate_propagators">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.cce.</span></span><span class="sig-name descname"><span class="pre">propagate_propagators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.propagate_propagators" title="Link to this definition"></a></dt>
+<dd><p>From two simple propagators and number of pulses in CPMG sequence generate two full propagators.
+Args:</p>
+<blockquote>
+<div><p>v0 (ndarray with shape (n, N, N)): Propagator conditioned on the alpha qubit state for each time point.
+v1 (ndarray with shape (n, N, N)): Propagator conditioned on the beta qubit state for each time point.
+number (int): Number of pulses.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>tuple:</dt><dd><ul class="simple">
+<li><p><strong>ndarray with shape (n, N, N)</strong>:
+Matrix representation of the propagator conditioned on the alpha qubit state for each time point.</p></li>
+<li><p><strong>ndarray with shape (n, N, N)</strong>:
+Matrix representation of the propagator conditioned on the beta qubit state for each time point.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.cce.simple_propagators">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.cce.</span></span><span class="sig-name descname"><span class="pre">simple_propagators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hamiltonian_alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hamiltonian_beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.cce.simple_propagators" title="Link to this definition"></a></dt>
+<dd><p>Generate two simple propagators <span class="math notranslate nohighlight">\(U=\exp[-\frac{i}{\hbar} \hat H]\)</span> from the Hamiltonians, conditioned
+on two qubit levels.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>delays (ndarray with shape (n, )): Time points at which to evaluate the propagator.
+hamiltonian_alpha (ndarray with shape (N, N)): Hamiltonian of the bath spins with qubit in alpha state.
+hamiltonian_beta (ndarray with shape (N, N)): Hamiltonian of the bath spins with qubit in beta state.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>tuple:</dt><dd><ul class="simple">
+<li><p><strong>ndarray with shape (n, N, N)</strong>:
+Matrix representation of the propagator conditioned on the alpha qubit state for each time point.</p></li>
+<li><p><strong>ndarray with shape (n, N, N)</strong>:
+Matrix representation of the propagator conditioned on the beta qubit state for each time point.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.run.gcce">
+<span id="generalized-cce"></span><h2>Generalized CCE<a class="headerlink" href="#module-pycce.run.gcce" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.gcce.</span></span><span class="sig-name descname"><span class="pre">gCCE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fulldm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE" title="Link to this definition"></a></dt>
+<dd><p>Class for running generalized CCE simulations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Subclass of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> abstract class.</p>
+</div>
+<dl>
+<dt>Args:</dt><dd><p><a href="#id37"><span class="problematic" id="id38">*</span></a>args: Positional arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+<p>pulses (Sequence): Sequence object, containing series of pulses, applied to the system.</p>
+<dl class="simple">
+<dt>fulldm (bool):</dt><dd><p>True if return full density matrix. Default False.</p>
+</dd>
+</dl>
+<p><a href="#id39"><span class="problematic" id="id40">**</span></a>kwargs: Keyword arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.compute_result">
+<span class="sig-name descname"><span class="pre">compute_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE.compute_result" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute the coherence function of the central spin.</p>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Computed coherence.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.dm0">
+<span class="sig-name descname"><span class="pre">dm0</span></span><a class="headerlink" href="#pycce.run.gcce.gCCE.dm0" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (2s+1, 2s+1): Initial density matrix of the central spin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.fulldm">
+<span class="sig-name descname"><span class="pre">fulldm</span></span><a class="headerlink" href="#pycce.run.gcce.gCCE.fulldm" title="Link to this definition"></a></dt>
+<dd><p>bool: True if return full density matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.generate_hamiltonian">
+<span class="sig-name descname"><span class="pre">generate_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE.generate_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute the cluster hamiltonian including the central spin.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Hamiltonian: Cluster hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.normalization">
+<span class="sig-name descname"><span class="pre">normalization</span></span><a class="headerlink" href="#pycce.run.gcce.gCCE.normalization" title="Link to this definition"></a></dt>
+<dd><p>float: Coherence at time 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.postprocess">
+<span class="sig-name descname"><span class="pre">postprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE.postprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called after cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called before cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.process_dm">
+<span class="sig-name descname"><span class="pre">process_dm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">density_matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE.process_dm" title="Link to this definition"></a></dt>
+<dd><p>Obtain the result from the density matrices.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>density_matrix (ndarray with shape (n, N, N)): Array of the density matrices.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>ndarray:</dt><dd><p>Depending on the parameters,
+returns the off diagonal element of the density matrix or full matrix.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.propagator">
+<span class="sig-name descname"><span class="pre">propagator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.gCCE.propagator" title="Link to this definition"></a></dt>
+<dd><p>Function to compute time propagator U.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (t, n, n): Array of propagators, evaluated at each time point in <code class="docutils literal notranslate"><span class="pre">self.timespace</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.gcce.gCCE.zero_cluster">
+<span class="sig-name descname"><span class="pre">zero_cluster</span></span><a class="headerlink" href="#pycce.run.gcce.gCCE.zero_cluster" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (n,): Coherence computed for the isolated central spin.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.gcce.rotation_propagator">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.gcce.</span></span><span class="sig-name descname"><span class="pre">rotation_propagator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.gcce.rotation_propagator" title="Link to this definition"></a></dt>
+<dd><p>Generate the propagator from the simple propagator and set of <span class="math notranslate nohighlight">\(2      au\)</span> equispaced rotation operators.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the spacing between rotation operators is assumed to be <span class="math notranslate nohighlight">\(2  au\)</span>, the spacing before and after
+the first and the last rotation respectively is assumed to be :math:`   au`.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>u (ndarray with shape (n, N, N)): Simple propagator.
+rotations (ndarray with shape (x, N, N)): Array of rotation operators.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, N, N): Full propagator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.run.corr">
+<span id="noise-autocorrelation"></span><h2>Noise autocorrelation<a class="headerlink" href="#module-pycce.run.corr" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.corr.</span></span><span class="sig-name descname"><span class="pre">CCENoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise" title="Link to this definition"></a></dt>
+<dd><p>Class for running conventional CCE simulations of the noise autocorrelation function.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Subclass of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> abstract class.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In general, for calculations of the autocorrelation function, better results are achieved with
+generalized CCE, which accounts for the evolution of the entangled state of the central spin.</p>
+<p>Second order couplings between nuclear spins are not implemented.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id41"><span class="problematic" id="id42">*</span></a>args: Positional arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.
+<a href="#id43"><span class="problematic" id="id44">**</span></a>kwargs: Keyword arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.addition_operator">
+<span class="sig-name descname"><span class="pre">addition_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.addition_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden group operation which will combine contributions from the different clusters into
+one contribution in the direct approach: <code class="docutils literal notranslate"><span class="pre">numpy.sum</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.compute_result">
+<span class="sig-name descname"><span class="pre">compute_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.compute_result" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute autocorrelation function of the noise from bath spins in the given cluster.</p>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Computed autocorrelation function.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.contribution_operator">
+<span class="sig-name descname"><span class="pre">contribution_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.contribution_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden operator which will combine multiple contributions of the same cluster
+in the optimized approach: <code class="docutils literal notranslate"><span class="pre">operator.imul</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.generate_hamiltonian">
+<span class="sig-name descname"><span class="pre">generate_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.generate_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute the projected cluster hamiltonian, averaged for two qubit states.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Hamiltonian: Cluster hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.postprocess">
+<span class="sig-name descname"><span class="pre">postprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.postprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called after cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called before cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.removal_operator">
+<span class="sig-name descname"><span class="pre">removal_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.removal_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden operator which remove subcluster contribution
+from the given cluster contribution: <code class="docutils literal notranslate"><span class="pre">operator.isub</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.CCENoise.result_operator">
+<span class="sig-name descname"><span class="pre">result_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.CCENoise.result_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden operator which will combine the result of expansion: <code class="docutils literal notranslate"><span class="pre">operator.iadd</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.corr.compute_correlations">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.corr.</span></span><span class="sig-name descname"><span class="pre">compute_correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nspin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dm0_expanded</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">central_spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.compute_correlations" title="Link to this definition"></a></dt>
+<dd><p>Function to compute correlations for the given cluster, given time propagator U.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>nspin (BathArray):</dt><dd><p>BathArray of the given cluster of bath spins.</p>
+</dd>
+<dt>dm0_expanded (ndarray with shape (n, n)):</dt><dd><p>Initial density matrix of the cluster.</p>
+</dd>
+<dt>U (ndarray with shape (t, n, n)):</dt><dd><p>Time evolution propagator, evaluated over t time points.</p>
+</dd>
+</dl>
+<p>central_spin (CenterArray): Array of central spins.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>ndarray with shape (t,):</dt><dd><p>correlation of the Overhauser field, induced by the given cluster at each time point.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.corr.correlation_it_j0">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.corr.</span></span><span class="sig-name descname"><span class="pre">correlation_it_j0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operator_j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dm0_expanded</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.correlation_it_j0" title="Link to this definition"></a></dt>
+<dd><p>Function to compute correlation function of the operator i at time t and operator j at time 0</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>operator_i (ndarray with shape (n, n)):</dt><dd><p>Matrix representation of operator i.</p>
+</dd>
+<dt>operator_j (ndarray with shape (n, n)):</dt><dd><p>Matrix representation of operator j.</p>
+</dd>
+<dt>dm0_expanded (ndarray with shape (n, n)):</dt><dd><p>Initial density matrix of the cluster.</p>
+</dd>
+<dt>U (ndarray with shape (t, n, n)):</dt><dd><p>Time evolution propagator, evaluated over t time points.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (t,): Autocorrelation of the z-noise at each time point.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.corr.</span></span><span class="sig-name descname"><span class="pre">gCCENoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise" title="Link to this definition"></a></dt>
+<dd><p>Class for running generalized CCE simulations of the noise autocorrelation function.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Subclass of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> abstract class.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id45"><span class="problematic" id="id46">*</span></a>args: Positional arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.
+<a href="#id47"><span class="problematic" id="id48">**</span></a>kwargs: Keyword arguments of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.addition_operator">
+<span class="sig-name descname"><span class="pre">addition_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;no</span> <span class="pre">value&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.addition_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden group operation which will combine contributions from the different clusters into
+one contribution in the direct approach: <code class="docutils literal notranslate"><span class="pre">numpy.sum</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.compute_result">
+<span class="sig-name descname"><span class="pre">compute_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.compute_result" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute autocorrelation function of the noise from bath spins in the given cluster.</p>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Computed autocorrelation function.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.contribution_operator">
+<span class="sig-name descname"><span class="pre">contribution_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.contribution_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden operator which will combine multiple contributions of the same cluster
+in the optimized approach: <code class="docutils literal notranslate"><span class="pre">operator.imul</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.generate_hamiltonian">
+<span class="sig-name descname"><span class="pre">generate_hamiltonian</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.generate_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Using the attributes of the <code class="docutils literal notranslate"><span class="pre">self</span></code> object,
+compute the cluster hamiltonian including the central spin.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Hamiltonian: Cluster hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.postprocess">
+<span class="sig-name descname"><span class="pre">postprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.postprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called after cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Method which will be called before cluster-expanded run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.removal_operator">
+<span class="sig-name descname"><span class="pre">removal_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.removal_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden operator which remove subcluster contribution
+from the given cluster contribution: <code class="docutils literal notranslate"><span class="pre">operator.isub</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.corr.gCCENoise.result_operator">
+<span class="sig-name descname"><span class="pre">result_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.corr.gCCENoise.result_operator" title="Link to this definition"></a></dt>
+<dd><p>Overridden operator which will combine the result of expansion: <code class="docutils literal notranslate"><span class="pre">operator.iadd</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="cluster-correlation-expansion-decorators">
+<h2>Cluster-correlation expansion decorators<a class="headerlink" href="#cluster-correlation-expansion-decorators" title="Link to this heading"></a></h2>
+<p>The way we find cluster in the code.</p>
+<dl class="py function" id="module-pycce.find_clusters">
+<dt class="sig sig-object py" id="pycce.find_clusters.combine_clusters">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">combine_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.combine_clusters" title="Link to this definition"></a></dt>
+<dd><p>Combine two dictionaries with clusters.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>cs1 (dict): First cluster dictionary with keys corresponding to size of the cluster,</dt><dd><p>and value corresponds to ndarray of shape (M, N).</p>
+</dd>
+</dl>
+<p>cs2 (dict): Second cluster dictionary with the same structure.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Combined dictionary with unique clusters from both dictionaries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.find_clusters.connected_components">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">connected_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csgraph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weak'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.connected_components" title="Link to this definition"></a></dt>
+<dd><p>Find connected components using <code class="docutils literal notranslate"><span class="pre">scipy.sparse.csgraph</span></code>.
+See documentation of <code class="docutils literal notranslate"><span class="pre">scipy.sparse.csgraph.connected_components</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.find_clusters.expand_clusters">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">expand_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.expand_clusters" title="Link to this definition"></a></dt>
+<dd><p>Expand dict so each new cluster will include all possible additions of one more bath spin. This increases
+maximum size of the cluster by one.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sc (dict): Initial clusters dictionary.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Dictionary with expanded clusters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.find_clusters.find_subclusters">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">find_subclusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum_order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strong</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.find_subclusters" title="Link to this definition"></a></dt>
+<dd><p>Find subclusters from connectivity matrix.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>maximum_order (int):</dt><dd><p>Maximum size of the clusters to find.</p>
+</dd>
+</dl>
+<p>graph (csr_matrix): Connectivity matrix.
+labels (ndarray with shape (n,)): Array of labels of the connected components.
+n_components (int): The number of connected components n.
+strong (bool): Whether to find only completely interconnected clusters (default False).</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>dict:</dt><dd><p>Dictionary with keys corresponding to size of the cluster,
+and value corresponds to ndarray of shape (M, N).
+Here M is the number of clusters of given size, N is the size of the cluster.
+Each row contains indexes of the bath spins included in the given cluster.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.find_clusters.find_valid_subclusters">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">find_valid_subclusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nclusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strong</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_strength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.find_valid_subclusters" title="Link to this definition"></a></dt>
+<dd><p>Find subclusters from connectivity matrix.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>maximum_order (int):</dt><dd><p>Maximum size of the clusters to find.</p>
+</dd>
+</dl>
+<p>graph (csr_matrix): Connectivity matrix.
+nclusters (dict): Dictionary which contain maximum number of clusters of the given size.
+bath (BathArray): Array of bath spins.
+strong (bool): Whether to find only completely interconnected clusters (default False).</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>dict:</dt><dd><p>Dictionary with keys corresponding to size of the cluster,
+and value corresponds to ndarray of shape (M, N).
+Here M is the number of clusters of given size, N is the size of the cluster.
+Each row contains indexes of the bath spins included in the given cluster.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.find_clusters.generate_clusters">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">generate_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dipole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_inner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strong</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nclusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.generate_clusters" title="Link to this definition"></a></dt>
+<dd><p>Generate clusters for the bath spins.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>bath (BathArray): Array of bath spins.
+r_dipole (float): Maximum connectivity distance.
+order (int): Maximum size of the clusters to find.</p>
+<p>r_inner (float): Minimum connectivity distance.
+ignore (list or str, optional):</p>
+<blockquote>
+<div><p>If not None, includes the names of bath spins which are ignored in the cluster generation.</p>
+</div></blockquote>
+<p>strong (bool): Whether to find only completely interconnected clusters (default False).</p>
+<dl>
+<dt>nclusters (dict): Dictionary which contain maximum number of clusters of the given size.</dt><dd><p>Has the form <code class="docutils literal notranslate"><span class="pre">n_clusters</span> <span class="pre">=</span> <span class="pre">{order:</span> <span class="pre">number}</span></code>, where <code class="docutils literal notranslate"><span class="pre">order</span></code> is the size of the cluster,
+<code class="docutils literal notranslate"><span class="pre">number</span></code> is the maximum number of clusters with this size.</p>
+<p>If provided, sorts the clusters by the strength of cluster interaction,
+equal to the lowest pairwise interaction in the cluster. Then the strongest <code class="docutils literal notranslate"><span class="pre">number</span></code> of clusters is
+taken.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Returns:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>dict:</dt><dd><p>Dictionary with keys corresponding to size of the cluster,
+and value corresponds to ndarray of shape (M, N).
+Here M is the number of clusters of given size, N is the size of the cluster.
+Each row contains indexes of the bath spins included in the given cluster.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.find_clusters.make_graph">
+<span class="sig-prename descclassname"><span class="pre">pycce.find_clusters.</span></span><span class="sig-name descname"><span class="pre">make_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dipole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_inner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.find_clusters.make_graph" title="Link to this definition"></a></dt>
+<dd><p>Make a connectivity matrix for bath spins.</p>
+<dl>
+<dt>Args:</dt><dd><p>bath (BathArray): Array of bath spins.
+r_dipole (float): Maximum connectivity distance.
+r_inner (float): Minimum connectivity distance.
+ignore (list or str, optional):</p>
+<blockquote>
+<div><p>If not None, includes the names of bath spins which are ignored in the cluster generation.</p>
+</div></blockquote>
+<p>max_size (int): Maximum size of the bath before less optimal (but less memory intensive) approach is used.</p>
+</dd>
+<dt>Returns:</dt><dd><p>crs_matrix: Connectivity matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>General decorators that are used to expand kernel of the <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> class or subclasses to the whole bath <em>via</em> CCE.</p>
+<p id="module-pycce.run.clusters">This module contains information about the way the cluster expansion is implemented in the package.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.clusters.cluster_expansion_decorator">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.clusters.</span></span><span class="sig-name descname"><span class="pre">cluster_expansion_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">imul&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contribution_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">ipow&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removal_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">itruediv&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addition_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">prod&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.clusters.cluster_expansion_decorator" title="Link to this definition"></a></dt>
+<dd><p>Decorator for creating cluster correlation expansion of the method of <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> class.</p>
+<dl>
+<dt>Args:</dt><dd><p>_func (func): Function to expand.
+result_operator (func):</p>
+<blockquote>
+<div><p>Operator which will combine the result of expansion (default: operator.imul).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>contribution_operator (func):</dt><dd><p>Operator which will combine multiple contributions
+of the same cluster (default: operator.ipow) in the optimized approach.</p>
+</dd>
+<dt>result_operator (func):</dt><dd><p>Operator which will combine the result of expansion (default: operator.imul).</p>
+</dd>
+<dt>removal_operator (func):</dt><dd><p>Operator which will remove subcluster contribution from the given cluster contribution.
+First argument cluster contribution, second - subcluster contribution (default: operator.itruediv).</p>
+</dd>
+<dt>addition_operator (func):</dt><dd><p>Group operation which will combine contributions from the different clusters into one
+contribution (default: np.prod).</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>func: Expanded function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.clusters.direct_approach">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.clusters.</span></span><span class="sig-name descname"><span class="pre">direct_approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">imul&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removal_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">itruediv&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addition_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">prod&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwarg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.clusters.direct_approach" title="Link to this definition"></a></dt>
+<dd><p>Direct approach to compute cluster correlation expansion.</p>
+<dl>
+<dt>Args:</dt><dd><p>function (func): Function to expand.
+self (RunObject): Object whose method is expanded.
+result_operator (func):</p>
+<blockquote>
+<div><p>Operator which will combine the result of expansion (default: operator.imul).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>removal_operator (func):</dt><dd><p>Operator which will remove subcluster contribution from the given cluster contribution.
+First argument cluster contribution, second - subcluster contribution (default: operator.itruediv).</p>
+</dd>
+<dt>addition_operator (func):</dt><dd><p>Group operation which will combine contributions from the different clusters into one
+contribution (default: np.prod).</p>
+</dd>
+</dl>
+<p><a href="#id49"><span class="problematic" id="id50">**</span></a>kwarg: Dictionary containing all keyword arguments of the expanded function.</p>
+</dd>
+<dt>Returns:</dt><dd><p>func: Expanded method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.clusters.interlaced_decorator">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.clusters.</span></span><span class="sig-name descname"><span class="pre">interlaced_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">imul&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contribution_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">ipow&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.clusters.interlaced_decorator" title="Link to this definition"></a></dt>
+<dd><p>Decorator for creating interlaced cluster correlation expansion of the method of <code class="docutils literal notranslate"><span class="pre">RunObject</span></code> class.</p>
+<dl>
+<dt>Args:</dt><dd><p>_func (func): Function to expand.
+result_operator (func):</p>
+<blockquote>
+<div><p>Operator which will combine the result of expansion (default: operator.imul).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>contribution_operator (func):</dt><dd><p>Operator which will combine multiple contributions
+of the same cluster (default: operator.ipow) in the optimized approach.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>func: Expanded method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.clusters.optimized_approach">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.clusters.</span></span><span class="sig-name descname"><span class="pre">optimized_approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">imul&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contribution_operator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">ipow&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwarg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.clusters.optimized_approach" title="Link to this definition"></a></dt>
+<dd><p>Optimized approach to compute cluster correlation expansion.</p>
+<dl>
+<dt>Args:</dt><dd><p>function (func): Function to expand.
+self (RunObject): Object whose method is expanded.
+<a href="#id51"><span class="problematic" id="id52">*</span></a>arg: list of positional arguments of the expanded function.
+result_operator (func):</p>
+<blockquote>
+<div><p>Operator which will combine the result of expansion (default: operator.imul).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>contribution_operator (func):</dt><dd><p>Operator which will combine multiple contributions
+of the same cluster (default: operator.ipow).</p>
+</dd>
+</dl>
+<p><a href="#id53"><span class="problematic" id="id54">**</span></a>kwarg: Dictionary containing all keyword arguments of the expanded function.</p>
+</dd>
+<dt>Returns:</dt><dd><p>func: Expanded function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Decorators that are used to perform bath state sampling over the kernel of <code class="docutils literal notranslate"><span class="pre">RunObject</span></code>.</p>
+<dl class="py function" id="module-pycce.run.mc">
+<dt class="sig sig-object py" id="pycce.run.mc.generate_bath_state">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.mc.</span></span><span class="sig-name descname"><span class="pre">generate_bath_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbstates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.mc.generate_bath_state" title="Link to this definition"></a></dt>
+<dd><p>Generator of the random <em>pure</em> <span class="math notranslate nohighlight">\(\hat{I}_z\)</span> bath eigenstates.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>bath (BathArray): Array of bath spins.
+nbstates (int): Number of random bath states to generate.
+seed (int): Optional. Seed for RNG.
+parallel (bool): True if run in parallel mode. Default False.</p>
+</dd>
+<dt>Yields:</dt><dd><p>List: list of the pure bath spin state vectors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.run.mc.monte_carlo_method_decorator">
+<span class="sig-prename descclassname"><span class="pre">pycce.run.mc.</span></span><span class="sig-name descname"><span class="pre">monte_carlo_method_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.mc.monte_carlo_method_decorator" title="Link to this definition"></a></dt>
+<dd><p>Decorator to sample over random bath states given function.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dft.html" class="btn btn-neutral float-left" title="Electronic Structure Output" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hamiltonian.html" class="btn btn-neutral float-right" title="Hamiltonian Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

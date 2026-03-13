@@ -1,0 +1,596 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hamiltonian Functions &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Utility Functions" href="utilities.html" />
+    <link rel="prev" title="CCE Calculators" href="calculators.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hamiltonian Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.h.base">Base class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.base.Hamiltonian"><code class="docutils literal notranslate"><span class="pre">Hamiltonian</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycce.h.total">Total Hamiltonian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.total.bath_hamiltonian"><code class="docutils literal notranslate"><span class="pre">bath_hamiltonian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.total.central_hamiltonian"><code class="docutils literal notranslate"><span class="pre">central_hamiltonian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.total.custom_hamiltonian"><code class="docutils literal notranslate"><span class="pre">custom_hamiltonian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.total.custom_single"><code class="docutils literal notranslate"><span class="pre">custom_single()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.total.total_hamiltonian"><code class="docutils literal notranslate"><span class="pre">total_hamiltonian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#separate-terms">Separate terms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.bath_external_point_dipole"><code class="docutils literal notranslate"><span class="pre">bath_external_point_dipole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.bath_interactions"><code class="docutils literal notranslate"><span class="pre">bath_interactions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.bath_mediated"><code class="docutils literal notranslate"><span class="pre">bath_mediated()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.center_external_addition"><code class="docutils literal notranslate"><span class="pre">center_external_addition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.center_interactions"><code class="docutils literal notranslate"><span class="pre">center_interactions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.conditional_hyperfine"><code class="docutils literal notranslate"><span class="pre">conditional_hyperfine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.dd_tensor"><code class="docutils literal notranslate"><span class="pre">dd_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.dipole_dipole"><code class="docutils literal notranslate"><span class="pre">dipole_dipole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.expanded_single"><code class="docutils literal notranslate"><span class="pre">expanded_single()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.external_spins_field"><code class="docutils literal notranslate"><span class="pre">external_spins_field()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.gen_pos_tensor"><code class="docutils literal notranslate"><span class="pre">gen_pos_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.hyperfine"><code class="docutils literal notranslate"><span class="pre">hyperfine()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.overhauser_bath"><code class="docutils literal notranslate"><span class="pre">overhauser_bath()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.overhauser_central"><code class="docutils literal notranslate"><span class="pre">overhauser_central()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.overhauser_from_tensors"><code class="docutils literal notranslate"><span class="pre">overhauser_from_tensors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.projected_addition"><code class="docutils literal notranslate"><span class="pre">projected_addition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.self_central"><code class="docutils literal notranslate"><span class="pre">self_central()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.h.functions.zeeman"><code class="docutils literal notranslate"><span class="pre">zeeman()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Hamiltonian Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hamiltonian.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hamiltonian-functions">
+<h1>Hamiltonian Functions<a class="headerlink" href="#hamiltonian-functions" title="Link to this heading"></a></h1>
+<section id="module-pycce.h.base">
+<span id="base-class"></span><h2>Base class<a class="headerlink" href="#module-pycce.h.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.h.base.Hamiltonian">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.h.base.</span></span><span class="sig-name descname"><span class="pre">Hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.base.Hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Class containing properties of the Hamiltonian.</p>
+<p>Essentially wrapper for ndarray with additional attributes of <code class="docutils literal notranslate"><span class="pre">dimensions</span></code> and <code class="docutils literal notranslate"><span class="pre">spins</span></code>.</p>
+<p>Usual methods (e.g. <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> or <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>) access the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Algebraic operations with Hamiltonian will return ndarray instance.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dimensions (array-like): array of the dimensions for each spin in the Hilbert space of the Hamiltonian.</p>
+</dd>
+<dt>Attributes:</dt><dd><p>dimensions (ndarray): array of the dimensions for each spin in the Hilbert space of the Hamiltonian.
+spins (ndarray): array of the spins, spanning the Hilbert space of the Hamiltonian.
+vectors (list): list with spin vectors of form <code class="docutils literal notranslate"><span class="pre">[[Ix,</span> <span class="pre">Iy,</span> <span class="pre">Iz],</span> <span class="pre">[Ix,</span> <span class="pre">Iy,</span> <span class="pre">Iz],</span> <span class="pre">...]</span></code>.
+data (ndarray): matrix representation of the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycce.h.total">
+<span id="total-hamiltonian"></span><h2>Total Hamiltonian<a class="headerlink" href="#module-pycce.h.total" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.total.bath_hamiltonian">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.total.</span></span><span class="sig-name descname"><span class="pre">bath_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfield</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.total.bath_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Compute hamiltonian containing only the bath spins.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>bath (BathArray):</dt><dd><p>array of all bath spins in the cluster.</p>
+</dd>
+<dt>mfield (ndarray with shape (3,) or func):</dt><dd><p>Magnetic field of type <code class="docutils literal notranslate"><span class="pre">mfield</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>
+or callable with signature <code class="docutils literal notranslate"><span class="pre">mfield(pos)</span></code>, where <code class="docutils literal notranslate"><span class="pre">pos</span></code> is ndarray with shape (3,) with the
+position of the spin.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Hamiltonian: Hamiltonian of the given cluster without qubit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.total.central_hamiltonian">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.total.</span></span><span class="sig-name descname"><span class="pre">central_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperfine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.total.central_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Compute Hamiltonian, containing only central spin.</p>
+<dl>
+<dt>Args:</dt><dd><p>center (CenterArray or Center): Center spin.</p>
+<dl class="simple">
+<dt>magnetic_field (ndarray with shape (3,) or func):</dt><dd><p>Magnetic field of type <code class="docutils literal notranslate"><span class="pre">magnetic_field</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>
+or callable with signature <code class="docutils literal notranslate"><span class="pre">magnetic_field(pos)</span></code>, where <code class="docutils literal notranslate"><span class="pre">pos</span></code> is ndarray with shape (3,) with the
+position of the spin.</p>
+</dd>
+</dl>
+<p>hyperfine (ndarray with shape (…, n, 3, 3)): Array of hyperfine tensors of bath spins.</p>
+<p>bath_state (ndarray with shape (n, )): Array of <span class="math notranslate nohighlight">\(S_z\)</span> projections of bath spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Hamiltonian: Central spin Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.total.custom_hamiltonian">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.total.</span></span><span class="sig-name descname"><span class="pre">custom_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.total.custom_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Custom addition to the Hamiltonian from the spins in the given array.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>spins (BathArray or CenterArray): Array of the spins.
+dims (ndarray with shape (n, )): Dimensions of all spins in the cluster.
+offset (int): Index of the dimensions of the first spin from array in <code class="docutils literal notranslate"><span class="pre">dims</span></code>. Default 0.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (N, N): Addition to the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.total.custom_single">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.total.</span></span><span class="sig-name descname"><span class="pre">custom_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.total.custom_single" title="Link to this definition"></a></dt>
+<dd><p>Custom addition to the Hamiltonian from the dictionary with the parameters.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>h (dict): Dictionary with coupling parameters.
+index (int): Index of the spin in <code class="docutils literal notranslate"><span class="pre">dims</span></code>.
+dims (ndarray with shape (n, )): Dimensions of all spins in the cluster.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (N, N): Addition to the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.total.total_hamiltonian">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.total.</span></span><span class="sig-name descname"><span class="pre">total_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfield</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.total.total_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Compute total Hamiltonian of the given cluster.</p>
+<dl>
+<dt>Args:</dt><dd><p>bath (BathArray): Array of bath spins.</p>
+<p>center(CenterArray): Array of central spins.</p>
+<dl class="simple">
+<dt>mfield (ndarray with shape (3,) or func):</dt><dd><p>Magnetic field of type <code class="docutils literal notranslate"><span class="pre">mfield</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>
+or callable with signature <code class="docutils literal notranslate"><span class="pre">mfield(pos)</span></code>, where <code class="docutils literal notranslate"><span class="pre">pos</span></code> is ndarray with shape (3, ) with the
+position of the spin.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Hamiltonian: hamiltonian of the given cluster, including central spin.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="separate-terms">
+<h2>Separate terms<a class="headerlink" href="#separate-terms" title="Link to this heading"></a></h2>
+<p>Documentation for the functions used to generate spin Hamiltonian for each cluster.</p>
+<dl class="py function" id="module-pycce.h.functions">
+<dt class="sig sig-object py" id="pycce.h.functions.bath_external_point_dipole">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">bath_external_point_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_spin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.bath_external_point_dipole" title="Link to this definition"></a></dt>
+<dd><p>Compute the first order addition of the point-dipole interactions between cluster spins and external bath spins
+to the cluster Hamiltonian.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vectors (array-like): Array of expanded spin vectors, each with shape (3, n, n).
+cluster (BathArray): Array of cluster spins.
+outer_spin (BathArray with shape (o, )): Array of the spins outside the cluster.
+outer_state (ndarray with shape (o, )): Array of the <span class="math notranslate nohighlight">\(S_z\)</span> projections of the external bath spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Addition to the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.bath_interactions">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">bath_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nspin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.bath_interactions" title="Link to this definition"></a></dt>
+<dd><p>Compute interactions between bath spins.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>nspin (BathArray): Array of the bath spins in the given cluster.
+ivectors (array-like): array of expanded spin vectors, each with shape (3, n, n).</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): All intrabath interactions of bath spins in the cluster.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.bath_mediated">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">bath_mediated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hyperfines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projections</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.bath_mediated" title="Link to this definition"></a></dt>
+<dd><p>Compute all hyperfine-mediated interactions between bath spins.</p>
+<dl>
+<dt>Args:</dt><dd><p>hyperfines (ndarray with shape (n, 3, 3)): Array of hyperfine tensors of the bath spins in the given cluster.
+ivectors (array-like): array of expanded spin vectors, each with shape (3, n, n).
+energy_state (float): Energy of the qubit state on which the interaction is conditioned.
+energies (ndarray with shape (2s - 1,)): Array of energies of all states of the central spin.
+projections (ndarray with shape (2s - 1, 3)):</p>
+<blockquote>
+<div><p>Array of vectors of the central spin matrix elements of form:</p>
+<div class="math notranslate nohighlight">
+\[[\bra{i}\hat{S}_x\ket{j}, \bra{i}\hat{S}_y\ket{j}, \bra{i}\hat{S}_z\ket{j}],\]</div>
+<p>where  <span class="math notranslate nohighlight">\(\ket{i}\)</span> are different states of the central spin.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Hyperfine-mediated interactions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.center_external_addition">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">center_external_addition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_spin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.center_external_addition" title="Link to this definition"></a></dt>
+<dd><p>Compute the first order addition of the interactions between central spin and external bath spins
+to the cluster Hamiltonian.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vectors (array-like): Array of expanded spin vectors, each with shape (3, n, n).
+cluster (BathArray): Array of cluster spins.
+outer_spin (BathArray with shape (o, )): Array of the spins outside the cluster.
+outer_state (ndarray with shape (o, )): Array of the <span class="math notranslate nohighlight">\(S_z\)</span> projections of the external bath spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Addition to the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.center_interactions">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">center_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.center_interactions" title="Link to this definition"></a></dt>
+<dd><p>Compute interactions between central spins.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>center (CenterArray): Array of central spins
+vectors (ndarray with shape (x, 3, n, n)): Array of spin vectors of central spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Central spin Overhauser term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.conditional_hyperfine">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">conditional_hyperfine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hyperfine_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projections</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.conditional_hyperfine" title="Link to this definition"></a></dt>
+<dd><p>Compute conditional hyperfine Hamiltonian.</p>
+<dl>
+<dt>Args:</dt><dd><p>hyperfine_tensor (ndarray with shape (3, 3)): Tensor of hyperfine interactions of the bath spin.
+ivec (ndarray with shape (3, n, n)): Spin vector of the bath spin in the full Hilbert space of the cluster.
+projections (ndarray with shape (3,)):</p>
+<blockquote>
+<div><p>Array of vectors of the central spin matrix elements of form:</p>
+<div class="math notranslate nohighlight">
+\[[\bra{i}\hat{S}_x\ket{j}, \bra{i}\hat{S}_y\ket{j}, \bra{i}\hat{S}_z\ket{j}],\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ket{j}\)</span> are different states of the central spin.
+If <span class="math notranslate nohighlight">\(\ket{i} = \ket{j}\)</span>, produces the usual conditioned hyperfine interactions
+and just equal to projections of <span class="math notranslate nohighlight">\(\hat{S}_z\)</span> of the central spin state
+<span class="math notranslate nohighlight">\([\braket{\hat{S}_x}, \braket{\hat{S}_y}, \braket{\hat{S}_z}]\)</span>.</p>
+<p>If <span class="math notranslate nohighlight">\(\ket{i} \neq \ket{j}\)</span>, gives second order perturbation.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Conditional hyperfine interaction.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.dd_tensor">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">dd_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.dd_tensor" title="Link to this definition"></a></dt>
+<dd><p>Generate dipole-dipole interaction tensor.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>coord_1 (ndarray with shape (3,)): Coordinates of the first spin.
+coord_2 (ndarray with shape (3,)): Coordinates of the second spin.
+g1 (float or ndarray with shape (3, 3)): Gyromagnetic ratio of the first spin.
+g2 (float or ndarray with shape (3, 3)): Gyromagnetic ratio of the second spin.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, 3): Interaction tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.dipole_dipole">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">dipole_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivec_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivec_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.dipole_dipole" title="Link to this definition"></a></dt>
+<dd><p>Compute dipole_dipole interactions between two bath spins.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>coord_1 (ndarray with shape (3,)): Coordinates of the first spin.
+coord_2 (ndarray with shape (3,)): Coordinates of the second spin.
+g1 (float): Gyromagnetic ratio of the first spin.
+g2 (float): Gyromagnetic ratio of the second spin.
+ivec_1 (ndarray with shape (3, n, n)): Spin vector of the first spin in the full Hilbert space of the cluster.
+ivec_2 (ndarray with shape (3, n, n)): Spin vector of the second spin in the full Hilbert space of the cluster.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Dipole-dipole interactions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.expanded_single">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">expanded_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detuning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.expanded_single" title="Link to this definition"></a></dt>
+<dd><p>Function to compute the single bath spin term.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ivec (ndarray with shape (3, n, n)): Spin vector of the bath spin in the full Hilbert space of the cluster.
+gyro (float or ndarray with shape (3, 3)):
+mfield (ndarray wtih shape (3, ): Magnetic field of type <code class="docutils literal notranslate"><span class="pre">mfield</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>.
+self_tensor (ndarray with shape (3, 3)): tensor of self-interaction of type IPI where I is bath spin.
+detuning (float): Additional term of d*Iz allowing to simulate different energy splittings of bath spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Single bath spin term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.external_spins_field">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">external_spins_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.external_spins_field" title="Link to this definition"></a></dt>
+<dd><p>Compute the first order addition of the point-dipole interactions between cluster spins and external bath spins
+to the cluster Hamiltonian.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>vectors (array-like): Array of expanded spin vectors, each with shape (3, n, n).
+indexes (ndarray with shape (n,)): Array of indexes of bath spins inside the given cluster.
+bath (BathArray with shape (N,)): Array of all bath spins.
+projected_state (ndarray with shape (N, ):  Array of the <span class="math notranslate nohighlight">\(S_z\)</span> projections of all bath spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Addition to the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.gen_pos_tensor">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">gen_pos_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coord_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.gen_pos_tensor" title="Link to this definition"></a></dt>
+<dd><p>Generate positional tensor -(3*r &#64; r.T - r*r), used for hyperfine tensor (without gyro factor).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>coord_1 (ndarray with shape (3,)): Coordinates of the first spin.
+coord_2 (ndarray with shape (3,)): Coordinates of the second spin.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, 3): Positional tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.hyperfine">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">hyperfine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hyperfine_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ivec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.hyperfine" title="Link to this definition"></a></dt>
+<dd><p>Compute hyperfine interactions between central spin and bath spin.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>hyperfine_tensor (ndarray with shape (3, 3)): Tensor of hyperfine interactions of the bath spin.
+svec (ndarray with shape (3, n, n)): Spin vector of the central spin in the full Hilbert space of the cluster.
+ivec (ndarray with shape (3, n, n)): Spin vector of the bath spin in the full Hilbert space of the cluster.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Hyperfine interaction.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.overhauser_bath">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">overhauser_bath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_gyros</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others_position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.overhauser_bath" title="Link to this definition"></a></dt>
+<dd><p>Compute Overhauser field term on the bath spin in the cluster from all other spins, not included in the cluster.</p>
+<dl>
+<dt>Args:</dt><dd><p>ivec (ndarray with shape (3, n, n)): Spin vector of the bath spin in the full Hilbert space of the cluster.
+position (ndarray with shape (3,)): Position of the bath spin.
+gyro (float): Gyromagnetic ratio of the bath spin.
+other_gyros (ndarray with shape (m,)):</p>
+<blockquote>
+<div><p>Array of the gyromagnetic ratios of the bath spins, not included in the cluster.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>others_position (ndarray with shape (m, 3)):</dt><dd><p>Array of the positions of the bath spins, not included in the cluster.</p>
+</dd>
+<dt>others_state (ndarray with shape (m,) or (m, 3)):</dt><dd><p>Array of <span class="math notranslate nohighlight">\(I_z\)</span> projections for each bath spin outside of the given cluster.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Bath spin Overhauser term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.overhauser_central">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">overhauser_central</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others_hyperfines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.overhauser_central" title="Link to this definition"></a></dt>
+<dd><p>Compute Overhauser field term on the central spin from all other spins, not included in the cluster.</p>
+<dl>
+<dt>Args:</dt><dd><p>svec (ndarray with shape (3, n, n)): Spin vector of the central spin in the full Hilbert space of the cluster.
+others_hyperfines (ndarray with shape (m, 3, 3)):</p>
+<blockquote>
+<div><p>Array of hyperfine tensors for all bath spins not included in the cluster.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>others_state (ndarray with shape (m,) or (m, 3)):</dt><dd><p>Array of <span class="math notranslate nohighlight">\(I_z\)</span> projections for each bath spin outside of the given cluster.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Central spin Overhauser term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.overhauser_from_tensors">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">overhauser_from_tensors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.overhauser_from_tensors" title="Link to this definition"></a></dt>
+<dd><p>Compute Overhauser field from array of tensors.</p>
+<dl>
+<dt>Args:</dt><dd><p>vec (ndarray with shape (3, n, n)): Spin vector of the bath spin in the full Hilbert space of the cluster.</p>
+<p>tensors (ndarray with shape (N, 3, 3)): Array of interaction tensors.</p>
+<dl class="simple">
+<dt>projected_state (ndarray with shape (N, )):</dt><dd><p>Array of <span class="math notranslate nohighlight">\(I_z\)</span> projections of the spins outside of the given cluster..</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Bath spin Overhauser term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.projected_addition">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">projected_addition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.projected_addition" title="Link to this definition"></a></dt>
+<dd><p>Compute the first order addition of the interactions with the cental spin to the cluster Hamiltonian.</p>
+<dl>
+<dt>Args:</dt><dd><p>vectors (array-like): Array of expanded spin vectors, each with shape (3, n, n).
+bath (BathArray): Array of bath spins.
+center (CenterArray): Array of central spins.
+state (str, bool, or array-like): Identificator of the qubit spin. <code class="docutils literal notranslate"><span class="pre">'alpha'</span></code> or <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<blockquote>
+<div><p>for <span class="math notranslate nohighlight">\(\ket{0}\)</span> state, <code class="docutils literal notranslate"><span class="pre">'beta'</span></code> of <code class="docutils literal notranslate"><span class="pre">False</span></code> for <span class="math notranslate nohighlight">\(\ket{1}\)</span> state.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Addition to the Hamiltonian.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.self_central">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">self_central</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfield</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-17608.59705</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detuning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.self_central" title="Link to this definition"></a></dt>
+<dd><p>Function to compute the central spin term in the Hamiltonian.</p>
+<dl>
+<dt>Args:</dt><dd><p>svec (ndarray with shape (3, n, n)): Spin vector of the central spin in the full Hilbert space of the cluster.
+mfield (ndarray wtih shape (3,): Magnetic field of type <code class="docutils literal notranslate"><span class="pre">mfield</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>.
+tensor (ndarray with shape (3, 3)):</p>
+<blockquote>
+<div><p>Zero Field Splitting tensor of the central spin.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>gyro (float or ndarray with shape (3,3)):</dt><dd><p>gyromagnetic ratio of the central spin OR tensor corresponding to interaction between magnetic field and
+central spin.</p>
+</dd>
+</dl>
+<p>detuning (float): Energy detuning from the Zeeman splitting in kHz.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Central spin term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.h.functions.zeeman">
+<span class="sig-prename descclassname"><span class="pre">pycce.h.functions.</span></span><span class="sig-name descname"><span class="pre">zeeman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ivec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfield</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.h.functions.zeeman" title="Link to this definition"></a></dt>
+<dd><p>Function
+Args:</p>
+<blockquote>
+<div><p>ivec (ndarray with shape (3, n, n)): Spin vector of the  spin in the full Hilbert space of the cluster.
+gyro (float or ndarray with shape (3, 3)): Gyromagnetic ratio of the spin.
+mfield (ndarray with shape (3, )): Magnetic field at the position of the spin.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Zeeman interactions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="calculators.html" class="btn btn-neutral float-left" title="CCE Calculators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utilities.html" class="btn btn-neutral float-right" title="Utility Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

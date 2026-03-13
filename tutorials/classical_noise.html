@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Correlation function &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multiple central spins" href="second_spin.html" />
+    <link rel="prev" title="Shallow donor in Si" href="si_shallow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="diamond_nv.html">NV Center in Diamond</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sic_vv.html">VV in SiC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="si_shallow.html">Shallow donor in Si</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Correlation function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Generate-nuclear-spin-bath">Generate nuclear spin bath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Coherence-calculations">Coherence calculations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Noise-calculations">Noise calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="second_spin.html">Multiple central spins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mecce.html">Dissipative spin bath</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorial.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Correlation function</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/classical_noise.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Correlation-function">
+<h1>Correlation function<a class="headerlink" href="#Correlation-function" title="Link to this heading"></a></h1>
+<p>In this tutorial we will compute the coherence function of the NV Center in diamond and then reproduce it from the correlation function of the noise.</p>
+<p>The correlation function <span class="math notranslate nohighlight">\(C(t)\)</span> of the effective magnetic field (noise) along the <span class="math notranslate nohighlight">\(z\)</span>-axis can be defined as follows: <span class="math">\begin{equation}
+C(t) = \left\langle \beta_z(t)\beta_z(0) \right\rangle
+\end{equation}</span></p>
+<p>With <span class="math notranslate nohighlight">\(\beta_z\)</span> given as:</p>
+<p><span class="math">\begin{equation}
+\beta_z(t) = U^{\dagger}(t) \left( \sum_{\{I\}}{A_{zz} I_z} \right) U(t)
+\end{equation}</span></p>
+<p>Where <span class="math notranslate nohighlight">\(U(t)\)</span> is time propagator.</p>
+<p>Within the CCE formalism, the correlation function is computed as:</p>
+<p><span class="math">\begin{equation}
+C(t) = \sum_{\{i\}} {\tilde C_{\{i\}}(t)} + \sum_{\{ij\}} {\tilde C_{\{ij\}}(t)}\ + \ ...
+\end{equation}</span></p>
+<p>With contributions computed as:</p>
+<p><span class="math">\begin{equation}
+\tilde C_{\nu}(t) = C_{\nu}(t) - \sum_{\nu'  \subset\ \nu} {\tilde C_{\nu'}(t)}
+\end{equation}</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycce</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ase</span>
+
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42055</span>
+<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Generate-nuclear-spin-bath">
+<h2>Generate nuclear spin bath<a class="headerlink" href="#Generate-nuclear-spin-bath" title="Link to this heading"></a></h2>
+<p>Building a <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> of nuclear spins from the <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> object.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">bulk</span>
+
+<span class="c1"># Generate unitcell from ase</span>
+<span class="n">diamond</span> <span class="o">=</span> <span class="n">bulk</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;diamond&#39;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">diamond</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">bath</span><span class="o">.</span><span class="n">BathCell</span><span class="o">.</span><span class="n">from_ase</span><span class="p">(</span><span class="n">diamond</span><span class="p">)</span>
+<span class="c1"># Add types of isotopes</span>
+<span class="n">diamond</span><span class="o">.</span><span class="n">add_isotopes</span><span class="p">((</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">))</span>
+<span class="c1"># set z direction of the defect</span>
+<span class="n">diamond</span><span class="o">.</span><span class="n">zdir</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c1"># Add the defect. remove and add atoms at the positions (in cell coordinates)</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">diamond</span><span class="o">.</span><span class="n">gen_supercell</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+                                           <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])],</span>
+                              <span class="n">add</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;14N&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+                              <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we define all of the parameters of the simulation. We are interested in the very specific regime, when all nearby nuclear spins are removed. To achieve this goal we define an <code class="docutils literal notranslate"><span class="pre">inner</span> <span class="pre">=</span> <span class="pre">20</span></code> parameter, and remove all nuclear spins within this radius.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">inner</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">smallatoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">atoms</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">inner</span><span class="p">]</span>
+
+<span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># CCE order</span>
+    <span class="n">r_bath</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>  <span class="c1"># Size of the bath in A</span>
+    <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>  <span class="c1"># Cutoff of pairwise clusters in A</span>
+    <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="c1"># Position of central Spin</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="c1"># 0 qubit state</span>
+    <span class="n">beta</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="c1"># 1 qubit state</span>
+    <span class="n">magnetic_field</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="c1"># magnetic field along z-axis</span>
+    <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span> <span class="c1"># N pulses in CPMG sequence</span>
+<span class="p">)</span> <span class="c1"># Qubit levels</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>  <span class="c1"># Time points in ms</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Coherence-calculations">
+<h2>Coherence calculations<a class="headerlink" href="#Coherence-calculations" title="Link to this heading"></a></h2>
+<p>Next, we set up <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> objects and check convergence with respect to the CCE order.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">smallatoms</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">orders</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">coh</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">:</span>
+    <span class="n">calc</span><span class="o">.</span><span class="n">generate_clusters</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="n">coh</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;cce&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;coherence&#39;</span><span class="p">)</span>
+<span class="n">coh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">coh</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ts</span><span class="p">))</span>
+<span class="n">coh</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Time (ms)&#39;</span>
+</pre></div>
+</div>
+</div>
+<p>Visually verify the convergence.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coh</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_classical_noise_11_0.png" src="../_images/tutorials_classical_noise_11_0.png" />
+</div>
+</div>
+</section>
+<section id="Noise-calculations">
+<h2>Noise calculations<a class="headerlink" href="#Noise-calculations" title="Link to this heading"></a></h2>
+<p>To compute the correlation function of the noise, we call <code class="docutils literal notranslate"><span class="pre">Simulator.compute</span></code> method and specify <code class="docutils literal notranslate"><span class="pre">quantity</span> <span class="pre">=</span> <span class="pre">'noise'</span></code>.</p>
+<p>First we determine convergence of the correlation function with the CCE order.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="n">calc</span><span class="o">.</span><span class="n">generate_clusters</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;cce&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;noise&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">noise</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">o</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Correlation&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_classical_noise_13_0.png" src="../_images/tutorials_classical_noise_13_0.png" />
+</div>
+</div>
+<p>The difference between third and fourth order is fairly small, we will use the fourth order for the following calculations. It will take a bit of a time, so you can grab some tea while you wait.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span><span class="o">.</span><span class="n">generate_clusters</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">noise</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;cce&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;noise&#39;</span><span class="p">)</span>
+<span class="n">genoise</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s1">&#39;noise&#39;</span><span class="p">,</span> <span class="n">nbstates</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Compare the results obtained with CCE and gCCE approaches. Note that they are slighlity different. However, as we will see it does not impact the predicted coherence.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">noise</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">genoise</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;gCCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Correlation&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_classical_noise_17_0.png" src="../_images/tutorials_classical_noise_17_0.png" />
+</div>
+</div>
+<p>Assuming that the noise is Gaussian, we can reproduce the coherence from the average phase squared <span class="math notranslate nohighlight">\(\langle\phi^2\rangle\)</span>, accumulated by the spin qubit:</p>
+<p><span class="math notranslate nohighlight">\(L(t)=e^{-\langle \phi^2(t) \rangle}\)</span></p>
+<p>The average phase is obtained from the autocorrelation function as:</p>
+<p><span class="math notranslate nohighlight">\(\langle \phi^2(t) \rangle = \int_0^t{d\tau C(\tau) F(\tau)}\)</span></p>
+<p>Where <span class="math notranslate nohighlight">\(F(\tau)\)</span> is the correlation filter function (see <a class="reference external" href="https://doi.org/10.1103/PhysRevA.86.012314">Phys. Rev. A 86, 012314 (2012)</a> for details).</p>
+<p>PyCCE code already has implemented calculations of the phase in the <code class="docutils literal notranslate"><span class="pre">pycce.filter</span></code> module:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pycce.filter.gaussian_phase</span></code> takes three positional arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">timespace</span></code> - time points at which correlation function was computed;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">corr</span></code> - noise autocorrelation function;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">npulses</span></code> - number of pulses in CPMG sequence.</p></li>
+</ul>
+<p>Here we compute the phase for the Hahn-echo experiment. Note that the implementation of <code class="docutils literal notranslate"><span class="pre">gaussian_phase</span></code> is not heavily optimized and can take a hot second.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pycce.filter</span>
+
+<span class="n">chis</span> <span class="o">=</span>  <span class="n">pycce</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">gaussian_phase</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">noise</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">gchis</span> <span class="o">=</span> <span class="n">pycce</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">gaussian_phase</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">genoise</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now compare results from direct calculations of the coherence function, and the one reconstructed from the noise autocorrelation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">chis</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;from noise (CCE)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gchis</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;from noise (generalized CCE)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">coh</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CCE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Coherence&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_classical_noise_21_0.png" src="../_images/tutorials_classical_noise_21_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="si_shallow.html" class="btn btn-neutral float-left" title="Shallow donor in Si" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="second_spin.html" class="btn btn-neutral float-right" title="Multiple central spins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

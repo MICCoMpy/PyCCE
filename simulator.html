@@ -1,0 +1,1182 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running the Simulations &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hamiltonian Parameters Input" href="parameters.html" />
+    <link rel="prev" title="Central Spins" href="center.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running the Simulations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-simulator-object">Setting up the Simulator object</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.main.Simulator"><code class="docutils literal notranslate"><span class="pre">Simulator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.alpha"><code class="docutils literal notranslate"><span class="pre">Simulator.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.as_delay"><code class="docutils literal notranslate"><span class="pre">Simulator.as_delay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.bath"><code class="docutils literal notranslate"><span class="pre">Simulator.bath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.bath_state"><code class="docutils literal notranslate"><span class="pre">Simulator.bath_state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.beta"><code class="docutils literal notranslate"><span class="pre">Simulator.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.center"><code class="docutils literal notranslate"><span class="pre">Simulator.center</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.clusters"><code class="docutils literal notranslate"><span class="pre">Simulator.clusters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.error_range"><code class="docutils literal notranslate"><span class="pre">Simulator.error_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.ext_r_bath"><code class="docutils literal notranslate"><span class="pre">Simulator.ext_r_bath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.external_bath"><code class="docutils literal notranslate"><span class="pre">Simulator.external_bath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.fixstates"><code class="docutils literal notranslate"><span class="pre">Simulator.fixstates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.fulldm"><code class="docutils literal notranslate"><span class="pre">Simulator.fulldm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.hyperfine"><code class="docutils literal notranslate"><span class="pre">Simulator.hyperfine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.interlaced"><code class="docutils literal notranslate"><span class="pre">Simulator.interlaced</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.level_confidence"><code class="docutils literal notranslate"><span class="pre">Simulator.level_confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.magnetic_field"><code class="docutils literal notranslate"><span class="pre">Simulator.magnetic_field</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.masked"><code class="docutils literal notranslate"><span class="pre">Simulator.masked</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.n_clusters"><code class="docutils literal notranslate"><span class="pre">Simulator.n_clusters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.nbstates"><code class="docutils literal notranslate"><span class="pre">Simulator.nbstates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.order"><code class="docutils literal notranslate"><span class="pre">Simulator.order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.projected_bath_state"><code class="docutils literal notranslate"><span class="pre">Simulator.projected_bath_state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.pulses"><code class="docutils literal notranslate"><span class="pre">Simulator.pulses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.r_bath"><code class="docutils literal notranslate"><span class="pre">Simulator.r_bath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.r_dipole"><code class="docutils literal notranslate"><span class="pre">Simulator.r_dipole</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.second_order"><code class="docutils literal notranslate"><span class="pre">Simulator.second_order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.seed"><code class="docutils literal notranslate"><span class="pre">Simulator.seed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.set_magnetic_field"><code class="docutils literal notranslate"><span class="pre">Simulator.set_magnetic_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.set_zfs"><code class="docutils literal notranslate"><span class="pre">Simulator.set_zfs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.main.Simulator.timespace"><code class="docutils literal notranslate"><span class="pre">Simulator.timespace</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-the-bath">Reading the bath</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.main.Simulator.read_bath"><code class="docutils literal notranslate"><span class="pre">Simulator.read_bath()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.main.Simulator.generate_clusters"><code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-properties-with-simulator">Calculate properties with simulator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.main.Simulator.compute"><code class="docutils literal notranslate"><span class="pre">Simulator.compute()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pulse-sequences">Pulse sequences</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.pulses.BasePulse"><code class="docutils literal notranslate"><span class="pre">BasePulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.check_flip"><code class="docutils literal notranslate"><span class="pre">BasePulse.check_flip()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.flip"><code class="docutils literal notranslate"><span class="pre">BasePulse.flip</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.generate_rotation"><code class="docutils literal notranslate"><span class="pre">BasePulse.generate_rotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.indices"><code class="docutils literal notranslate"><span class="pre">BasePulse.indices</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.naxes"><code class="docutils literal notranslate"><span class="pre">BasePulse.naxes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.set_angle"><code class="docutils literal notranslate"><span class="pre">BasePulse.set_angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.x"><code class="docutils literal notranslate"><span class="pre">BasePulse.x</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.y"><code class="docutils literal notranslate"><span class="pre">BasePulse.y</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.BasePulse.z"><code class="docutils literal notranslate"><span class="pre">BasePulse.z</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.pulses.Pulse"><code class="docutils literal notranslate"><span class="pre">Pulse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Pulse.bath_angles"><code class="docutils literal notranslate"><span class="pre">Pulse.bath_angles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Pulse.bath_axes"><code class="docutils literal notranslate"><span class="pre">Pulse.bath_axes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Pulse.bath_names"><code class="docutils literal notranslate"><span class="pre">Pulse.bath_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Pulse.delay"><code class="docutils literal notranslate"><span class="pre">Pulse.delay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Pulse.rotation"><code class="docutils literal notranslate"><span class="pre">Pulse.rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Pulse.which"><code class="docutils literal notranslate"><span class="pre">Pulse.which</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.run.pulses.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.run.pulses.Sequence.append"><code class="docutils literal notranslate"><span class="pre">Sequence.append()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running the Simulations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/simulator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-the-simulations">
+<h1>Running the Simulations<a class="headerlink" href="#running-the-simulations" title="Link to this heading"></a></h1>
+<section id="setting-up-the-simulator-object">
+<h2>Setting up the Simulator object<a class="headerlink" href="#setting-up-the-simulator-object" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">pycce.Simulator</span></code> - main class for conducting CCE Simulations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.main.Simulator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.main.</span></span><span class="sig-name descname"><span class="pre">Simulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dipole</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">bath_kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.main.Simulator" title="Link to this definition"></a></dt>
+<dd><p>The main class for CCE calculations.</p>
+<p>The typical usage includes:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>Read array of the bath spins. This is done with <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> method which accepts either
+reading from .xyz file or from the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instance with defined positions and names of the bath spins.
+In the process, the subset of the array within the distance of <code class="docutils literal notranslate"><span class="pre">r_dipole</span></code> from the central spin is taken
+and for this subset the Hyperfine couplings can be generated.</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">hyperfine</span></code> keyword is provided and there are some hyperfine couplings already,
+then no changes are done to the hyperfine tensors.
+If <code class="docutils literal notranslate"><span class="pre">hyperfine='pd'</span></code>, the hyperfine couplings are computed assuming point dipole approximation. For all
+accepted arguments, see <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code>.</p>
+</li>
+<li><p>Generate set of clusters with <code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters</span></code>,
+determined by the maximum connectivity radius <code class="docutils literal notranslate"><span class="pre">r_dipole</span></code>
+and the maximum size of the cluster <code class="docutils literal notranslate"><span class="pre">order</span></code>.</p></li>
+<li><p>Compute the desired property with <code class="docutils literal notranslate"><span class="pre">Simulator.compute</span></code> method.</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Directly setting up the attribute values will rerun <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code>
+and/or <code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters</span></code> to reflect updated value of the given attribute.</p>
+<p>E.g. If <code class="docutils literal notranslate"><span class="pre">Simulator.r_bath</span></code> is set to some new value after initialization,
+then <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> and <code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters</span></code> are called with the increased bath.</p>
+</div>
+<p>First two steps are usually done during the initialization of the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object by providing the necessary
+arguments.</p>
+<p>Notes:</p>
+<blockquote>
+<div><p>Depending on the number of provided arguments, in the initialization process will call the following methods
+to setup the calculation engine.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">bath</span></code> is provided, <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> is called with additional keywords in <code class="docutils literal notranslate"><span class="pre">**bath_kw</span></code>.</p></li>
+<li><p>If both <code class="docutils literal notranslate"><span class="pre">r_dipole</span></code> and <code class="docutils literal notranslate"><span class="pre">order</span></code> are provided and <code class="docutils literal notranslate"><span class="pre">bath</span></code> is not None,
+the <code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters</span></code> is called.</p></li>
+</ul>
+<p>See the corresponding method documentation for details.</p>
+</div></blockquote>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">atoms</span> <span class="o">=</span> <span class="n">random_bath</span><span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                 <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mf">2.88</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                 <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="go">Simulator for center array of size 1.</span>
+<span class="go">Parameters of cluster expansion:</span>
+<span class="go">r_bath: 40</span>
+<span class="go">r_dipole: 6</span>
+<span class="go">order: 2</span>
+
+<span class="go">Bath consists of 549 spins.</span>
+
+<span class="go">Clusters include:</span>
+<span class="go">549  clusters of order 1.</span>
+<span class="go">457  clusters of order 2.</span>
+</pre></div>
+</div>
+<p>Args:</p>
+<blockquote>
+<div><dl>
+<dt>spin (CenterArray or float or array with shape (n,)):</dt><dd><p>CenterArray containing properties of all central spins.</p>
+<p><em>OR</em></p>
+<p>Total spin of the central spin (Assumes one central spin).</p>
+<p><em>OR</em></p>
+<p>Array of total spins of the central spins (Assumes <em>n</em> central spins).</p>
+</dd>
+<dt>position (ndarray):</dt><dd><p>Cartesian coordinates ar array of coordinates in Angstrom of the central spin(s).
+Default (0., 0., 0.). If provided, overrides the position in CenterArray.</p>
+</dd>
+<dt>alpha (float or ndarray with shape (S, )): <span class="math notranslate nohighlight">\(\ket{0}\)</span> state of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span></dt><dd><p>basis or the index of eigenstate to be used as one.</p>
+<p>Default: Lowest energy eigenstate of the central spin Hamiltonian.</p>
+<p>If provided, overrides the alpha state in the CenterArray.</p>
+</dd>
+<dt>beta (float or ndarray with shape (S, )): <span class="math notranslate nohighlight">\(\ket{1}\)</span> state of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis</dt><dd><p>or the index of the eigenstate to be used as one.</p>
+<p>Default: Second lowest energy eigenstate of the central spin Hamiltonian.</p>
+<p>If provided, overrides the beta state in the CenterArray.</p>
+</dd>
+</dl>
+<p>gyro (float or ndarray with shape (3, 3)): Gyromagnetic ratio of the central spin(s) in rad / ms / G.</p>
+<blockquote>
+<div><p><em>OR</em></p>
+<p>Tensor describing central spin interactions with the magnetic field.</p>
+<p>Default -17608.597050 kHz * rad / G - gyromagnetic ratio of the free electron spin.</p>
+<p>If provided, overrides the gyro value in CenterArray.</p>
+</div></blockquote>
+<dl>
+<dt>D (float or ndarray with shape (3, 3)): D (longitudinal splitting) parameter of central spin</dt><dd><p>in ZFS tensor of central spin in kHz.</p>
+<p><em>OR</em></p>
+<p>Total ZFS tensor. Default 0.</p>
+<p>If provided, overrides the ZFS value in CenterArray.</p>
+</dd>
+<dt>E (float): E (transverse splitting) parameter of central spin in ZFS tensor of central spin in kHz.</dt><dd><p>Default 0. Ignored if <code class="docutils literal notranslate"><span class="pre">D</span></code> is None or tensor.</p>
+</dd>
+</dl>
+<p>bath (ndarray or str): First positional argument of the <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> method.</p>
+<blockquote>
+<div><p>Either:</p>
+<ul class="simple">
+<li><p>Instance of BathArray class;</p></li>
+<li><p>ndarray with <code class="docutils literal notranslate"><span class="pre">dtype([('N',</span> <span class="pre">np.str_,</span> <span class="pre">16),</span> <span class="pre">('xyz',</span> <span class="pre">np.float64,</span> <span class="pre">(3,))])</span></code> containing names
+of bath spins (same ones as stored in self.ntype) and positions of the spins in angstroms;</p></li>
+<li><p>the name of the .xyz text file containing 4 columns: name of the bath spin and xyz coordinates in A.</p></li>
+</ul>
+</div></blockquote>
+<p>r_dipole (float): Maximum connectivity distance between two bath spins.</p>
+<p>order (int): Maximum size of the cluster to be considered in CCE expansion.</p>
+<dl>
+<dt>n_clusters (dict): Dictionary which contain maximum number of clusters of the given size.</dt><dd><p>Has the form <code class="docutils literal notranslate"><span class="pre">n_clusters</span> <span class="pre">=</span> <span class="pre">{order:</span> <span class="pre">number}</span></code>, where <code class="docutils literal notranslate"><span class="pre">order</span></code> is the size of the cluster,
+<code class="docutils literal notranslate"><span class="pre">number</span></code> is the maximum number of clusters with this size.</p>
+<p>If provided, sort the clusters by the “strength” of cluster.
+Then the strongest <code class="docutils literal notranslate"><span class="pre">number</span></code> of clusters is taken.</p>
+<p>We define the strength of the cluster <span class="math notranslate nohighlight">\(s\)</span> as an inverse of the sum
+over inverse pairwise interaction strengths of the minimal cluster:</p>
+<div class="math notranslate nohighlight">
+\[s = (\sum_{i&lt;j\in C} \frac{r^3}{\gamma_i\gamma_j})^{-1}\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\gamma_i\)</span> is the gyromagnetic ration of a spin <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(r\)</span> is the distance between
+two spins, and the summation of <span class="math notranslate nohighlight">\(i, j\)</span> goes only over the edges of the minimally connected cluster.</p>
+<p>We define minimally connected cluster as a cluster with lowest possible number of edges that still forms
+a connected graph. If multiple choices of the minimally connected cluster
+for the same cluster are possible, the one with the larger strength <span class="math notranslate nohighlight">\(s\)</span> is chosen.</p>
+</dd>
+</dl>
+<p>pulses (list or int or Sequence): Number of pulses in CPMG sequence or list with pulses.</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>bath_kw: Additional keyword arguments for the <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> method.</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.alpha">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#pycce.main.Simulator.alpha" title="Link to this definition"></a></dt>
+<dd><p>ndarray or int: Returns .center.alpha property: <span class="math notranslate nohighlight">\(\ket{0}\)</span> qubit state of the central spin in Sz basis
+<strong>OR</strong> index of the energy state to be considered as one.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.as_delay">
+<span class="sig-name descname"><span class="pre">as_delay</span></span><a class="headerlink" href="#pycce.main.Simulator.as_delay" title="Link to this definition"></a></dt>
+<dd><p>bool: True if time points are delay between pulses (for equispaced pulses),
+False if time points are total time. Ignored if <code class="docutils literal notranslate"><span class="pre">pulses</span></code> contains the time delays.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.bath">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">bath</span></span><a class="headerlink" href="#pycce.main.Simulator.bath" title="Link to this definition"></a></dt>
+<dd><p>BathArray: Array of bath spins used in CCE simulations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.bath_state">
+<span class="sig-name descname"><span class="pre">bath_state</span></span><a class="headerlink" href="#pycce.main.Simulator.bath_state" title="Link to this definition"></a></dt>
+<dd><p>bath_state (ndarray): Array of bath states.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.beta">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#pycce.main.Simulator.beta" title="Link to this definition"></a></dt>
+<dd><p>ndarray or int: Returns .center.beta property: <span class="math notranslate nohighlight">\(\ket{1}\)</span> qubit state of the central spin in Sz basis
+<strong>OR</strong> index of the energy state to be considered as one.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.center">
+<span class="sig-name descname"><span class="pre">center</span></span><a class="headerlink" href="#pycce.main.Simulator.center" title="Link to this definition"></a></dt>
+<dd><p>CenterArray: Array of central spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.clusters">
+<span class="sig-name descname"><span class="pre">clusters</span></span><a class="headerlink" href="#pycce.main.Simulator.clusters" title="Link to this definition"></a></dt>
+<dd><p>dict: Dictionary containing information about cluster structure of the bath.</p>
+<p>Each keys n correspond to the size of the cluster.
+Each <code class="docutils literal notranslate"><span class="pre">Simulator.clusters[n]</span></code> contains <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> of shape (m, n),
+where m is the number of clusters of given size, n is the size of the cluster.
+Each row  of this array contains indexes of the bath spins included in the given cluster.
+Generated during <code class="docutils literal notranslate"><span class="pre">.generate_clusters</span></code> call.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.error_range">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">error_range</span></span><a class="headerlink" href="#pycce.main.Simulator.error_range" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>float: Maximum distance between positions in bath and external</dt><dd><p>bath to consider two positions the same (default 0.2).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.ext_r_bath">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ext_r_bath</span></span><a class="headerlink" href="#pycce.main.Simulator.ext_r_bath" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>float: Maximum distance from the central spins of the bath spins</dt><dd><p>for which to use the data from <code class="docutils literal notranslate"><span class="pre">external_bath</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.external_bath">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">external_bath</span></span><a class="headerlink" href="#pycce.main.Simulator.external_bath" title="Link to this definition"></a></dt>
+<dd><p>BathArray: Array with spins read from DFT output (see <code class="docutils literal notranslate"><span class="pre">pycce.io</span></code>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.fixstates">
+<span class="sig-name descname"><span class="pre">fixstates</span></span><a class="headerlink" href="#pycce.main.Simulator.fixstates" title="Link to this definition"></a></dt>
+<dd><p>dict: If not None, shows which bath states to fix in random bath states.</p>
+<p>Each key is the index of bath spin,
+value - fixed <span class="math notranslate nohighlight">\(\hat S_z\)</span> projection of the mixed state of nuclear spin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.fulldm">
+<span class="sig-name descname"><span class="pre">fulldm</span></span><a class="headerlink" href="#pycce.main.Simulator.fulldm" title="Link to this definition"></a></dt>
+<dd><p>bool: True if return full density matrix as the result in the gCCE calculations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.hyperfine">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">hyperfine</span></span><a class="headerlink" href="#pycce.main.Simulator.hyperfine" title="Link to this definition"></a></dt>
+<dd><dl>
+<dt>str, func, or Cube instance: This argument tells the code how to generate hyperfine couplings.</dt><dd><p>If (<code class="docutils literal notranslate"><span class="pre">hyperfine</span> <span class="pre">=</span> <span class="pre">None</span></code> and all A in provided bath are 0) or (<code class="docutils literal notranslate"><span class="pre">hyperfine</span> <span class="pre">=</span> <span class="pre">'pd'</span></code>),
+use point dipole approximation. Otherwise can be an instance of <code class="docutils literal notranslate"><span class="pre">Cube</span></code> object,
+or callable with signature:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">func(array)</span></code></p>
+</div></blockquote>
+<p>where array is the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.interlaced">
+<span class="sig-name descname"><span class="pre">interlaced</span></span><a class="headerlink" href="#pycce.main.Simulator.interlaced" title="Link to this definition"></a></dt>
+<dd><p>bool: True if use hybrid CCE approach - for each cluster sample over states of the supercluster.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.level_confidence">
+<span class="sig-name descname"><span class="pre">level_confidence</span></span><a class="headerlink" href="#pycce.main.Simulator.level_confidence" title="Link to this definition"></a></dt>
+<dd><p>float: Maximum fidelity of the qubit state to be considered eigenstate of the
+central spin Hamiltonian when <code class="docutils literal notranslate"><span class="pre">second_order</span></code> set to True.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.magnetic_field">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">magnetic_field</span></span><a class="headerlink" href="#pycce.main.Simulator.magnetic_field" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array containing external magnetic field as (Bx, By, Bz)
+or callable with signature <code class="docutils literal notranslate"><span class="pre">magnetic_field(pos)</span></code>, where <code class="docutils literal notranslate"><span class="pre">pos</span></code> is an array with shape (3,) with the
+position of either bath or central spin. Default is (0, 0, 0).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.masked">
+<span class="sig-name descname"><span class="pre">masked</span></span><a class="headerlink" href="#pycce.main.Simulator.masked" title="Link to this definition"></a></dt>
+<dd><p>bool: True if mask numerically unstable points (with coherence &gt; 1)
+in the averaging over bath states.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is up to user to check whether the possible instability is due to numerical error
+or unphysical assumptions of the calculations.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.n_clusters">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">n_clusters</span></span><a class="headerlink" href="#pycce.main.Simulator.n_clusters" title="Link to this definition"></a></dt>
+<dd><p>dict: Dictionary which contain maximum number of clusters of the given size.
+Has the form <code class="docutils literal notranslate"><span class="pre">n_clusters</span> <span class="pre">=</span> <span class="pre">{order:</span> <span class="pre">number}</span></code>, where <code class="docutils literal notranslate"><span class="pre">order</span></code> is the size of the cluster,
+<code class="docutils literal notranslate"><span class="pre">number</span></code> is the maximum number of clusters with this size.</p>
+<p>If provided, sorts the clusters by the strength of cluster interaction,
+equal to the inverse of a sum of inverse pairwise interaction in the minimally connected cluster.
+Then the strongest <code class="docutils literal notranslate"><span class="pre">number</span></code> of clusters is taken.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.nbstates">
+<span class="sig-name descname"><span class="pre">nbstates</span></span><a class="headerlink" href="#pycce.main.Simulator.nbstates" title="Link to this definition"></a></dt>
+<dd><p>int: Number or random bath states to sample over.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.order">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#pycce.main.Simulator.order" title="Link to this definition"></a></dt>
+<dd><p>int: Maximum size of the cluster.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.projected_bath_state">
+<span class="sig-name descname"><span class="pre">projected_bath_state</span></span><a class="headerlink" href="#pycce.main.Simulator.projected_bath_state" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (n,): Array with z-projections of the bath spins states.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.pulses">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pulses</span></span><a class="headerlink" href="#pycce.main.Simulator.pulses" title="Link to this definition"></a></dt>
+<dd><p>Sequence: List-like object, containing the sequence of the instantaneous ideal control pulses.</p>
+<p>Each item is <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> object, containing the following attributes:</p>
+<ul class="simple">
+<li><p><strong>which</strong> (<em>array-like</em>): Indexes of the central spins to be rotated by the pulse. Default is all.</p></li>
+<li><p><strong>x</strong> (<em>float</em>): Rotation angle of the central spin about x-axis in radians.</p></li>
+<li><p><strong>y</strong> (<em>float</em>): Rotation angle of the central spin about y-axis in radians.</p></li>
+<li><p><strong>z</strong> (<em>float</em>): Rotation angle of the central spin about z-axis in radians.</p></li>
+<li><p><strong>delay</strong> (<em>float or ndarray</em>): Delay before the pulse or array of delays
+with the same shape as time points.</p></li>
+</ul>
+<p>Additionally, act as a container object for the pulses, applied to the bath.</p>
+<p>The bath pulses can be accessed as items of the <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> object, with name of the item corresponding
+to the name of the bath spin impacted, and the item corresponding to the <code class="docutils literal notranslate"><span class="pre">BasePulse</span></code> object with attributes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>): Rotation angle of the central spin about x-axis in radians.</p></li>
+<li><p><strong>y</strong> (<em>float</em>): Rotation angle of the central spin about y-axis in radians.</p></li>
+<li><p><strong>z</strong> (<em>float</em>): Rotation angle of the central spin about z-axis in radians.</p></li>
+</ul>
+</div></blockquote>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">Pulse((x: 3.14, y: 0.00, z: 0.00))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span> <span class="o">=</span> <span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="n">bath_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="s1">&#39;14C&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span>
+<span class="go">Pulse((x: 3.14, y: 0.00, z: 0.00), {13C: (x: 3.14, y: 0.00, z: 0.00),</span>
+<span class="go">                                    14C: (x: 3.14, y: 0.00, z: 0.00)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pb</span><span class="p">[</span><span class="s1">&#39;13C&#39;</span><span class="p">])</span>
+<span class="go">(x: 3.14, y: 0.00, z: 0.00)</span>
+</pre></div>
+</div>
+<p>If delay is not provided in <strong>all</strong> pulses, assumes even delay of CPMG sequence.
+If only <strong>some</strong> delays are provided, assumes 0 delay in the pulses without delay provided.</p>
+<p>For the full list of properties, see <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> and <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> documentations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.r_bath">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">r_bath</span></span><a class="headerlink" href="#pycce.main.Simulator.r_bath" title="Link to this definition"></a></dt>
+<dd><p>float or array-like: Cutoff size of the spin bath. If <code class="docutils literal notranslate"><span class="pre">len(r_bath)</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, uses different cutoff
+sizes for each of the central spins. The total bath then is the sum of all bath spins, that are
+close to at least one of the central spins.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.main.Simulator.r_dipole">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">r_dipole</span></span><a class="headerlink" href="#pycce.main.Simulator.r_dipole" title="Link to this definition"></a></dt>
+<dd><p>float: Maximum connectivity distance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.second_order">
+<span class="sig-name descname"><span class="pre">second_order</span></span><a class="headerlink" href="#pycce.main.Simulator.second_order" title="Link to this definition"></a></dt>
+<dd><p>bool: True if add second order perturbation theory correction to the cluster Hamiltonian in conventional CCE.
+Relevant only for conventional CCE calculations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#pycce.main.Simulator.seed" title="Link to this definition"></a></dt>
+<dd><p>int: Seed for random number generator, used in random bath states sampling.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.main.Simulator.set_magnetic_field">
+<span class="sig-name descname"><span class="pre">set_magnetic_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.main.Simulator.set_magnetic_field" title="Link to this definition"></a></dt>
+<dd><p>Set magnetic field from either value of the magnetic field along z-direction or full magnetic field vector.</p>
+<dl>
+<dt>Args:</dt><dd><p>magnetic_field (float or array-like): Magnetic field along z-axis.</p>
+<blockquote>
+<div><p><strong>OR</strong></p>
+<p>Array containing external magnetic field as (Bx, By, Bz). Default (0, 0, 0).</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.main.Simulator.set_zfs">
+<span class="sig-name descname"><span class="pre">set_zfs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.main.Simulator.set_zfs" title="Link to this definition"></a></dt>
+<dd><p>Set Zero Field Splitting of the central spin from longitudinal ZFS <em>D</em> and transverse ZFS <em>E</em>.</p>
+<dl>
+<dt>Args:</dt><dd><dl>
+<dt>D (float or ndarray with shape (3, 3)): D (longitudinal splitting) parameter of central spin</dt><dd><p>in ZFS tensor of central spin in kHz.</p>
+<p><strong>OR</strong></p>
+<p>Total ZFS tensor. Default 0.</p>
+</dd>
+<dt>E (float): E (transverse splitting) parameter of central spin in ZFS tensor of central spin in kHz.</dt><dd><p>Default 0. Ignored if <code class="docutils literal notranslate"><span class="pre">D</span></code> is None or tensor.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.main.Simulator.timespace">
+<span class="sig-name descname"><span class="pre">timespace</span></span><a class="headerlink" href="#pycce.main.Simulator.timespace" title="Link to this definition"></a></dt>
+<dd><p>timespace (ndarray with shape (n,)): Time points at which compute the desired property.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="reading-the-bath">
+<h2>Reading the bath<a class="headerlink" href="#reading-the-bath" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> and <code class="docutils literal notranslate"><span class="pre">Simulator.generate_clusters</span></code>
+method. These methods are called automatically on the initialization of the <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object
+if the necessary keywords are provided. Otherwise they can also be called by themselves
+to update the properties of the spin bath in <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.main.Simulator.read_bath">
+<span class="sig-prename descclassname"><span class="pre">Simulator.</span></span><span class="sig-name descname"><span class="pre">read_bath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperfine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_r_bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_kw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.main.Simulator.read_bath" title="Link to this definition"></a></dt>
+<dd><p>Read spin bath from the file or from the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code>.</p>
+<dl>
+<dt>Args:</dt><dd><p>bath (ndarray, BathArray or str): Either:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Instance of BathArray class;</p></li>
+<li><p>ndarray with <code class="docutils literal notranslate"><span class="pre">dtype([('N',</span> <span class="pre">np.unicode_,</span> <span class="pre">16),</span> <span class="pre">('xyz',</span> <span class="pre">np.float64,</span> <span class="pre">(3,))])</span></code> containing names
+of bath spins (same ones as stored in self.ntype) and positions of the spins in angstroms;</p></li>
+<li><p>the name of the xyz text file containing 4 cols: name of the bath spin and xyz coordinates in A.</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>r_bath (float or array-like): Cutoff size of the spin bath. If <code class="docutils literal notranslate"><span class="pre">len(r_bath)</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, uses different cutoff</dt><dd><p>sizes for each of the central spins. The total bath then is the sum of all bath spins, that are
+close to at least one of the central spins.</p>
+</dd>
+<dt>skiprows (int, optional): If <code class="docutils literal notranslate"><span class="pre">bath</span></code> is name of the file, this argument</dt><dd><p>gives number of rows to skip while reading the .xyz file (default 1).</p>
+</dd>
+<dt>external_bath (BathArray, optional):</dt><dd><p>BathArray containing spins read from DFT output (see <code class="docutils literal notranslate"><span class="pre">pycce.io</span></code>).</p>
+</dd>
+<dt>hyperfine (str, func, or Cube instance, optional):</dt><dd><p>This argument tells the code how to generate hyperfine couplings.</p>
+<p>If (<code class="docutils literal notranslate"><span class="pre">hyperfine</span> <span class="pre">=</span> <span class="pre">None</span></code> and all A in provided bath are 0) or (<code class="docutils literal notranslate"><span class="pre">hyperfine</span> <span class="pre">=</span> <span class="pre">'pd'</span></code>),
+use point dipole approximation.</p>
+<p>Otherwise can be an instance of <code class="docutils literal notranslate"><span class="pre">Cube</span></code> object,
+or callable with signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">array</span></code> is array of the bath spins,</p>
+</dd>
+</dl>
+<p>func_kw (dict): Additional keywords if for generating hyperfine couplings if <code class="docutils literal notranslate"><span class="pre">hyperfine</span></code> is callable.</p>
+<dl>
+<dt>types (SpinDict): SpinDict or input to create one.</dt><dd><p>Contains either SpinTypes of the bath spins or tuples which will initialize those.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">pycce.bath.SpinDict</span></code> documentation for details.</p>
+</dd>
+<dt>error_range (float, optional): Maximum distance between positions in bath and external</dt><dd><p>bath to consider two positions the same (default 0.2).</p>
+</dd>
+<dt>ext_r_bath (float, optional): Maximum distance from the central spins of the bath spins</dt><dd><p>for which to use the DFT positions.</p>
+</dd>
+<dt>imap (InteractionMap): Instance of <code class="docutils literal notranslate"><span class="pre">InteractionMap</span></code> class, containing interaction tensors for bath spins.</dt><dd><p>Each key of the <code class="docutils literal notranslate"><span class="pre">InteractionMap</span></code> is a tuple with indexes of two bath spins.
+The value is the 3x3 tensor describing the interaction between two spins in a format:</p>
+<div class="math notranslate nohighlight">
+\[I^iJI^j = I^i_{x}J_{xx}I^j_{x} + I^i_{x}J_{xy}I^j_{y} ...\]</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For each bath spin pair without interaction tensor in <code class="docutils literal notranslate"><span class="pre">imap</span></code>, coupling is approximated assuming
+magnetic point dipole–dipole interaction.  If <code class="docutils literal notranslate"><span class="pre">imap</span> <span class="pre">=</span> <span class="pre">None</span></code> all interactions between bath spins
+are approximated in this way. Then interaction tensor between spins <cite>i</cite> and <cite>j</cite> is computed as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{J}_{ij} = -\gamma_{i} \gamma_{j} \frac{\hbar^2}{4\pi \mu_0}
+                   \left[ \frac{3 \vec{r}_{ij} \otimes \vec{r}_{ij} - |r_{ij}|^2 I}{|r_{ij}|^5} \right]\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\gamma_{i}\)</span> is gyromagnetic ratio of <cite>i</cite> spin, <span class="math notranslate nohighlight">\(I\)</span> is 3x3 identity matrix, and
+<span class="math notranslate nohighlight">\(\vec{r}_{ij}\)</span> is distance between two spins.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>BathArray: The view of <code class="docutils literal notranslate"><span class="pre">Simulator.bath</span></code> attribute, generated by the method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.main.Simulator.generate_clusters">
+<span class="sig-prename descclassname"><span class="pre">Simulator.</span></span><span class="sig-name descname"><span class="pre">generate_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_dipole</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_inner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strong</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.main.Simulator.generate_clusters" title="Link to this definition"></a></dt>
+<dd><p>Generate set of clusters used in CCE calculations.</p>
+<p>The clusters are generated from the following procedure:</p>
+<ul class="simple">
+<li><p>Each bath spin <span class="math notranslate nohighlight">\(i\)</span> forms a cluster of one.</p></li>
+<li><p>Bath spins <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> form cluster of two if there is an edge between them
+(distance <span class="math notranslate nohighlight">\(d_{ij} \le\)</span> <code class="docutils literal notranslate"><span class="pre">r_dipole</span></code>).</p></li>
+<li><p>Bath spins <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(j\)</span>, and <span class="math notranslate nohighlight">\(j\)</span> form a cluster of three if enough edges connect them
+(e.g., there are two edges <span class="math notranslate nohighlight">\(ij\)</span> and <span class="math notranslate nohighlight">\(jk\)</span>)</p></li>
+<li><p>And so on.</p></li>
+</ul>
+<p>In general, we assume that spins <span class="math notranslate nohighlight">\(\{i..n\}\)</span> form clusters if they form a connected graph.
+Only clusters up to the size imposed by the <code class="docutils literal notranslate"><span class="pre">order</span></code> parameter (equal to CCE order) are included.</p>
+<dl>
+<dt>Args:</dt><dd><p>order (int): Maximum size of the cluster.</p>
+<p>r_dipole (float): Maximum connectivity distance.</p>
+<p>r_inner (float): Minimum connectivity distance.</p>
+<dl>
+<dt>strong (bool):</dt><dd><p>True -  generate only clusters with “strong” connectivity (all nodes should be interconnected).
+Default False.</p>
+</dd>
+<dt>ignore (list or str, optional): If not None, includes the names of bath spins</dt><dd><p>which are ignored in the cluster generation.</p>
+</dd>
+<dt>n_clusters (dict): Dictionary which contain maximum number of clusters of the given size.</dt><dd><p>Has the form <code class="docutils literal notranslate"><span class="pre">n_clusters</span> <span class="pre">=</span> <span class="pre">{order:</span> <span class="pre">number}</span></code>, where <code class="docutils literal notranslate"><span class="pre">order</span></code> is the size of the cluster,
+<code class="docutils literal notranslate"><span class="pre">number</span></code> is the maximum number of clusters with this size.</p>
+<p>If provided, sort the clusters by the strength of cluster interaction,
+Then the strongest <code class="docutils literal notranslate"><span class="pre">number</span></code> of clusters is taken.</p>
+<p>Strength of the cluster <span class="math notranslate nohighlight">\(s\)</span> is defined as
+an inverse of a sum of inverse pairwise interactions of the minimal cluster:</p>
+<div class="math notranslate nohighlight">
+\[s = (\sum_{i&lt;j\in C} \frac{r^3}{\gamma_i\gamma_j})^{-1}\]</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><dl>
+<dt>dict: View of <code class="docutils literal notranslate"><span class="pre">Simulator.clusters</span></code>. <code class="docutils literal notranslate"><span class="pre">Simulator.clusters</span></code> is a dictionary</dt><dd><p>with keys corresponding to size of the cluster.</p>
+<p>I.e. <code class="docutils literal notranslate"><span class="pre">Simulator.clusters[n]</span></code> contains <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> of shape (m, n),
+where m is the number of clusters of given size,
+n is the size of the cluster.
+Each row contains indexes of the bath spins included in the given cluster.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="calculate-properties-with-simulator">
+<h2>Calculate properties with simulator<a class="headerlink" href="#calculate-properties-with-simulator" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">Simulator.compute</span></code> method -
+the interface to run calculations with <strong>PyCCE</strong>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.main.Simulator.compute">
+<span class="sig-prename descclassname"><span class="pre">Simulator.</span></span><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'coherence'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cce'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.main.Simulator.compute" title="Link to this definition"></a></dt>
+<dd><p>General function for computing properties with CCE.</p>
+<p>The dynamics are simulated using the Hamiltonian:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}&amp;\hat H_S = \mathbf{SDS} + \mathbf{B\gamma}_{S}\mathbf{S} \\
+&amp;\hat H_{SB} = \sum_i \mathbf{S}\mathbf{A}_i\mathbf{I}_i \\
+&amp;\hat H_{B} = \sum_i{\mathbf{I}_i\mathbf{P}_i \mathbf{I}_i +
+               \mathbf{B}\mathbf{\gamma}_i\mathbf{I}_i} +
+               \sum_{i&gt;j} \mathbf{I}_i\mathbf{J}_{ij}\mathbf{I}_j\end{split}\]</div>
+<p>Here <span class="math notranslate nohighlight">\(\hat H_S\)</span> is the central spin Hamiltonian with Zero Field splitting tensor <span class="math notranslate nohighlight">\(\mathbf{D}\)</span> and
+gyromagnetic ratio tensor <span class="math notranslate nohighlight">\(\mathbf{\gamma_S} = \mu_S \mathbf{g}\)</span>
+are read from <code class="docutils literal notranslate"><span class="pre">Simulator.zfs</span></code> and <code class="docutils literal notranslate"><span class="pre">Simulator.gyro</span></code> respectively.</p>
+<p>The <span class="math notranslate nohighlight">\(\hat H_{SB}\)</span> is the Hamiltonian describing interactions between central spin and the bath.
+The hyperfine coupling tensors <span class="math notranslate nohighlight">\(\mathbf{A}_i\)</span> are read from the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> stored in
+<code class="docutils literal notranslate"><span class="pre">Simulator.bath['A']</span></code>. They can be generated using point dipole approximation or provided
+by the user (see <code class="docutils literal notranslate"><span class="pre">Simulator.read_bath</span></code> for details).</p>
+<p>The <span class="math notranslate nohighlight">\(\hat H_{B}\)</span> is the Hamiltonian describing interactions between the bath spins.
+The self interaction tensors <span class="math notranslate nohighlight">\(\mathbf{P}_i\)</span> are read from the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> stored in
+<code class="docutils literal notranslate"><span class="pre">Simulator.bath['Q']</span></code> and have to be provided by the user.</p>
+<p>The gyromagnetic ratios <span class="math notranslate nohighlight">\(\mathbf{\gamma}_i\)</span> are read from the <code class="docutils literal notranslate"><span class="pre">BathArray.gyros</span></code> attribuite,
+which is generated from the properties of the types of bath spins, stored in <code class="docutils literal notranslate"><span class="pre">BathArray.types</span></code>. They can
+either be provided by user or read from the <code class="docutils literal notranslate"><span class="pre">pycce.common_isotopes</span></code> object.</p>
+<p>The interaction tensors <span class="math notranslate nohighlight">\(\mathbf{J}_{ij}\)</span> are assumed from point dipole approximation
+or can be provided  in <code class="docutils literal notranslate"><span class="pre">BathArray.imap</span></code> attrubite.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">compute</span></code> method takes two keyword arguments to determine which quantity to compute and how:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><cite>method</cite> can take ‘cce’ or ‘gcce’ values, and determines
+which method to use - conventional or generalized CCE.</p></li>
+<li><p><cite>quantity</cite> can take ‘coherence’ or ‘noise’ values, and determines
+which quantity to compute - coherence function
+or autocorrelation function of the noise.</p></li>
+</ul>
+</div></blockquote>
+<p>Each of the methods can be performed with monte carlo bath state sampling
+(if <code class="docutils literal notranslate"><span class="pre">nbstates</span></code> keyword is non zero)
+and with interlaced averaging (If <code class="docutils literal notranslate"><span class="pre">interlaced</span></code> keyword is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
+</div>
+<p>Examples:</p>
+<blockquote>
+<div><p>First set up Simulator object using random bath of 1000 13C nuclear spins.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pycce</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atoms</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">random_bath</span><span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># Random spin bath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bath</span><span class="o">=</span><span class="n">atoms</span><span class="p">,</span> <span class="n">r_bath</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">r_dipole</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mf">2.88</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="c1"># D of NV in GHz -&gt; kHz</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">magnetic_field</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">pulses</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span> <span class="c1"># timesteps</span>
+</pre></div>
+</div>
+<p>We set magnetic field to 500 G along z-axis and chose 1 decoupling pulse (Hahn-echo) in this example.
+The zero field splitting is set to the one of NV center in diamond.</p>
+<p>Run conventional CCE calculation at time points <code class="docutils literal notranslate"><span class="pre">timespace</span></code> to obtain coherence without second order
+effects:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will call <code class="docutils literal notranslate"><span class="pre">Simulator.cce_coherence</span></code> method with default keyword values.</p>
+<p>Compute the coherence conventional CCE coherence with second order interactions between bath spins:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">second_order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute the coherence with conventional CCE with bath state sampling (over 10 states):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">nbstates</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute the coherence with generalized CCE:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will call <code class="docutils literal notranslate"><span class="pre">Simulator.gcce_dm</span></code> method with default keyword values and obtain off diagonal
+element as <span class="math notranslate nohighlight">\(\bra{0} \hat \rho_{C} \ket{1}\)</span>,
+where <span class="math notranslate nohighlight">\(\hat \rho_{C}\)</span> is the density matrix of the qubit.</p>
+<p>Compute the coherence with generalized CCE with bath state sampling (over 10 states):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gcce&#39;</span><span class="p">,</span> <span class="n">nbstates</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Args:</p>
+<blockquote>
+<div><p>timespace (ndarray with shape (n,)): Time points at which compute the desired property.</p>
+<p>quantity (str): Which quantity to compute. Case insensitive.</p>
+<blockquote>
+<div><p>Possible values:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘coherence’: compute coherence function.</p></li>
+<li><p>‘noise’: compute noise autocorrelation function.</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>method (str): Which implementation of CCE to use. Case insensitive.</p>
+<blockquote>
+<div><p>Possible values:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘cce’: conventional CCE, where interactions are mapped on 2 level pseudospin.</p></li>
+<li><p>‘gcce’: Generalized CCE where central spin is included in each cluster.</p></li>
+</ul>
+<dl>
+<dt>magnetic_field (ndarray with shape (3,) or callable): Magnetic field vector of form (Bx, By, Bz)</dt><dd><p>or callable with signature <code class="docutils literal notranslate"><span class="pre">magnetic_field(pos)</span></code>, where <code class="docutils literal notranslate"><span class="pre">pos</span></code> is an array with shape (3,) with the
+position of the spin.</p>
+<p>Default is <strong>None</strong>. Overrides <code class="docutils literal notranslate"><span class="pre">Simulator.magnetic_field</span></code> if provided.</p>
+</dd>
+</dl>
+<p>pulses (list or int or Sequence): Number of pulses in CPMG sequence.</p>
+<blockquote>
+<div><p><strong>OR</strong></p>
+<p>Sequence of the instantaneous ideal control pulses.
+It can be provided as an instance of <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> class or a list with <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> objects.
+(See documentation for pycce.Sequence).</p>
+<p><code class="docutils literal notranslate"><span class="pre">pulses</span></code> can be provided as a list with tuples or dictionaries,
+each tuple or dictionary is used to initialize <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> class instance.</p>
+<p>For example, for only central spin pulses the <code class="docutils literal notranslate"><span class="pre">pulses</span></code> argument
+can be provided as a list of tuples, containing:</p>
+<ol class="arabic simple">
+<li><p>axis the rotation is about;</p></li>
+<li><p>angle of rotation;</p></li>
+<li><p>(optional) Time before the pulse. Can be as fixed, as well as varied.
+If varied, it should be provided as an array with the same
+length as <code class="docutils literal notranslate"><span class="pre">timespace</span></code>.</p></li>
+</ol>
+<p>E.g. for Hahn-Echo the <code class="docutils literal notranslate"><span class="pre">pulses</span></code> can be defined as <code class="docutils literal notranslate"><span class="pre">[('x',</span> <span class="pre">np.pi)]</span></code> or
+<code class="docutils literal notranslate"><span class="pre">[('x',</span> <span class="pre">np.pi,</span> <span class="pre">timespace</span> <span class="pre">/</span> <span class="pre">2)]</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If delay is not provided in <strong>all</strong> pulses, assumes even delay of CPMG sequence.
+If only <strong>some</strong> delays are provided, assumes <code class="docutils literal notranslate"><span class="pre">delay</span> <span class="pre">=</span> <span class="pre">0</span></code>  in the pulses without delay.</p>
+<p>Then total experiment is assumed to be:</p>
+<blockquote>
+<div><p>tau – pulse – 2tau – pulse – … – 2tau – pulse – tau</p>
+</div></blockquote>
+<p>Where tau is the delay between pulses.</p>
+<p>The sum of delays at each time point should be less or equal to the total time of the experiment
+at the same time point, provided in <code class="docutils literal notranslate"><span class="pre">timespace</span></code> argument.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In conventional CCE calculations, only <span class="math notranslate nohighlight">\(pi\)</span> pulses
+on the central spin are allowed.</p>
+</div>
+<p>In the calculations of noise autocorrelation this parameter is ignored.</p>
+<p>Default is <strong>None</strong>. Overrides``Simulator.pulses`` if provided.</p>
+</div></blockquote>
+<dl>
+<dt>i (int or ndarray with shape (2s+1, ) or callable): Used in gCCE calculations.</dt><dd><p>Along with <code class="docutils literal notranslate"><span class="pre">j</span></code> parameter indicates which density matrix element to compute with gCCE as:</p>
+<div class="math notranslate nohighlight">
+\[L=\bra{i}\hat \rho \ket{j}\]</div>
+<p>By default is equal to <span class="math notranslate nohighlight">\(R\ket{0}\)</span> state of the <code class="docutils literal notranslate"><span class="pre">.center</span></code>
+where <span class="math notranslate nohighlight">\(R\)</span> is a product of all rotations applied in the pulse sequence.
+Can be set as a vector in <span class="math notranslate nohighlight">\(S_z\)</span> basis, the index of the central spin Hamiltonian
+eigenstate, or as a callable with call signature <code class="docutils literal notranslate"><span class="pre">i(dm)</span></code>, where <code class="docutils literal notranslate"><span class="pre">dm</span></code> is a density matrix of the
+central spin. If callable, <code class="docutils literal notranslate"><span class="pre">j</span></code> parameter is ignored.</p>
+</dd>
+<dt>j (int or ndarray with shape (2s+1, ) or callable): Used in gCCE calculations.</dt><dd><p>Along with <code class="docutils literal notranslate"><span class="pre">i</span></code> parameter indicates which density matrix element to compute.</p>
+<p>By default is equal to <span class="math notranslate nohighlight">\(R\ket{1}\)</span> state of the <code class="docutils literal notranslate"><span class="pre">.center</span></code>
+where <span class="math notranslate nohighlight">\(R\)</span> is a product of all rotations applied in the pulse sequence.
+Can be set as a vector in <span class="math notranslate nohighlight">\(S_z\)</span> basis, the index of the central spin Hamiltonian
+eigenstate, or as a callable with call signature <code class="docutils literal notranslate"><span class="pre">j(dm)</span></code>, where <code class="docutils literal notranslate"><span class="pre">dm</span></code> is a density matrix of the
+central spin. If callable, <code class="docutils literal notranslate"><span class="pre">i</span></code> parameter is ignored.</p>
+</dd>
+<dt>as_delay (bool): True if time points are delay between pulses (for equispaced pulses),</dt><dd><p>False if time points are total time. Ignored in gCCE if <code class="docutils literal notranslate"><span class="pre">pulses</span></code> contains the time fractions.
+Conventional CCE calculations do not support custom time fractions.</p>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+<dt>interlaced (bool): True if use hybrid CCE approach - for each cluster</dt><dd><p>sample over states of the supercluster.</p>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+<dt>state (ndarray with shape (2s+1,)):</dt><dd><p>Initial state of the central spin, used in gCCE and noise autocorrelation calculations.</p>
+<p>Defaults to <span class="math notranslate nohighlight">\(\frac{1}{N}(\ket{0} + \ket{1})\)</span> if not set.</p>
+</dd>
+<dt>bath_state (array-like):</dt><dd><p>List of bath spin states. If <code class="docutils literal notranslate"><span class="pre">len(shape)</span> <span class="pre">==</span> <span class="pre">1</span></code>, contains
+<span class="math notranslate nohighlight">\(I_z\)</span> projections of <span class="math notranslate nohighlight">\(I_z\)</span> eigenstates.
+Otherwise, contains array of initial density matrices of bath spins.</p>
+<p>Default is <strong>None</strong>. If not set, the code assumes completely random spin bath
+(density matrix of each nuclear spin is proportional to identity, <span class="math notranslate nohighlight">\(\hat {\mathbb{1}}/N\)</span>).</p>
+</dd>
+</dl>
+<p>nbstates (int): Number or random bath states to sample over.</p>
+<blockquote>
+<div><p>If provided, sampling of random states is carried and <code class="docutils literal notranslate"><span class="pre">bath_states</span></code> values are
+ignored.</p>
+<p>Default is 0.</p>
+</div></blockquote>
+<p>seed (int): Seed for random number generator, used in random bath states sampling.</p>
+<blockquote>
+<div><p>Default is <strong>None</strong>.</p>
+</div></blockquote>
+<dl>
+<dt>masked (bool):</dt><dd><p>True if mask numerically unstable points (with coherence &gt; 1)
+in the averaging over bath states.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is up to user to check whether the possible instability is due to numerical error
+or unphysical assumptions of the calculations.</p>
+</div>
+<p>Default is <strong>True</strong> for coherence calculations, <strong>False</strong> for noise calculations.</p>
+</dd>
+<dt>parallel_states (bool):</dt><dd><p>True if to use MPI to parallelize the calculations of density matrix equally over
+present mpi processes for random bath state sampling calculations.</p>
+<p>Compared to <code class="docutils literal notranslate"><span class="pre">parallel</span></code> keyword,
+when this argument is True each process is given a fraction of random bath states.
+This makes the implementation faster. Works best when the
+number of bath states is divisible by the number of processes, <code class="docutils literal notranslate"><span class="pre">nbstates</span> <span class="pre">%</span> <span class="pre">size</span> <span class="pre">==</span> <span class="pre">0</span></code>.</p>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+<dt>second_order (bool):</dt><dd><p>True if add second order perturbation theory correction
+to the cluster Hamiltonian in conventional CCE.
+Relevant only for conventional CCE calculations.</p>
+<p>If set to True sets the qubit states as eigenstates of central spin Hamiltonian
+from the following procedure. If qubit states are provided as vectors in <span class="math notranslate nohighlight">\(S_z\)</span> basis,
+for each qubit state compute the fidelity of the qubit state and
+all eigenstates of the central spin and chose the one with fidelity higher than <code class="docutils literal notranslate"><span class="pre">level_confidence</span></code>.
+If such state is not found, raises an error.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Second order corrections are not implemented as mean field.</p>
+<p>I.e., setting <code class="docutils literal notranslate"><span class="pre">second_order=True</span></code>
+and <code class="docutils literal notranslate"><span class="pre">nbstates</span> <span class="pre">!=</span> <span class="pre">0</span></code> leads to the calculation, when mean field effect is accounted only from
+dipolar interactions within the bath.</p>
+</div>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+<dt>level_confidence (float): Maximum fidelity of the qubit state to be considered eigenstate of the</dt><dd><p>central spin Hamiltonian.</p>
+<p>Default is 0.95.</p>
+</dd>
+<dt>direct (bool):</dt><dd><p>True if use direct approach (requires way more memory but might be more numerically stable).
+False if use memory efficient approach.</p>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+<dt>parallel (bool):</dt><dd><p>True if parallelize calculation of cluster contributions over different mpi processes.</p>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+<dt>fulldm (bool):</dt><dd><p>Used in gCCE. True if return full density matrix of the central spin.
+False if only return the computed property.</p>
+<p>Default is <strong>False</strong>.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><p>ndarray: Computed property.</p>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="pulse-sequences">
+<h2>Pulse sequences<a class="headerlink" href="#pulse-sequences" title="Link to this heading"></a></h2>
+<p>Documentation of the <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> and <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> classes, used in definition of the complicated
+pulse sequences.</p>
+<dl class="py class" id="module-pycce.run.pulses">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.pulses.</span></span><span class="sig-name descname"><span class="pre">BasePulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.BasePulse" title="Link to this definition"></a></dt>
+<dd><p>Base class for Pulse.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (float): Rotation angle about x-axis in radians.
+y (float): Rotation angle about y-axis in radians.
+z (float): Rotation angle about z-axis in radians.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.check_flip">
+<span class="sig-name descname"><span class="pre">check_flip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.BasePulse.check_flip" title="Link to this definition"></a></dt>
+<dd><p>Check if the rotation is about single cartesian axis by an angle <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.flip">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">flip</span></span><a class="headerlink" href="#pycce.run.pulses.BasePulse.flip" title="Link to this definition"></a></dt>
+<dd><p>bool: True if the angle == pi.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.generate_rotation">
+<span class="sig-name descname"><span class="pre">generate_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spinvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin_half</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.BasePulse.generate_rotation" title="Link to this definition"></a></dt>
+<dd><p>Generate rotation matrix given spin vector.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>spinvec (ndarray with shape (3, n, n)): Spin vector.
+spin_half (bool): True if spin vector is for a spin-1/2. Default is False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, n): Rotation operator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.indices">
+<span class="sig-name descname"><span class="pre">indices</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">array([0,</span> <span class="pre">1,</span> <span class="pre">2])</span></span><a class="headerlink" href="#pycce.run.pulses.BasePulse.indices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.naxes">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">naxes</span></span><a class="headerlink" href="#pycce.run.pulses.BasePulse.naxes" title="Link to this definition"></a></dt>
+<dd><p>int: Number of axes the rotation is defined for.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.set_angle">
+<span class="sig-name descname"><span class="pre">set_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.BasePulse.set_angle" title="Link to this definition"></a></dt>
+<dd><p>Set rotation angle <code class="docutils literal notranslate"><span class="pre">angle</span></code> about axis <code class="docutils literal notranslate"><span class="pre">axis</span></code>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>axis (str): Axis of the rotation.
+angle (float): Rotation angle in radians.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.x">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#pycce.run.pulses.BasePulse.x" title="Link to this definition"></a></dt>
+<dd><p>float: Angle of rotation of the spin about x axis in rad.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.y">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#pycce.run.pulses.BasePulse.y" title="Link to this definition"></a></dt>
+<dd><p>float: Angle of rotation of the spin about y axis in rad.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.run.pulses.BasePulse.z">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#pycce.run.pulses.BasePulse.z" title="Link to this definition"></a></dt>
+<dd><p>float: Angle of rotation of the spin about z axis in rad.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.pulses.</span></span><span class="sig-name descname"><span class="pre">Pulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath_angles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.Pulse" title="Link to this definition"></a></dt>
+<dd><p>Class containing properties of each control pulse, applied to the system.</p>
+<p>The properties of the pulse, applied on the central spin(s) can be accessed as attributes, while bath spin
+pulses can be acessed as elements of the <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> instance.</p>
+<p>Args:</p>
+<blockquote>
+<div><p>axis (str): Axis of rotation of the central spin. Can be ‘x’, ‘y’, or ‘z’. Default is None.</p>
+<dl class="simple">
+<dt>angle (float or str): Angle of rotation of central spin. Can be provided in rad, or as a string, containing</dt><dd><p>fraction of pi: <code class="docutils literal notranslate"><span class="pre">'pi'</span></code>, <code class="docutils literal notranslate"><span class="pre">'pi/2'</span></code>, <code class="docutils literal notranslate"><span class="pre">'2*pi'</span></code> etc. Default is None.</p>
+</dd>
+<dt>delay (float or ndarray): Delay before the pulse or array of delays with the same shape as time points.</dt><dd><p>Default is None.</p>
+</dd>
+<dt>which (array-like): Indexes of the central spins to be rotated by the pulse. Default is all.</dt><dd><p>Separated indexes are supported only if qubit states are provided separately for all
+center spins.</p>
+</dd>
+<dt>bath_names (str or array-like of str): Name or array of names of bath spin types, impacted by the bath pulse.</dt><dd><p>Default is None.</p>
+</dd>
+<dt>bath_axes (str or array-like of str): Axis of rotation or array of axes of the bath spins.</dt><dd><p>Default is None. If <code class="docutils literal notranslate"><span class="pre">bath_names</span></code> is provided, but <code class="docutils literal notranslate"><span class="pre">bath_axes</span></code> and <code class="docutils literal notranslate"><span class="pre">bath_angles</span></code> are not,
+assumes the same axis and angle as the one of the central spin</p>
+</dd>
+</dl>
+<p>bath_angles (float or str or array-like): Angle of rotation or array of axes of rotations of the bath spins.</p>
+<p>x (float): Rotation angle of the central spin about x-axis in radians.</p>
+<p>y (float): Rotation angle of the central spin about y-axis in radians.</p>
+<p>z (float): Rotation angle of the central spin about z-axis in radians.</p>
+</div></blockquote>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">)</span>
+<span class="go">Pulse((x: 3.14, y: 0.00, z: 0.00))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="n">bath_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="s1">&#39;14C&#39;</span><span class="p">])</span>
+<span class="go">Pulse((x: 3.14, y: 0.00, z: 0.00), {13C: (x: 3.14, y: 0.00, z: 0.00), 14C: (x: 3.14, y: 0.00, z: 0.00)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">bath_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="s1">&#39;14C&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">bath_axes</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">bath_angles</span><span class="o">=</span><span class="s1">&#39;pi/2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">Pulse((x: 3.14, y: 0.00, z: 0.00), {13C: (x: 1.57, y: 0.00, z: 0.00), 14C: (x: 1.57, y: 0.00, z: 0.00)},</span>
+<span class="go">t = [0.   0.25 0.5  0.75 1.  ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;13C&#39;</span><span class="p">])</span>
+<span class="go">(x: 1.57, y: 0.00, z: 0.00)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse.bath_angles">
+<span class="sig-name descname"><span class="pre">bath_angles</span></span><a class="headerlink" href="#pycce.run.pulses.Pulse.bath_angles" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of angles of rotation of the bath spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse.bath_axes">
+<span class="sig-name descname"><span class="pre">bath_axes</span></span><a class="headerlink" href="#pycce.run.pulses.Pulse.bath_axes" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of axes of rotation of the bath spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse.bath_names">
+<span class="sig-name descname"><span class="pre">bath_names</span></span><a class="headerlink" href="#pycce.run.pulses.Pulse.bath_names" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of names of bath spin types, impacted by the bath pulse.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse.delay">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">delay</span></span><a class="headerlink" href="#pycce.run.pulses.Pulse.delay" title="Link to this definition"></a></dt>
+<dd><p>ndarray or float: Delay or array of delays before the pulse.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><a class="headerlink" href="#pycce.run.pulses.Pulse.rotation" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Matrix representation of the pulse for the given cluster. Generated by <code class="docutils literal notranslate"><span class="pre">Run</span></code> object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.run.pulses.Pulse.which">
+<span class="sig-name descname"><span class="pre">which</span></span><a class="headerlink" href="#pycce.run.pulses.Pulse.which" title="Link to this definition"></a></dt>
+<dd><p>iterable: Indexes of the central spins to be rotated by the pulse.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.run.pulses.Sequence">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.run.pulses.</span></span><span class="sig-name descname"><span class="pre">Sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.Sequence" title="Link to this definition"></a></dt>
+<dd><p>List-like object, which contains the sequence of the pulses.</p>
+<p>Each element is a <code class="docutils literal notranslate"><span class="pre">Pulse</span></code> instance, which can be generated from either the tuple with positional arguments
+or from the dictionary, or set manually.</p>
+<p>If delay is not provided in <strong>all</strong> pulses in the sequence, assume equispaced pulse sequence:</p>
+<blockquote>
+<div><p>t - pulse - 2t - pulse - 2t - … - pulse - t</p>
+</div></blockquote>
+<p>If only <strong>some</strong> delays are provided, assumes 0 delay in the pulses without delay provided.</p>
+<dl>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Sequence</span><span class="p">([(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="p">{</span><span class="s1">&#39;axis&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;angle&#39;</span><span class="p">:</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;bath_names&#39;</span><span class="p">:</span> <span class="s1">&#39;13C&#39;</span><span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>          <span class="n">Pulse</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+<span class="go">[Pulse((x, 3.14), t = 0), Pulse((y, 3.14), {13C: (y, 3.14)}, t = [0.  0.5 1. ]), Pulse((x, 3.14), t = 1)]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.run.pulses.Sequence.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.run.pulses.Sequence.append" title="Link to this definition"></a></dt>
+<dd><p>S.append(value) – append value to the end of the sequence</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="center.html" class="btn btn-neutral float-left" title="Central Spins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="parameters.html" class="btn btn-neutral float-right" title="Hamiltonian Parameters Input" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

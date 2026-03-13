@@ -1,0 +1,1487 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spin Bath &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Central Spins" href="center.html" />
+    <link rel="prev" title="Dissipative spin bath" href="tutorials/mecce.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spin Bath</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#batharray">BathArray</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.BathArray"><code class="docutils literal notranslate"><span class="pre">BathArray</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.A"><code class="docutils literal notranslate"><span class="pre">BathArray.A</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.N"><code class="docutils literal notranslate"><span class="pre">BathArray.N</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.Q"><code class="docutils literal notranslate"><span class="pre">BathArray.Q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.add_interaction"><code class="docutils literal notranslate"><span class="pre">BathArray.add_interaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.add_single_jump"><code class="docutils literal notranslate"><span class="pre">BathArray.add_single_jump()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.add_type"><code class="docutils literal notranslate"><span class="pre">BathArray.add_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.detuning"><code class="docutils literal notranslate"><span class="pre">BathArray.detuning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.dim"><code class="docutils literal notranslate"><span class="pre">BathArray.dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.dist"><code class="docutils literal notranslate"><span class="pre">BathArray.dist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.from_center"><code class="docutils literal notranslate"><span class="pre">BathArray.from_center()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.from_cube"><code class="docutils literal notranslate"><span class="pre">BathArray.from_cube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.from_efg"><code class="docutils literal notranslate"><span class="pre">BathArray.from_efg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.from_func"><code class="docutils literal notranslate"><span class="pre">BathArray.from_func()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.from_point_dipole"><code class="docutils literal notranslate"><span class="pre">BathArray.from_point_dipole()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.gyro"><code class="docutils literal notranslate"><span class="pre">BathArray.gyro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.h"><code class="docutils literal notranslate"><span class="pre">BathArray.h</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.has_state"><code class="docutils literal notranslate"><span class="pre">BathArray.has_state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.name"><code class="docutils literal notranslate"><span class="pre">BathArray.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.nc"><code class="docutils literal notranslate"><span class="pre">BathArray.nc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.proj"><code class="docutils literal notranslate"><span class="pre">BathArray.proj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.q"><code class="docutils literal notranslate"><span class="pre">BathArray.q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.s"><code class="docutils literal notranslate"><span class="pre">BathArray.s</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.savetxt"><code class="docutils literal notranslate"><span class="pre">BathArray.savetxt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.sort"><code class="docutils literal notranslate"><span class="pre">BathArray.sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.state"><code class="docutils literal notranslate"><span class="pre">BathArray.state</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.update"><code class="docutils literal notranslate"><span class="pre">BathArray.update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.x"><code class="docutils literal notranslate"><span class="pre">BathArray.x</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.xyz"><code class="docutils literal notranslate"><span class="pre">BathArray.xyz</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.y"><code class="docutils literal notranslate"><span class="pre">BathArray.y</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.BathArray.z"><code class="docutils literal notranslate"><span class="pre">BathArray.z</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.argsort"><code class="docutils literal notranslate"><span class="pre">argsort()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.broadcast_array"><code class="docutils literal notranslate"><span class="pre">broadcast_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.check_gyro"><code class="docutils literal notranslate"><span class="pre">check_gyro()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.point_dipole"><code class="docutils literal notranslate"><span class="pre">point_dipole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.same_bath_indexes"><code class="docutils literal notranslate"><span class="pre">same_bath_indexes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.array.sort"><code class="docutils literal notranslate"><span class="pre">sort()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pycce.bath.state">BathState</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.state.BathState"><code class="docutils literal notranslate"><span class="pre">BathState</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pycce.bath.cube">Cube</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cube.Cube"><code class="docutils literal notranslate"><span class="pre">Cube</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#spindict-and-spintype">SpinDict and SpinType</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.SpinDict"><code class="docutils literal notranslate"><span class="pre">SpinDict</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.SpinType"><code class="docutils literal notranslate"><span class="pre">SpinType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.common_isotopes"><code class="docutils literal notranslate"><span class="pre">common_isotopes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.array.common_concentrations"><code class="docutils literal notranslate"><span class="pre">common_concentrations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#random-bath">Random bath</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.cell.random_bath"><code class="docutils literal notranslate"><span class="pre">random_bath()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bathcell">BathCell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.cell.BathCell"><code class="docutils literal notranslate"><span class="pre">BathCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.add_atoms"><code class="docutils literal notranslate"><span class="pre">BathCell.add_atoms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.add_isotopes"><code class="docutils literal notranslate"><span class="pre">BathCell.add_isotopes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.from_ase"><code class="docutils literal notranslate"><span class="pre">BathCell.from_ase()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.gen_supercell"><code class="docutils literal notranslate"><span class="pre">BathCell.gen_supercell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.rotate"><code class="docutils literal notranslate"><span class="pre">BathCell.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.set_zdir"><code class="docutils literal notranslate"><span class="pre">BathCell.set_zdir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.to_cartesian"><code class="docutils literal notranslate"><span class="pre">BathCell.to_cartesian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.to_cell"><code class="docutils literal notranslate"><span class="pre">BathCell.to_cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.bath.cell.BathCell.zdir"><code class="docutils literal notranslate"><span class="pre">BathCell.zdir</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.cell.defect"><code class="docutils literal notranslate"><span class="pre">defect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.bath.cell.read_ase"><code class="docutils literal notranslate"><span class="pre">read_ase()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="center.html">Central Spins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Spin Bath</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bath.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spin-bath">
+<h1>Spin Bath<a class="headerlink" href="#spin-bath" title="Link to this heading"></a></h1>
+<section id="batharray">
+<h2>BathArray<a class="headerlink" href="#batharray" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">pycce.BathArray</span></code> - central class, containing properties of the bath spins.</p>
+<dl class="py class" id="module-pycce.bath.array">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">BathArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperfines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadrupoles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ca</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">efg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray" title="Link to this definition"></a></dt>
+<dd><p>Subclass of <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> containing information about the bath spins.</p>
+<p>The subclass has fixed structured datatype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_dtype_bath</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">str_</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+                        <span class="p">(</span><span class="s1">&#39;xyz&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)),</span>
+                        <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+                        <span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))])</span>
+</pre></div>
+</div>
+<p>Accessing different fields results in the <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> view.</p>
+<p>Each of the fields can be accessed as the attribute of the <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instance and modified accordingly.
+In addition to the name fields, the information of the bath spin types is stored in the <code class="docutils literal notranslate"><span class="pre">types</span></code> attribute.
+All of the items in <code class="docutils literal notranslate"><span class="pre">types</span></code> can be accessed as attributes of the BathArray itself.</p>
+<dl>
+<dt>Examples:</dt><dd><p>Generate empty <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ba</span> <span class="o">=</span> <span class="n">BathArray</span><span class="p">((</span><span class="mi">3</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ba</span><span class="p">)</span>
+<span class="go">[(&#39;&#39;, [0., 0., 0.], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]])</span>
+<span class="go"> (&#39;&#39;, [0., 0., 0.], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]])</span>
+<span class="go"> (&#39;&#39;, [0., 0., 0.], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]])]</span>
+</pre></div>
+</div>
+<p>Generate BathArray from the set of arrays:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sn</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1H&#39;</span><span class="p">,</span> <span class="s1">&#39;2H&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ba</span> <span class="o">=</span> <span class="n">BathArray</span><span class="p">(</span><span class="n">ca</span><span class="o">=</span><span class="n">ca</span><span class="p">,</span> <span class="n">hf</span><span class="o">=</span><span class="n">hf</span><span class="p">,</span> <span class="n">sn</span><span class="o">=</span><span class="n">sn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ba</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">ba</span><span class="o">.</span><span class="n">types</span><span class="p">)</span>
+<span class="go">[&#39;1H&#39; &#39;2H&#39;] SpinDict(1H: (1H, 0.5, 26.7519), 2H: (2H, 1, 4.1066, 0.00286))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Due to how structured arrays work, if one uses a boolean array to access an subarray,
+and then access the name field, the initial array <em>will not change</em>.</p>
+<p>Example:</p>
+<blockquote>
+<div><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ha</span> <span class="o">=</span> <span class="n">BathArray</span><span class="p">((</span><span class="mi">10</span><span class="p">,),</span> <span class="n">sn</span><span class="o">=</span><span class="s1">&#39;1H&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ha</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="go">[&#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bool_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ha</span><span class="p">[</span><span class="n">bool_mask</span><span class="p">][</span><span class="s1">&#39;N&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;e&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ha</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="go">[&#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39; &#39;1H&#39;]</span>
+</pre></div>
+</div>
+<p>To achieve the desired result, one should first access the name field and only then apply the boolean mask:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ha</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">][</span><span class="n">bool_mask</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;e&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ha</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+<span class="go">[&#39;e&#39; &#39;1H&#39; &#39;e&#39; &#39;1H&#39; &#39;e&#39; &#39;1H&#39; &#39;e&#39; &#39;1H&#39; &#39;e&#39; &#39;1H&#39;]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<p>Each bath spin can initiallized in some specific state accessing the <code class="docutils literal notranslate"><span class="pre">.state</span></code> attribute. It takes
+both state vectors and density matrices as values. See <code class="docutils literal notranslate"><span class="pre">.state</span></code> attribute documentation for details.</p>
+<dl>
+<dt>Args:</dt><dd><p>shape (tuple): Shape of the array.</p>
+<dl class="simple">
+<dt>array (array-like):</dt><dd><p>Either an unstructured array with shape (n, 3) containing coordinates of bath spins as rows OR
+structured ndarray with the same fields as the datatype of the bath.</p>
+</dd>
+<dt>name (array-like):</dt><dd><p>Array of the bath spin name.</p>
+</dd>
+<dt>hyperfines (array-like):</dt><dd><p>Array of the hyperfine tensors with shape (n, 3, 3).</p>
+</dd>
+<dt>quadrupoles (array-like):</dt><dd><p>Array of the quadrupole tensors with shape (n, 3, 3).</p>
+</dd>
+<dt>efg (array-like):</dt><dd><p>Array of the electric field gradients with shape (n, 3, 3) for each bath spin.
+Used to compute Quadrupole tensors for spins &gt;= 1.
+Requires the spin types either be found in <code class="docutils literal notranslate"><span class="pre">common_isotopes</span></code> or specified with <code class="docutils literal notranslate"><span class="pre">types</span></code> argument.</p>
+</dd>
+<dt>types (SpinDict):</dt><dd><p>SpinDict or input to create one.
+Contains either SpinTypes of the bath spins or tuples which will initialize those.
+See <code class="docutils literal notranslate"><span class="pre">pycce.bath.SpinDict</span></code> documentation for details.</p>
+</dd>
+<dt>imap (InteractionMap):</dt><dd><p>Instance of InteractionMap containing user defined
+interaction tensors between bath spins stored in the array.</p>
+</dd>
+<dt>ca (array-like):</dt><dd><p>Shorthand notation for <code class="docutils literal notranslate"><span class="pre">array</span></code> argument.</p>
+</dd>
+<dt>sn (array-like):</dt><dd><p>Shorthand notation for <code class="docutils literal notranslate"><span class="pre">name</span></code> argument.</p>
+</dd>
+<dt>hf (array-like):</dt><dd><p>Shorthand notation for <code class="docutils literal notranslate"><span class="pre">hyperfines</span></code> argument.</p>
+</dd>
+<dt>q (array-like):</dt><dd><p>Shorthand notation for <code class="docutils literal notranslate"><span class="pre">quadrupoles</span></code> argument.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.A">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">A</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.A" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of hyperfine tensors for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['A']</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.N">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">N</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.N" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of name for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['N']</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.Q">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Q</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.Q" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of quadrupole tensors for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['Q']</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.add_interaction">
+<span class="sig-name descname"><span class="pre">add_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.add_interaction" title="Link to this definition"></a></dt>
+<dd><p>Add interactions tensor between bath spins with indexes <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If called from the subarray this method <strong>does not</strong> change the tensors of the total BathArray.</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>i (int or ndarray (n,) ):</dt><dd><p>Index of the first spin in the pair or array of the indexes of the first spins in n pairs.</p>
+</dd>
+<dt>j (int or ndarray with shape (n,)):</dt><dd><p>Index of the second spin in the pair or array of the indexes of the second spins in n pairs.</p>
+</dd>
+<dt>tensor (ndarray with shape (3,3) or (n, 3,3)):</dt><dd><p>Interaction tensor between the spins i and j or array of tensors.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.add_single_jump">
+<span class="sig-name descname"><span class="pre">add_single_jump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.add_single_jump" title="Link to this definition"></a></dt>
+<dd><p>Add single-spin jump operator for the given type of spins to be used in the Lindbladian master equation CCE.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>operator (str or ndarray with shape (dim, dim)): Definition of the operator. Can be either of the following:</dt><dd><ul class="simple">
+<li><p>Pair of integers defining the Sven operator.</p></li>
+<li><p>String where each symbol corresponds to the spin matrix or operation between them.
+Allowed symbols: <code class="docutils literal notranslate"><span class="pre">xyz+</span></code>. If there is nothing between symbols,
+assume multiplication of the operators.
+If there is a <code class="docutils literal notranslate"><span class="pre">+</span></code> symbol, assume summation between terms. For example, <code class="docutils literal notranslate"><span class="pre">xx+z</span></code> would correspond to
+the operator <span class="math notranslate nohighlight">\(\hat S_x \hat S_x + \hat S_z\)</span>.</p></li>
+<li><p>String equal to <code class="docutils literal notranslate"><span class="pre">A</span></code>. Then assumes that the correct matrix form of the operator has been provided
+by the user.</p></li>
+</ul>
+</dd>
+</dl>
+<p>rate (float): Rate associated with the given jump operator. By default, is given in rad ms^-1.
+units (str): Units of the rate, can be either rad (for radial frequency units) or deg</p>
+<blockquote>
+<div><p>(for rotational frequency).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>square_root (bool): True if the rate is given as a square root of the rate (to match how one sets up</dt><dd><p>collapse operators in Qutip). Default False.</p>
+</dd>
+<dt>which (str): For which type of the spins add the jump operator. Default is None - if</dt><dd><p>there is only one spin type in the array then the jump operator is added,
+otherwise the exception is raised.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.add_type">
+<span class="sig-name descname"><span class="pre">add_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.add_type" title="Link to this definition"></a></dt>
+<dd><p>Add spin type to the <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args: Any number of positional inputs to create <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> entries.</dt><dd><p>E.g. the tuples of form (name <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>, spin <code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>, gyro <code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>, q <code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code>).</p>
+</dd>
+<dt><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs: Any number of keyword inputs to create <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> entries.</dt><dd><p>E.g. name = (spin, gyro, q).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>For details and allowed inputs see <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> documentation.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>SpinDict: A view of <code class="docutils literal notranslate"><span class="pre">self.types</span></code> instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.detuning">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">detuning</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.detuning" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>ndarray: Array of the <code class="docutils literal notranslate"><span class="pre">detuning</span></code></dt><dd><p>attribute for each spin in the array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.dim" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>ndarray: Array of the <code class="docutils literal notranslate"><span class="pre">dim</span></code> (dimensions of the spin) attribute</dt><dd><p>for each spin in the array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.dist">
+<span class="sig-name descname"><span class="pre">dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.dist" title="Link to this definition"></a></dt>
+<dd><p>Compute the distance of the bath spins from the given position.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>position (ndarray with shape (3,)):</dt><dd><p>Cartesian coordinates of the position from which to compute the distance. Default is (0, 0, 0).</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray  with shape (n,): Array of distances of each bath spin from the given position in angstrom.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.from_center">
+<span class="sig-name descname"><span class="pre">from_center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cube</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwarg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.from_center" title="Link to this definition"></a></dt>
+<dd><p>Generate hyperfine couplings using either the point dipole approximation or spin density in the .cube format,
+with the information from the CenterArray instance.</p>
+<dl>
+<dt>Args:</dt><dd><p>center (CenterArray): Array, containing properties of the central spin</p>
+<p>inplace (bool): True if changes parameters of the array in place. If False, returns copy of the array.</p>
+<dl class="simple">
+<dt>cube (Cube or iterable of Cubes): An instance of <code class="docutils literal notranslate"><span class="pre">Cube</span></code> object,</dt><dd><p>which contains spatial distribution of spin density of central spins.
+For details see documentation of <code class="docutils literal notranslate"><span class="pre">Cube</span></code> class.</p>
+</dd>
+<dt>which (int): If <code class="docutils literal notranslate"><span class="pre">cube</span></code> is a single Cube instance,</dt><dd><p>this is an index of the central spin it corresponds to.</p>
+</dd>
+</dl>
+<p><a href="#id5"><span class="problematic" id="id6">**</span></a>kwarg: Additional arguments for .from_cube method.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray: Updated BathArray instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.from_cube">
+<span class="sig-name descname"><span class="pre">from_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro_center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-17608.59705</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.from_cube" title="Link to this definition"></a></dt>
+<dd><p>Generate hyperfine couplings, assuming that bath spins interaction with central spin can be approximated as
+a point dipole, interacting with given spin density distribution.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>cube (Cube): An instance of <cite>Cube</cite> object, which contains spatial distribution of spin density.</dt><dd><p>For details see documentation of <cite>Cube</cite> class.</p>
+</dd>
+</dl>
+<p>gyro_center (float): Gyromagnetic ratio of the central spin.</p>
+<p>inplace (bool): True if changes parameters of the array in place. If False, returns copy of the array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray: Updated BathArray instance with changed hyperfine couplings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.from_efg">
+<span class="sig-name descname"><span class="pre">from_efg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.from_efg" title="Link to this definition"></a></dt>
+<dd><p>Generate quadrupole splittings from electric field gradient tensors for spins &gt;= 1.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>efg (array-like): Array of the electric field gradients for each bath spin. The data for spins-1/2</dt><dd><p>should be included but can be any value.</p>
+</dd>
+</dl>
+<p>inplace (bool): True if changes parameters of the array in place. If False, returns copy of the array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray: Updated BathArray instance with changed quadrupole tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.from_func">
+<span class="sig-name descname"><span class="pre">from_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.from_func" title="Link to this definition"></a></dt>
+<dd><p>Generate hyperfine couplings from user-defined function.</p>
+<p>Args:</p>
+<blockquote>
+<div><dl>
+<dt>func (func):</dt><dd><p>Callable with signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">array</span></code> is array of the bath spins,</p>
+</dd>
+</dl>
+<p><a href="#id7"><span class="problematic" id="id8">*</span></a>args: Positional arguments of the <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+<a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs: Keyword arguments of the <code class="docutils literal notranslate"><span class="pre">func</span></code>.
+inplace (bool): True if changes parameters of the array in place. If False, returns copy of the array.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>BathArray: Updated BathArray instance with changed hyperfine couplings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.from_point_dipole">
+<span class="sig-name descname"><span class="pre">from_point_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro_center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-17608.59705</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.from_point_dipole" title="Link to this definition"></a></dt>
+<dd><p>Generate hyperfine couplings, assuming that bath spins interaction with central spin is the same as the
+one between two magnetic point dipoles.</p>
+<dl>
+<dt>Args:</dt><dd><p>position (ndarray with shape (3,)): position of the central spin</p>
+<dl>
+<dt>gyro_center (float or ndarray with shape (3,3)):</dt><dd><p>gyromagnetic ratio of the central spin</p>
+<p><strong>OR</strong></p>
+<p>tensor corresponding to interaction between magnetic field and central spin.</p>
+</dd>
+</dl>
+<p>inplace (bool): True if changes parameters of the array in place. If False, returns copy of the array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray: Updated BathArray instance with changed hyperfine couplings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.gyro">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">gyro</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.gyro" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>ndarray: Array of the <code class="docutils literal notranslate"><span class="pre">gyro</span></code> (gyromagnetic ratio)</dt><dd><p>attribute for each spin in the array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.h">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.h" title="Link to this definition"></a></dt>
+<dd><p>dict: Dictionary with additional spin Hamiltonian parameters.
+Key denotes the product of spin operators as:</p>
+<p>Either a string containing <code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">+,</span> <span class="pre">-</span></code>  where each symbol is a corresponding spin operator:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> == <span class="math notranslate nohighlight">\(S_x\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> == <span class="math notranslate nohighlight">\(S_y\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code> == <span class="math notranslate nohighlight">\(S_z\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> == <span class="math notranslate nohighlight">\(S_+\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> == <span class="math notranslate nohighlight">\(S_-\)</span></p></li>
+</ul>
+</div></blockquote>
+<p>Several symbols is a product of those spin operators.</p>
+<p>Or a tuple with indexes (k, q) for Stevens operators
+(see <a class="reference external" href="https://www.easyspin.org/documentation/stevensoperators.html">https://www.easyspin.org/documentation/stevensoperators.html</a>).</p>
+<p>The item is the coupling parameter in float.</p>
+<p>Examples:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">d['pm']</span> <span class="pre">=</span> <span class="pre">2000</span></code> corresponds to the Hamiltonian term
+<span class="math notranslate nohighlight">\(\hat H_{add} = A \hat S_+ \hat S_-\)</span> with <span class="math notranslate nohighlight">\(A = 2\)</span> MHz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d[2,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">1.5e6</span></code> corresponds to Stevens operator
+<span class="math notranslate nohighlight">\(B^q_k \hat O^q_k = 3 \hat S_z - s(s+1) \hat I\)</span>
+with <span class="math notranslate nohighlight">\(k = 2\)</span>, <span class="math notranslate nohighlight">\(q = 0\)</span>, and <span class="math notranslate nohighlight">\(B^q_k = 1.5\)</span> GHz.</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.has_state">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">has_state</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.has_state" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Bool array. True if given spin was initialized with a state, False otherwise.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.name" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of the <code class="docutils literal notranslate"><span class="pre">name</span></code> attribute for each spin in the array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the value of this attribute should be the same as the <code class="docutils literal notranslate"><span class="pre">N</span></code> field of the BathArray instance,
+<code class="docutils literal notranslate"><span class="pre">.name</span></code> <em>should not</em> be used for production as it creates a <em>new</em> array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.nc">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">nc</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.nc" title="Link to this definition"></a></dt>
+<dd><p>int: Number of central spins.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.proj">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">proj</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.proj" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of <span class="math notranslate nohighlight">\(S_z\)</span> projections of the bath spin states.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.q">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">q</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.q" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>ndarray: Array of the <code class="docutils literal notranslate"><span class="pre">q</span></code> (quadrupole moment)</dt><dd><p>attribute for each spin in the array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.s">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.s" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of the <code class="docutils literal notranslate"><span class="pre">spin</span></code> (spin value) attribute for each spin in the array from <code class="docutils literal notranslate"><span class="pre">types</span></code> dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.savetxt">
+<span class="sig-name descname"><span class="pre">savetxt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%18.8f'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip_isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.savetxt" title="Link to this definition"></a></dt>
+<dd><p>Save name of the isotopes and their coordinates to the txt file of xyz format.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str or file): Filename or file handle.
+fmt (str): Format of the coordinate entry.
+strip_isotopes (bool): True if remove numbers from the name of bath spins. Default False.
+<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs: Additional keywords of the <code class="docutils literal notranslate"><span class="pre">numpy.savetxt</span></code> function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.sort">
+<span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.sort" title="Link to this definition"></a></dt>
+<dd><p>Sort array in-place. Is implemented only when imap is None. Otherwise use <code class="docutils literal notranslate"><span class="pre">np.sort</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.state">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.state" title="Link to this definition"></a></dt>
+<dd><p>BathState: Array of the bath spin states.</p>
+<p>Can have three types of entries:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>None</strong>. If entry is <strong>None</strong>, assumes fully random density matrix. Default value.</p></li>
+<li><p><strong>ndarray with shape (s,)</strong>. If entry is vector, corresponds to the pure state of the spin.</p></li>
+<li><p><strong>ndarray with shape (s, s)</strong>. If entry is a matrix, corresponds to the density matrix of the spin.</p></li>
+</ul>
+</div></blockquote>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ba</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+<span class="go">[None None]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ba</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ba</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+<span class="go">[array([0, 1]) None]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ext_bath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.BathArray.update" title="Link to this definition"></a></dt>
+<dd><p>Update the properties of the spins in the array using data from other <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instance.
+For each spin in <code class="docutils literal notranslate"><span class="pre">ext_bath</span></code> check whether there is such spin in the array that has the same position
+within allowed error range given by <code class="docutils literal notranslate"><span class="pre">error_range</span></code> and has the same name.
+If such spins is found in the array, then it’s coordinates, hyperfine tensor and quadrupole tensor
+are updated using the values of the spin in the <code class="docutils literal notranslate"><span class="pre">ext_bath</span></code> object.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">ignore_isotopes</span></code> is true, then the name check ignores numbers in the name of the spins.</p>
+<dl>
+<dt>Args:</dt><dd><p>ext_bath (BathArray): Array of the new spins.</p>
+<dl class="simple">
+<dt>error_range (float): +- distance in Angstrom within which two positions are considered to be the same.</dt><dd><p>Default is 0.2 A.</p>
+</dd>
+</dl>
+<p>ignore_isotopes (bool): True if ignore numbers in the name of the spins. Default True.</p>
+<p>inplace (bool): True if changes parameters of the array in place. If False, returns copy of the array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray: updated BathArray instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.x">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.x" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of x coordinates for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['xyz'][:,</span> <span class="pre">0]</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.xyz">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">xyz</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.xyz" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of coordinates for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['xyz']</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.y">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.y" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of y coordinates for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['xyz'][:,</span> <span class="pre">1]</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.array.BathArray.z">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#pycce.bath.array.BathArray.z" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Array of z coordinates for each spin in the array (<code class="docutils literal notranslate"><span class="pre">bath['xyz'][:,</span> <span class="pre">2]</span></code>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.array.argsort">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">argsort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.argsort" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">a</span></code> indexes of a sorted array. Overrides <code class="docutils literal notranslate"><span class="pre">numpy.argsort</span></code> function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.array.broadcast_array">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">broadcast_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.broadcast_array" title="Link to this definition"></a></dt>
+<dd><p>Using mpi4py broadcast <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> or <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> to all processes.
+Args:</p>
+<blockquote>
+<div><p>array (BathArray or CenterArray): Array to broadcast.
+root (int): Rank of the process to broadcast from.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>BathArray or CenterArray: Broadcasted array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.array.check_gyro">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">check_gyro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gyro</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.check_gyro" title="Link to this definition"></a></dt>
+<dd><p>Check if gyro is matrix or scalar.</p>
+<dl>
+<dt>Args:</dt><dd><p>gyro (ndarray or float): Gyromagnetic ratio matrix or float.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>ndarray or float</strong>: Gyromagnetic ratio.</p></li>
+<li><p><strong>bool</strong>: True if gyro is float, False otherwise.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.array.point_dipole">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">point_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro_center</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.point_dipole" title="Link to this definition"></a></dt>
+<dd><p>Generate an array hyperfine couplings, assuming point dipole approximation.</p>
+<dl>
+<dt>Args:</dt><dd><p>pos (ndarray with shape (n, 3)): Relative position of the bath spins.
+gyro_array (ndarray with shape (n,)): Array of the gyromagnetic ratios of the bath spins.</p>
+<dl>
+<dt>gyro_center (float or ndarray with shape (3, 3)):</dt><dd><p>gyromagnetic ratio of the central spin</p>
+<p><strong>OR</strong></p>
+<p>tensor corresponding to interaction between magnetic field and central spin.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, 3, 3): Array of hyperfine tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.array.same_bath_indexes">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">same_bath_indexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">barray_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barray_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_isotopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.same_bath_indexes" title="Link to this definition"></a></dt>
+<dd><p>Find indexes of the same array elements in two <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instances.</p>
+<dl>
+<dt>Args:</dt><dd><p>barray_1 (BathArray): First array.
+barray_2 (BathArray): Second array.
+error_range (float): If distance between positions in two arrays is smaller than <code class="docutils literal notranslate"><span class="pre">error_range</span></code></p>
+<blockquote>
+<div><p>they are assumed to be the same.</p>
+</div></blockquote>
+<p>ignore_isotopes (bool): True if ignore numbers in the name of the spins. Default True.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: tuple containing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>ndarray</strong>: Indexes of the elements in the first array found in the second.</p></li>
+<li><p><strong>ndarray</strong>: Indexes of the elements in the second array found in the first.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.array.sort">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.array.sort" title="Link to this definition"></a></dt>
+<dd><p>Return a sorted copy of an array. Overrides numpy.sort function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">utilities.</span></span><span class="sig-name descname"><span class="pre">rotmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">final_vector</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Generate 3D rotation matrix which applied on initial vector will produce vector, aligned with final vector.</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">rotmatrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">array([0.577, 0.577, 0.577])</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>initial_vector (ndarray with shape(3, )): Initial vector.
+final_vector (ndarray with shape (3, )): Final vector.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, 3): Rotation matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="module-pycce.bath.state">
+<span id="bathstate"></span><h3>BathState<a class="headerlink" href="#module-pycce.bath.state" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.bath.state.</span></span><span class="sig-name descname"><span class="pre">BathState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.state.BathState" title="Link to this definition"></a></dt>
+<dd><p>Class for storing the state of the bath spins. Usually is not generated directly, but accessed as
+an <code class="docutils literal notranslate"><span class="pre">BathArray.state</span></code> attribute.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>size (int): Number of bath states to be stored.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.any">
+<span class="sig-name descname"><span class="pre">any</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kawrgs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.state.BathState.any" title="Link to this definition"></a></dt>
+<dd><p>Returns the output of <code class="docutils literal notranslate"><span class="pre">.has_state.any</span></code> method.
+Args:</p>
+<blockquote>
+<div><p><a href="#id13"><span class="problematic" id="id14">*</span></a>args: Positional arguments of <code class="docutils literal notranslate"><span class="pre">.has_state.any</span></code> method.
+<a href="#id15"><span class="problematic" id="id16">**</span></a>kawrgs: Keyword arguments of <code class="docutils literal notranslate"><span class="pre">.has_state.any</span></code> method.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>bool: True if any entry is initialized. Otherwise False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.gen_pure">
+<span class="sig-name descname"><span class="pre">gen_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.state.BathState.gen_pure" title="Link to this definition"></a></dt>
+<dd><p>Generate pure states from the <span class="math notranslate nohighlight">\(S_z\)</span> projections to be stored in the given <code class="docutils literal notranslate"><span class="pre">BathState</span></code> object.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>rho (ndarray with shape (n, )): Array of the desired projections.
+dim (ndarray with shape (n,) ): Array of the dimensions of the spins.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathState: View of the <code class="docutils literal notranslate"><span class="pre">BathState</span></code> object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.has_state">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">has_state</span></span><a class="headerlink" href="#pycce.bath.state.BathState.has_state" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Bool property. True if given element was initialized as a state, False otherwise.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.proj">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">proj</span></span><a class="headerlink" href="#pycce.bath.state.BathState.proj" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Projections of bath states on <span class="math notranslate nohighlight">\(S_z\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.project">
+<span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.state.BathState.project" title="Link to this definition"></a></dt>
+<dd><p>Generate projections of bath states on <span class="math notranslate nohighlight">\(S_z\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>rotation (optional, ndarray with shape (3, 3)):</dt><dd><p>Matrix used to transform <span class="math notranslate nohighlight">\(S_z\)</span> matrix as <span class="math notranslate nohighlight">\(S_z' = R^{\dagger} S_z R\)</span>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (n, ): Array with projections of the state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.pure">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pure</span></span><a class="headerlink" href="#pycce.bath.state.BathState.pure" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Bool property. True if given entry is a pure state, False otherwise.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.shape">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#pycce.bath.state.BathState.shape" title="Link to this definition"></a></dt>
+<dd><p>tuple: Shape of the BathState underlying array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.size">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#pycce.bath.state.BathState.size" title="Link to this definition"></a></dt>
+<dd><p>int: Size of the BathState underlying array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.state.BathState.state">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#pycce.bath.state.BathState.state" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Return an underlying object array.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycce.bath.cube">
+<span id="cube"></span><h3>Cube<a class="headerlink" href="#module-pycce.bath.cube" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.bath.cube.Cube">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.bath.cube.</span></span><span class="sig-name descname"><span class="pre">Cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cube.Cube" title="Link to this definition"></a></dt>
+<dd><p>Class to process the .cube datafiles with spin polarization.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): Name of the .cube file.</p>
+</dd>
+<dt>Attributes:</dt><dd><p>comments (str): First two lines of the .cube file.
+origin (ndarray with shape (3,)): Coordinates of the origin in angstrom.
+voxel (ndarray with shape (3,3)): Parameters of the voxel - unit of the 3D grid in angstrom.
+size (ndarray with shape (3,)): Size of the cube.
+atoms (BathArray with shape (n)): Array of atoms in the cube.
+data (ndarray with shape (size[0], size[1], size[2]): Data stored in cube.
+grid (ndarray with shape (size[0], size[1], size[2], 3): Coordinates of the points at which data is computed.
+integral (float): Data integrated over cube.
+spin (float): integral / 2 - total spin.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cube.Cube.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro_n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro_e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-17608.59705</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cube.Cube.integrate" title="Link to this definition"></a></dt>
+<dd><p>Integrate over polarization data, stored in Cube object,
+to obtain hyperfine dipolar-dipolar tensor.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>position (ndarray with shape (3,) or (n, 3)): Position of the bath spin at which to compute</dt><dd><p>hyperfine tensor or array of positions.</p>
+</dd>
+</dl>
+<p>gyro_n (float or ndarray with shape (n,) ): Gyromagnetic ratio of the bath spin or array of the ratios.
+gyro_e (float): Gyromagnetic ratio of central spin.
+spin (float): Total spin of the central spin. If not given, taken from the integral of the polarization.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3, 3) or (n, 3, 3): Hyperfine tensor or array of hyperfine tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cube.Cube.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotmatrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cube.Cube.transform" title="Link to this definition"></a></dt>
+<dd><p>Changes coordinates of the grid. DOES NOT ASSUME PERIODICITY.</p>
+<dl>
+<dt>Args:</dt><dd><p>rotmatrix (ndarray with shape (3, 3)): Rotation matrix <cite>R</cite>:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}R =  &amp;[n_1^{(1)} n_1^{(2)} n_1^{(3)}]\\
+     &amp;[n_2^{(1)} n_2^{(2)} n_2^{(3)}]\\
+     &amp;[n_3^{(1)} n_3^{(2)} n_3^{(3)}]\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(n_i^{(j)}\)</span> corresponds to the coefficient of initial basis vector <span class="math notranslate nohighlight">\(i\)</span>
+for <span class="math notranslate nohighlight">\(j\)</span> new basis vector:</p>
+<div class="math notranslate nohighlight">
+\[e'_j = n_1^{(j)} \vec{e}_1 + n_2^{(j)} \vec{e}_2 + n_3^{(j)} \vec{e}_3\]</div>
+<p>In other words, columns of <cite>R</cite> are coordinates of the new
+basis in the old basis.</p>
+<p>Given vector in initial basis v = [v1, v2, v3],
+vector in new basis is given as v’ = R.T &#64; v.</p>
+</div></blockquote>
+<p>shift (ndarray with shape (3,)): Shift in the origin of coordinates (in the old basis).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="spindict-and-spintype">
+<h3>SpinDict and SpinType<a class="headerlink" href="#spindict-and-spintype" title="Link to this heading"></a></h3>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> - dict-like class which describes
+the properties of the different types of the spins in the bath.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.SpinDict">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.</span></span><span class="sig-name descname"><span class="pre">SpinDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.SpinDict" title="Link to this definition"></a></dt>
+<dd><p>Wrapper class for dictionary tailored for containing properties of the spin types.
+Can take <code class="docutils literal notranslate"><span class="pre">np.void</span></code> or <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> instances as keys.
+Every entry is instance of the <code class="docutils literal notranslate"><span class="pre">SpinType</span></code>.</p>
+<p>Each entry of the <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> can be initianlized as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>As a Tuple containing name (optional), spin, gyromagnetic ratio, quadrupole constant (optional)
+and detuning (optional).</p></li>
+<li><p>As a <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instance.</p></li>
+</ul>
+</div></blockquote>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">types</span> <span class="o">=</span> <span class="n">SpinDict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">types</span><span class="p">[</span><span class="s1">&#39;1H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;1H&#39;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">26.7519</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">types</span><span class="p">[</span><span class="s1">&#39;2H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">4.1066</span><span class="p">,</span> <span class="mf">0.00286</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">types</span><span class="p">[</span><span class="s1">&#39;3H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SpinType</span><span class="p">(</span><span class="s1">&#39;3H&#39;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">28.535</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+<span class="go">SpinDict({&#39;1H&#39;: (1H, 0.5, 26.7519, 0.0), &#39;2H&#39;: (2H, 1, 4.1066, 0.00286), &#39;3H&#39;: (3H, 0.5, 28.535, 0)})</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> of the given bath spin is not provided, when requested
+<code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> will try to find information about the bath spins in the <code class="docutils literal notranslate"><span class="pre">common_isotopes</span></code>.</p>
+<p>If found, adds an entry to the given <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> instance and
+returns it. Otherwise <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> is raised.</p>
+<p>To initiallize several <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> entries one can use <code class="docutils literal notranslate"><span class="pre">add_types</span></code> method.</p>
+<dl>
+<dt>Args:</dt><dd><p><a href="#id17"><span class="problematic" id="id18">*</span></a>args: Any numbers of arguments which could initialize <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instances.
+<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs: Any numbers of keyword arguments which could initialize <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instances.</p>
+<blockquote>
+<div><p>For details see <code class="docutils literal notranslate"><span class="pre">SpinDict.add_type</span></code> method.</p>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.SpinDict.add_type">
+<span class="sig-name descname"><span class="pre">add_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.SpinDict.add_type" title="Link to this definition"></a></dt>
+<dd><p>Add one or several spin types to the spin dictionary.</p>
+<dl>
+<dt>Args:</dt><dd><dl>
+<dt><a href="#id21"><span class="problematic" id="id22">*</span></a>args:</dt><dd><p>Any numbers of arguments which could initialize <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instances.
+Accepted arguments:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Tuple containing name, spin, gyromagnetic ratio, quadrupole constant (optional)
+and detuning (optional).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instance.</p></li>
+</ul>
+</div></blockquote>
+<p>Can also initialize one instance of <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> if each argument corresponds to
+each positional argument necessary to initiallize.</p>
+</dd>
+<dt><a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs: Any numbers of keyword arguments which could initialize <code class="docutils literal notranslate"><span class="pre">SpinType</span></code> instances.</dt><dd><p>Usefull as an alternative for updating the dictionary. for each keyword argument adds an entry
+to the <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> with the same name as keyword.</p>
+</dd>
+</dl>
+</dd>
+<dt>Examples:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">types</span> <span class="o">=</span> <span class="n">SpinDict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">types</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s1">&#39;1H&#39;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">26.7519</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">types</span><span class="o">.</span><span class="n">add_type</span><span class="p">((</span><span class="s1">&#39;1H_det&#39;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">26.7519</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;2H&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">4.1066</span><span class="p">,</span> <span class="mf">0.00286</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                <span class="n">SpinType</span><span class="p">(</span><span class="s1">&#39;3H&#39;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">28.535</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">6.7283</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+<span class="go">SpinDict(1H: (1H, 0.5, 26.7519), 1H_det: (1H_det, 0.5, 26.7519, 10),</span>
+<span class="go">2H: (2H, 1, 4.1066, 0.00286), 3H: (3H, 0.5, 28.535), e: (e, 0.5, 6.7283))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.SpinType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.</span></span><span class="sig-name descname"><span class="pre">SpinType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detuning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.SpinType" title="Link to this definition"></a></dt>
+<dd><p>Class which contains properties of each spin type in the bath.</p>
+<dl>
+<dt>Args:</dt><dd><p>name (str): Name of the bath spin.
+s (float): Total spin of the bath spin.</p>
+<blockquote>
+<div><p>Default 0.</p>
+</div></blockquote>
+<p>gyro (float): Gyromagnetic ratio in rad * kHz / G.</p>
+<blockquote>
+<div><p>Default 0.</p>
+</div></blockquote>
+<p>q (float): Quadrupole moment in barn (for s &gt; 1/2).</p>
+<blockquote>
+<div><p>Default 0.</p>
+</div></blockquote>
+<dl>
+<dt>detuning (float): Energy detuning from the zeeman splitting in kHz,</dt><dd><p>included as an extra <span class="math notranslate nohighlight">\(+\omega \hat S_z\)</span> term in the Hamiltonian,
+where <span class="math notranslate nohighlight">\(\omega\)</span> is the detuning.</p>
+<p>Default 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Attributes:</p>
+<blockquote>
+<div><p>name (str): Name of the bath spin.
+s (float): Total spin of the bath spin.
+dim (int): Spin dimensionality = 2s + 1.</p>
+<p>gyro (float): Gyromagnetic ratio in rad/(ms * G).
+q (float): Quadrupole moment in barn (for s &gt; 1/2).
+detuning (float): Energy detuning from the zeeman splitting in kHz.</p>
+</div></blockquote>
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.SpinType.h">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#pycce.SpinType.h" title="Link to this definition"></a></dt>
+<dd><p>dict: Dictionary with additional spin Hamiltonian parameters.
+Key denotes the product of spin operators as:</p>
+<p>Either a string containing <code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">+,</span> <span class="pre">-</span></code>  where each symbol is a corresponding spin operator:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> == <span class="math notranslate nohighlight">\(S_x\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> == <span class="math notranslate nohighlight">\(S_y\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code> == <span class="math notranslate nohighlight">\(S_z\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> == <span class="math notranslate nohighlight">\(S_+\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> == <span class="math notranslate nohighlight">\(S_-\)</span></p></li>
+</ul>
+</div></blockquote>
+<p>Several symbols is a product of those spin operators.</p>
+<p>Or a tuple with indexes (k, q) for Stevens operators
+(see <a class="reference external" href="https://www.easyspin.org/documentation/stevensoperators.html">https://www.easyspin.org/documentation/stevensoperators.html</a>).</p>
+<p>The item is the coupling parameter in float.</p>
+<p>Examples:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">d['pm']</span> <span class="pre">=</span> <span class="pre">2000</span></code> corresponds to the Hamiltonian term
+<span class="math notranslate nohighlight">\(\hat H_{add} = A \hat S_+ \hat S_-\)</span> with <span class="math notranslate nohighlight">\(A = 2\)</span> MHz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d[2,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">1.5e6</span></code> corresponds to Stevens operator
+<span class="math notranslate nohighlight">\(B^q_k \hat O^q_k = 3 \hat S_z - s(s+1) \hat I\)</span>
+with <span class="math notranslate nohighlight">\(k = 2\)</span>, <span class="math notranslate nohighlight">\(q = 0\)</span>, and <span class="math notranslate nohighlight">\(B^q_k = 1.5\)</span> GHz.</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pycce.bath.array.common_isotopes">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">common_isotopes</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">SpinDict(1H:</span> <span class="pre">(0.5,</span> <span class="pre">26.7522),</span> <span class="pre">2H:</span> <span class="pre">(1.0,</span> <span class="pre">4.1066,</span> <span class="pre">0.0029),</span> <span class="pre">3He:</span> <span class="pre">(0.5,</span> <span class="pre">-20.3789),</span> <span class="pre">...)</span></span><a class="headerlink" href="#pycce.bath.array.common_isotopes" title="Link to this definition"></a></dt>
+<dd><p>SpinDict: An instance of the <code class="docutils literal notranslate"><span class="pre">SpinDict</span></code> dictionary, containing properties for the most of the common isotopes with
+nonzero spin.
+The isotope is considered common if it is stable and has nonzero concentration in nature.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pycce.bath.array.common_concentrations">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.array.</span></span><span class="sig-name descname"><span class="pre">common_concentrations</span></span><span class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">{element</span> <span class="pre">('H',</span> <span class="pre">'He',...)</span> <span class="pre">:</span> <span class="pre">{</span> <span class="pre">isotope</span> <span class="pre">('1H',</span> <span class="pre">'2H',</span> <span class="pre">..)</span> <span class="pre">:</span> <span class="pre">concentration}}</span></span><a class="headerlink" href="#pycce.bath.array.common_concentrations" title="Link to this definition"></a></dt>
+<dd><p>dict: Nested dict containing natural concentrations of the stable nuclear isotopes.</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="random-bath">
+<h2>Random bath<a class="headerlink" href="#random-bath" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">pycce.random_bath</span></code> function, used to generate random bath.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.cell.random_bath">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.cell.</span></span><span class="sig-name descname"><span class="pre">random_bath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cm-3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.random_bath" title="Link to this definition"></a></dt>
+<dd><p>Generate random bath containing spins with names provided with argument <code class="docutils literal notranslate"><span class="pre">name</span></code> in the box of size <code class="docutils literal notranslate"><span class="pre">size</span></code>.
+By default generates coordinates in range (-size/2; +size/2) but this behavior can be changed by providing
+<code class="docutils literal notranslate"><span class="pre">center</span></code> keyword.</p>
+<p>Examples:</p>
+<blockquote>
+<div><p>Generate 2000 <span class="math notranslate nohighlight">\(^{13}\mathrm{C}\)</span> nuclear spins in the cubic box with the side of 100 angstrom:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">atoms</span> <span class="o">=</span> <span class="n">random_bath</span><span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="go">2000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">round</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="go">-50.0 50.0</span>
+</pre></div>
+</div>
+<p>Generate electron spin bath with density <span class="math notranslate nohighlight">\(10^{17} \mathrm{cm}^{-3}\)</span> in the cuboid box:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">electrons</span> <span class="o">=</span> <span class="n">random_bath</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1e3</span><span class="p">,</span> <span class="mf">2e3</span><span class="p">,</span> <span class="mf">3e3</span><span class="p">],</span> <span class="n">density</span><span class="o">=</span><span class="mf">1e17</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                        <span class="n">density_units</span><span class="o">=</span><span class="s1">&#39;cm-3&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">electrons</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">electrons</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">round</span><span class="p">(</span><span class="n">electrons</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="go">600 -494.0 500.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">electrons</span><span class="o">.</span><span class="n">types</span><span class="p">)</span>
+<span class="go">SpinDict(e: (e, 0.5, -17608.59705))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Args:</dt><dd><p>names (str or array-like with length n): Name of the bath spin or array with the names of the bath spins,
+size (float or ndarray with shape (3,)): Size of the box. If float is given,</p>
+<blockquote>
+<div><p>assumes 3D cube with the edge = <code class="docutils literal notranslate"><span class="pre">size</span></code>. Otherwise the size specifies the dimensions of the box.
+Dimensionality is controlled by setting entries of the size array to 0.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>number (int or array-like with length n): Number of the bath spins in the box</dt><dd><p>or array with the numbers of the bath spins. Has to have the same length as the <code class="docutils literal notranslate"><span class="pre">name</span></code> array.</p>
+</dd>
+<dt>density (float or array-like with length n): Concentration of the bath spin</dt><dd><p>or array with the concentrations. Has to have the same length as the <code class="docutils literal notranslate"><span class="pre">name</span></code> array.</p>
+</dd>
+</dl>
+<p>types (SpinDict): Dictionary with SpinTypes or input to create one.</p>
+<dl>
+<dt>density_units (str): If number of spins provided as density, defines units.</dt><dd><p>Values are accepted in the format <code class="docutils literal notranslate"><span class="pre">m</span></code>, or <code class="docutils literal notranslate"><span class="pre">m^x</span></code> or <code class="docutils literal notranslate"><span class="pre">m-x</span></code> where m is the length unit,
+x is dimensionality of the bath (e.g. x = 1 for 1D, 2 for 2D etc).
+If only <code class="docutils literal notranslate"><span class="pre">m</span></code> is provided the dimensions are inferred from <code class="docutils literal notranslate"><span class="pre">size</span></code> argument.
+Accepted length units:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> meters;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cm</span></code> centimeters;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> angstroms.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>center (ndarray with shape (3,)): Coordinates of the (0, 0, 0) point of the final coordinate system</dt><dd><p>in the initial coordinates. Default is <code class="docutils literal notranslate"><span class="pre">size</span> <span class="pre">/</span> <span class="pre">2</span></code> - center is in the middle of the box.</p>
+</dd>
+</dl>
+<p>seed (int): Seed for random number generator.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray with shape (np.prod(number),): Array of the bath spins with random positions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="bathcell">
+<h2>BathCell<a class="headerlink" href="#bathcell" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">pycce.BathCell</span></code> - class for convenient generation of <code class="docutils literal notranslate"><span class="pre">BathArray</span></code> and the
+necessary helper functions.</p>
+<dl class="py class" id="module-pycce.bath.cell">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.bath.cell.</span></span><span class="sig-name descname"><span class="pre">BathCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell" title="Link to this definition"></a></dt>
+<dd><p>Generator of the bath spins positions from the unit cell of the material.</p>
+<dl>
+<dt>Args:</dt><dd><p>a (float): <cite>a</cite> parameter of the primitive cell.
+b (float): <cite>b</cite> parameter of the primitive cell.
+c (float): <cite>c</cite> parameter of the primitive cell.
+alpha (float): <span class="math notranslate nohighlight">\(\alpha\)</span> angle of the primitive cell.
+beta (float): <span class="math notranslate nohighlight">\(\beta\)</span> angle of the primitive cell.
+gamma (float): <span class="math notranslate nohighlight">\(\gamma\)</span> angle of the primitive cell.
+angle (str): units of the <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span> angles.</p>
+<blockquote>
+<div><p>Can be either radians (<code class="docutils literal notranslate"><span class="pre">'rad'</span></code>), or degrees (<code class="docutils literal notranslate"><span class="pre">'deg'</span></code>).</p>
+</div></blockquote>
+<p>cell (ndarray with shape (3, 3)): Parameters of the cell.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">cell</span></code> is 3x3 matrix with columns of coordinates of crystallographic vectors
+in the cartesian reference frame. See <code class="docutils literal notranslate"><span class="pre">cell</span></code> attribute.</p>
+<p>If provided, overrides <cite>a</cite>, <cite>b</cite>, and <cite>c</cite>.</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>Attributes:</p>
+<blockquote>
+<div><dl>
+<dt>cell (ndarray with shape (3, 3)): Parameters of the cell.</dt><dd><p><code class="docutils literal notranslate"><span class="pre">cell</span></code> is 3x3 matrix with entries:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}[&amp;[a_x\ b_x\ c_x]\\
+&amp;[a_y\ b_y\ c_y]\\
+&amp;[a_z\ b_z\ c_z]]\end{split}\]</div>
+<p>where a, b, c are crystallographic vectors
+and x, y, z are their coordinates in the cartesian reference frame.</p>
+</dd>
+</dl>
+<p>atoms (dict): Dictionary containing coordinates and occupancy of each lattice site:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">atom_1</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">]),</span> <span class="n">array</span><span class="p">([</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">])],</span>
+ <span class="n">atom_2</span><span class="p">:</span> <span class="p">[</span><span class="n">array</span><span class="p">([</span><span class="n">x3</span><span class="p">,</span> <span class="n">y3</span><span class="p">,</span> <span class="n">z3</span><span class="p">]),</span> <span class="o">...</span><span class="p">]}</span>
+</pre></div>
+</div>
+<dl>
+<dt>isotopes (dict):</dt><dd><p>Dictionary containing spin types and their concentration for each lattice site type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">atom_1</span><span class="p">:</span> <span class="p">{</span><span class="n">spin_1</span><span class="p">:</span> <span class="n">concentration</span><span class="p">,</span> <span class="n">spin_2</span><span class="p">:</span> <span class="n">concentration</span><span class="p">},</span>
+ <span class="n">atom_2</span><span class="p">:</span> <span class="p">{</span><span class="n">spin_3</span><span class="p">:</span> <span class="n">concentration</span> <span class="o">...</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">atom_i</span></code> are lattice site types, and <code class="docutils literal notranslate"><span class="pre">spin_i</span></code> are spin types.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.add_atoms">
+<span class="sig-name descname"><span class="pre">add_atoms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.add_atoms" title="Link to this definition"></a></dt>
+<dd><p>Add coordinates of the lattice sites to the unit cell.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt><em>args (tuple): List of tuples, each containing the type of atom N (*str</em>),</dt><dd><p>and the xyz coordinates in the format (<em>float, float, float</em>): <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z])</span></code>.</p>
+</dd>
+</dl>
+<p>type (str): Type of coordinates. Can take values of <code class="docutils literal notranslate"><span class="pre">['cell',</span> <span class="pre">'angstrom']</span></code>.</p>
+<blockquote>
+<div><p>If <code class="docutils literal notranslate"><span class="pre">type=&quot;cell&quot;</span></code>, assumes crystallographic coordinates.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">type=&quot;angstrom&quot;</span></code> assumes that coordinates are given in the cartresian reference frame.</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>Returns:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>dict:</dt><dd><p>View of <code class="docutils literal notranslate"><span class="pre">cell.atoms</span></code> dictionary, where each key is the type of lattice site, and each value
+is the list of coordinates in crystallographic frame.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span> <span class="o">=</span> <span class="n">BathCell</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span><span class="o">.</span><span class="n">add_atoms</span><span class="p">((</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span><span class="o">.</span><span class="n">add_atoms</span><span class="p">((</span><span class="s1">&#39;Si&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;cell&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+<span class="go">{&#39;C&#39;: [array([0., 0., 0.]), array([0.5, 0.5, 0.5])], &#39;Si&#39;: [array([0. , 0.5, 0. ])]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.add_isotopes">
+<span class="sig-name descname"><span class="pre">add_isotopes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.add_isotopes" title="Link to this definition"></a></dt>
+<dd><p>Add spins that can populate each lattice site type.</p>
+<p>Args:</p>
+<blockquote>
+<div><p><a href="#id25"><span class="problematic" id="id26">*</span></a>args (tuple or list of tuples): Each tuple can have any of the following formats:</p>
+<blockquote>
+<div><ul>
+<li><p>Name of the lattice site <cite>N</cite> (<cite>str</cite>), name of the spin <cite>X</cite> (<cite>str</cite>),
+concentration <cite>c</cite> (<cite>float</cite>, in decimal): <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">X,</span> <span class="pre">c)</span></code>.</p></li>
+<li><p>Isotope name <cite>X and concentration `c</cite>: <code class="docutils literal notranslate"><span class="pre">(X,</span> <span class="pre">c)</span></code>.</p>
+<p>In this case, the name of the isotope is given in the format
+<code class="docutils literal notranslate"><span class="pre">&quot;{}{}&quot;.format(digits,</span> <span class="pre">atom_name)</span></code> where <code class="docutils literal notranslate"><span class="pre">digits</span></code> is any set of digits 0-9,
+<code class="docutils literal notranslate"><span class="pre">atom_name</span></code> is the name of the corresponding lattice site.
+Convenient when generating nuclear spin bath.</p>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<dl>
+<dt>Returns:</dt><dd><dl>
+<dt>dict:</dt><dd><p>View of <code class="docutils literal notranslate"><span class="pre">cell.isotopes</span></code> dictionary which contains information about lattice site types, spin types,
+and their concentrations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">atom_1</span><span class="p">:</span> <span class="p">{</span><span class="n">spin_1</span><span class="p">:</span> <span class="n">concentration</span><span class="p">,</span> <span class="n">spin_2</span><span class="p">:</span> <span class="n">concentration</span><span class="p">},</span>
+ <span class="n">atom_2</span><span class="p">:</span> <span class="p">{</span><span class="n">spin_3</span><span class="p">:</span> <span class="n">concentration</span> <span class="o">...</span><span class="p">}}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span> <span class="o">=</span> <span class="n">BathCell</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span><span class="o">.</span><span class="n">add_atoms</span><span class="p">((</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;angstrom&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cell</span><span class="o">.</span><span class="n">add_isotopes</span><span class="p">((</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;13C&#39;</span><span class="p">,</span> <span class="mf">0.0107</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">isotopes</span><span class="p">)</span>
+<span class="go">{&#39;C&#39;: {&#39;X&#39;: 0.001, &#39;13C&#39;: 0.0107}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.from_ase">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_ase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.from_ase" title="Link to this definition"></a></dt>
+<dd><p>Generate <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> instance from <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> object of Atomic Simulations Environment (ASE) package.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>atoms_object (Atoms): Atoms object, used to generate new <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> instance.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathCell: New instance of the <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> with atoms read from <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.gen_supercell">
+<span class="sig-name descname"><span class="pre">gen_supercell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recenter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.gen_supercell" title="Link to this definition"></a></dt>
+<dd><p>Generate supercell populated with spins.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">isotopes</span></code> were not provided, assumes the natural concentration of nuclear spin isotopes for each
+lattice site type. However, if any isotope concentration is provided,
+then uses only user-defined ones.</p>
+</div>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>size (float): Approximate linear size of the supercell. The generated supercell will have</dt><dd><p>minimal distance between opposite sides larger than this parameter.</p>
+</dd>
+<dt>add (tuple or list of tuples):</dt><dd><p>Tuple or list of tuples containing common_isotopes to add as a defect.
+Each tuple contains name of the new isotope
+and its coordinates in the cell basis: <code class="docutils literal notranslate"><span class="pre">(isotope_name,</span> <span class="pre">x_cell,</span> <span class="pre">y_cell,</span> <span class="pre">z_cell)</span></code>.</p>
+</dd>
+<dt>remove (tuple or list of tuples):</dt><dd><p>Tuple or list of tuples containing bath to remove in the defect.
+Each tuple contains name of the atom to remove
+and its coordinates in the cell basis: <code class="docutils literal notranslate"><span class="pre">(atom_name,</span> <span class="pre">x_cell,</span> <span class="pre">y_cell,</span> <span class="pre">z_cell)</span></code>.</p>
+</dd>
+</dl>
+<p>seed (int): Seed for random number generator.</p>
+<dl class="simple">
+<dt>recenter (bool):</dt><dd><p>True if place approximate center of the supercell at (0,0,0). False if start supercell
+at (0, 0, 0). Default True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While <code class="docutils literal notranslate"><span class="pre">add</span></code> takes the <strong>spin</strong> name as an argument, <code class="docutils literal notranslate"><span class="pre">remove</span></code> takes the lattice site name.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>BathArray: Array of the spins in the given supercell.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.rotate" title="Link to this definition"></a></dt>
+<dd><p>Rotate the BathCell using the rotation matrix provided.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>rotation_matrix (ndarray with shape (3,)): Rotation matrix R which rotates the old basis of the</dt><dd><p>cartesian reference frame to the new basis.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.set_zdir">
+<span class="sig-name descname"><span class="pre">set_zdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cell'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.set_zdir" title="Link to this definition"></a></dt>
+<dd><p>Set z-direction of the cell.</p>
+<dl>
+<dt>Args:</dt><dd><p>direction (ndarray with shape (3,)): Direction of the z axis.</p>
+<dl class="simple">
+<dt>type (str): How coordinates in <code class="docutils literal notranslate"><span class="pre">direction</span></code> are stored. If <code class="docutils literal notranslate"><span class="pre">type=&quot;cell&quot;</span></code>,</dt><dd><p>assumes crystallographic coordinates. If <code class="docutils literal notranslate"><span class="pre">type=&quot;angstrom&quot;</span></code> assumes that z direction is given
+in the cartresian reference frame.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.to_cartesian">
+<span class="sig-name descname"><span class="pre">to_cartesian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.to_cartesian" title="Link to this definition"></a></dt>
+<dd><p>Transform coordinates from crystallographic basis to the cartesian reference frame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>coord (ndarray with shape (3,) or (n, 3)): Coordinates in crystallographic basis or array of coordinates.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3,) or (n, 3): Cartesian coordinates in angstrom.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.to_cell">
+<span class="sig-name descname"><span class="pre">to_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.BathCell.to_cell" title="Link to this definition"></a></dt>
+<dd><p>Transform coordinates from the cartesian coordinates of the reference frame to the cell coordinates.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>coord (ndarray with shape (3,) or (n, 3)): Cartesian coordinates in angstrom or array of coordinates.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ndarray with shape (3,) or (n, 3): Coordinates in the cell basis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.bath.cell.BathCell.zdir">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">zdir</span></span><a class="headerlink" href="#pycce.bath.cell.BathCell.zdir" title="Link to this definition"></a></dt>
+<dd><p>ndarray: z-direction of the reference cartesian coordinate frame in cell coordinates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.cell.defect">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.cell.</span></span><span class="sig-name descname"><span class="pre">defect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.defect" title="Link to this definition"></a></dt>
+<dd><p>Generate a defect in the given supercell.</p>
+<p>The defect will be located in the unit cell, located roughly
+in the middle of the supercell, generated by <code class="docutils literal notranslate"><span class="pre">BathCell</span></code>, such that (0, 0, 0) of cartesian reference frame
+is located at (0, 0, 0) position of this unit cell.</p>
+<dl>
+<dt>Args:</dt><dd><p>cell (ndarray with shape (3, 3)): parameters of the unit cell.</p>
+<p>atoms (BathArray): Array of spins in the supercell.</p>
+<dl class="simple">
+<dt>add (tuple or list of tuples):</dt><dd><p>Add spin type(s) to the supercell at specified positions to create point defect.
+Each tuple contains name of the new isotope
+and its coordinates in the cell basis: <code class="docutils literal notranslate"><span class="pre">(isotope_name,</span> <span class="pre">x_cell,</span> <span class="pre">y_cell,</span> <span class="pre">z_cell)</span></code>.</p>
+</dd>
+<dt>remove (tuple or list of tuples):</dt><dd><p>Remove lattice site from the supercell at specified position to create point defect.
+Each tuple contains name of the atom to remove
+and its coordinates in the cell basis: <code class="docutils literal notranslate"><span class="pre">(atom_name,</span> <span class="pre">x_cell,</span> <span class="pre">y_cell,</span> <span class="pre">z_cell)</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>BathArray: Array of spins with the defect added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycce.bath.cell.read_ase">
+<span class="sig-prename descclassname"><span class="pre">pycce.bath.cell.</span></span><span class="sig-name descname"><span class="pre">read_ase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.bath.cell.read_ase" title="Link to this definition"></a></dt>
+<dd><p>Generate <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> instance from <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> object of Atomic Simulations Environment (ASE) package.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>atoms_object (Atoms): Atoms object, used to generate new <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> instance.</p>
+</dd>
+<dt>Returns:</dt><dd><p>BathCell: New instance of the <code class="docutils literal notranslate"><span class="pre">BathCell</span></code> with atoms read from <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorials/mecce.html" class="btn btn-neutral float-left" title="Dissipative spin bath" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="center.html" class="btn btn-neutral float-right" title="Central Spins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
