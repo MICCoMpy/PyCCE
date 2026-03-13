@@ -24,6 +24,6 @@ dependencies = [
 bath = ["*.txt"]
 
 [project.urls]
-Homepage = "https://pycce.readthedocs.io/en/latest/"
-Documentation = "https://pycce.readthedocs.io/en/latest/"
+Homepage = "https://MICCoMpy.github.io/PyCCE/"
+Documentation = "https://MICCoMpy.github.io/PyCCE/"
 Repository = "https://github.com/MICCoMpy/PyCCE"

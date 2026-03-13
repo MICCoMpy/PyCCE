@@ -1,35 +1,34 @@
-
 CCE Calculators
-==========================================
+===============
 
 Documentation for the calculator objects called by ``Simulator`` object.
 
 Base class
---------------------------------------------
+----------
 
 .. automodule:: pycce.run.base
    :members:
 
 Conventional CCE
-------------------------------------------
+----------------
 
 .. automodule:: pycce.run.cce
    :members:
 
 Generalized CCE
--------------------------------------------
+---------------
 
 .. automodule:: pycce.run.gcce
    :members:
 
-Noise Autocorrelation
------------------------------------------------
+Noise autocorrelation
+---------------------
 
 .. automodule:: pycce.run.corr
    :members:
 
-Cluster-correlation Expansion Decorators
-------------------------------------------
+Cluster-correlation expansion decorators
+----------------------------------------
 
 The way we find cluster in the code.
 

@@ -1,5 +1,5 @@
 ES Interface
-====================================================================
+============
 
 Each of the interfaces uses subclass of the ``DFTCoordinates`` class to parse the output.
 
@@ -7,8 +7,8 @@ Each of the interfaces uses subclass of the ``DFTCoordinates`` class to parse th
 
     The interfaces are in beta stage. Please let us know if you encounter any errors.
 
-Quantum Espresso
------------------------------------------------------------------------
+Quantum ESPRESSO
+----------------
 
 .. automodule:: pycce.io.qe
    :members:
@@ -16,7 +16,7 @@ Quantum Espresso
    :noindex:
 
 ORCA
------------------------------------------------------------------------
+----
 
 .. automodule:: pycce.io.orca
    :members:
@@ -24,7 +24,7 @@ ORCA
    :noindex:
 
 Base class
------------------------------------------------------------------------
+----------
 
 .. automodule:: pycce.io.base
    :members:

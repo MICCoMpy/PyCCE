@@ -1,12 +1,11 @@
-
 Quick Start
-===================================================================
+===========
 
 The generic workflow of the simulation includes first the generation of the spin bath in the material,
 and second performing the CCE dynamics calculations for the qubit interacting with this spin bath.
 
-Base Units
--------------------------------------------------------------------
+Base units
+----------
 
 * All coupling constants are given in :math:`\mathrm{kHz}`.
 * Timesteps are in millisecond (:math:`\mathrm{ms}`).
@@ -15,8 +14,8 @@ Base Units
 * Quadrupole constants are given in :math:`\mathrm{barn}` (:math:`10^{-28}\ \mathrm{m}^2`).
 * Magnetic field is given in Gauss (:math:`\mathrm{G}`).
 
-Simple Example
--------------------------------------------------------------------
+Simple example
+--------------
 
 The simplest example includes the following steps:
 

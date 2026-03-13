@@ -1,5 +1,5 @@
 Tutorials
-===================
+=========
 
 The examples below are available as Jupyter notebooks in the GitHub repository.
 
@@ -7,13 +7,12 @@ The examples below are available as Jupyter notebooks in the GitHub repository.
    :maxdepth: 1
    :caption: Examples of using PyCCE
 
-   tutorials/diamond_nv
-   tutorials/sic_vv
-   tutorials/si_shallow
-   tutorials/classical_noise
-   tutorials/second_spin
-   tutorials/mecce
-
+   tutorials/diamond_nv.ipynb
+   tutorials/sic_vv.ipynb
+   tutorials/si_shallow.ipynb
+   tutorials/classical_noise.ipynb
+   tutorials/second_spin.ipynb
+   tutorials/mecce.ipynb
 
 The recommended order of the tutorials is:
 
@@ -28,5 +27,3 @@ The recommended order of the tutorials is:
 * :doc:`tutorials/second_spin` goes over systems with two central spins, either forming a hybrid qubit,
   or two entangled qubits.
 * :doc:`tutorials/mecce` provides details on the master-eqation based solvers ME-CCE and ME-gCCE.
-
-
