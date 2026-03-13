@@ -1,4 +1,4 @@
-![image](docs/source/logo.png)
+![image](doc/logo.png)
 
 ## **PyCCE** code repository
 
