@@ -1,5 +1,5 @@
 .idea/*
-docs/build
+doc/_build
 *.egg
 *.egg-info
 dist

@@ -1,5 +1,5 @@
 Theoretical Background
-===========================
+======================
 
 This document contains a brief list of the coupling parameters between
 the central and the bath spins used in **PyCCE**, a description of the qubit dephasing, and a
@@ -7,7 +7,7 @@ summary of the cluster correlation expansion (CCE) method.
 You can find more details in the following references [#code]_ [#yang2008]_ [#onizhuk2021]_.
 
 Hamiltonian
-----------------------------
+-----------
 
 The **PyCCE** package allows one to simulate the dynamics of a central spin or multiple central spins interacting with a spin bath through
 the following Hamiltonian:
@@ -58,9 +58,8 @@ by the package itself (see :doc:`parameters` for details):
 - :math:`\mathbf{J}` is the interaction tensor between bath spins.
 - :math:`\mathbf{K}` is the interaction tensor between central spins.
 
-
 Qubit dephasing
----------------------------------
+---------------
 
 Usually, two coherence times are measured to characterize the loss of a qubit coherence - :math:`T_1` and :math:`T_2`.
 :math:`T_1` defines the timescale over which the qubit population is thermalized;
@@ -124,7 +123,8 @@ In the case of several central spins, one can apply the CCE formalism to compute
 combined density matrix.
 
 Conventional CCE
-..................................
+................
+
 In the original formulation of the CCE method, the total Hamiltonian of the system
 is reduced to the sum of two effective Hamiltonians, conditioned on the qubit levels of the central spin:
 
@@ -173,8 +173,7 @@ Where :math:`\ket{\alpha} = \ket{0}, \ket{1}` and :math:`\ket{\beta} = \ket{1}, 
 In sequences with odd number of pulses `N`, the leftmost propagator is the exponent of :math:`\hat H_C^{(\beta)}`.
 
 Generalized CCE
-..................................
-
+...............
 
 Instead of projecting the total Hamiltonian on the qubit levels,
 one may directly include the central spin degrees of freedom to each clusters.
@@ -191,7 +190,6 @@ In this case we write the cluster Hamiltonian as:
              & \sum_{i<j \in C} \mathbf{I}_i \mathbf{J}_{ij} \mathbf{I}_j +
                \sum_{k, a \notin C} \mathbf{S}_k \mathbf{A}_{ka} \langle\mathbf{I}_a\rangle +
                \sum_{i\in C,\ a\notin C} {\mathbf{I}_i\mathbf{J}_{ia}\langle\mathbf{I}_a\rangle}
-
 
 And the coherence function of the cluster :math:`L_C(t)` is computed as:
 
@@ -212,5 +210,3 @@ Further details on the theoretical background are available in the references be
 .. [#onizhuk2021] Mykyta  Onizhuk  et  al.
        “Probing  the  Coherence  of  Solid-State  Qubits  at Avoided  Crossings”.
        PRX Quantum 2, p. 010311. https://link.aps.org/doi/10.1103/PRXQuantum.2.010311.
-
-

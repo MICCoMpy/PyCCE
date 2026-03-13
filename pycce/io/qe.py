@@ -11,7 +11,7 @@ qe_coord_types = ['crystal', 'bohr', 'angstrom', 'alat']
 def read_qe(pwfile, hyperfine=None, efg=None, s=1, pwtype=None, types=None, isotopes=None,
             center=None, center_type=None, rotation_matrix=None, rm_style='col', find_isotopes=True):
     r"""
-    Function to read PW/GIPAW output from Quantum Espresso into BathArray.
+    Function to read PW/GIPAW output from Quantum ESPRESSO into BathArray.
 
     Changes the names of the atoms to the most abundant isotopes if ``find_isotopes`` set to True.
     If that is not the desired outcome, user can define which isotopes to use using keyword isotopes.

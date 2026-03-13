@@ -1,7 +1,5 @@
-
 PyCCE: A Python Package for CCE Simulations
-=========================================================================================
-
+===========================================
 
 .. toctree::
    :hidden:
@@ -39,18 +37,18 @@ PyCCE: A Python Package for CCE Simulations
   :align: left
   :target: index.html
 
-
 **PyCCE** is an open source Python library to simulate the dynamics of
 a spin qubit interacting with a spin bath using the cluster-correlation expansion (CCE) method.
 
 **PyCCE** supports parallelization through mpi4py, and high-throughput
 workflows through `aiida-pycce <https://github.com/MICCoMpy/aiida-pycce>`_.
 
-Major Updates
------------------------------
+Major updates
+-------------
 
 PyCCE 1.1
-++++++++++++++++++
++++++++++
+
 **PyCCE** 1.1 has been released!
 Main changes include:
 
@@ -60,7 +58,8 @@ Main changes include:
 * Various optimization and bugfixes.
 
 PyCCE 1.0
-++++++++++++++++++
++++++++++
+
 **PyCCE** 1.0 has been released!
 Main changes include:
 
@@ -86,7 +85,7 @@ Main changes include:
 This is a major update. If you find any issues ot bugs, please let us know as soon as possible!
 
 Installation
-----------------
+------------
 
 The recommended way to install **PyCCE** is to use **pip**::
 
@@ -102,18 +101,19 @@ Then, execute **pip** in the folder containing **pyproject.toml**::
     $ pip install .
 
 Requirements
-----------------
+------------
+
 The following modules are required to run **PyCCE**.
 
-* `Python <http://www.python.org/>`_ (version >= 3.9).
+* `Python <https://www.python.org/>`_ (version >= 3.9).
 
 * `NumPy <https://numpy.org/>`_ (version >= 1.16).
 
-* `SciPy <https://www.scipy.org/>`_ (version >= 1.10).
+* `SciPy <https://scipy.org/>`_ (version >= 1.10).
 
-* `Numba <http://numba.pydata.org/>`_ (version >= 0.56).
+* `Numba <https://numba.pydata.org/>`_ (version >= 0.56).
 
-* `Atomic Simulation Environment (ASE) <https://wiki.fysik.dtu.dk/ase/>`_.
+* `Atomic Simulation Environment (ASE) <https://ase-lib.org/>`_.
 
 * `Pandas <https://pandas.pydata.org/>`_.
 
@@ -121,7 +121,8 @@ The following modules are required to run **PyCCE**.
 **mpi4py** is not required for serial calculations.
 
 How to cite
---------------------------
+-----------
+
 If you make use of **PyCCE** in a scientific publication, please cite the following paper:
 
    Mykyta Onizhuk and Giulia Galli. "PyCCE: A Python Package for Cluster Correlation Expansion Simulations of Spin Qubit Dynamic"

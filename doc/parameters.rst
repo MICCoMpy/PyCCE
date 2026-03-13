@@ -1,5 +1,5 @@
 Hamiltonian Parameters Input
-==================================
+============================
 
 The default total Hamiltonian of the system is set as:
 
@@ -36,8 +36,8 @@ Each of this terms and additional terms of the Hamiltonian can be defined within
 In general, central spin properties are stored in the ``CenterArray`` instance, bath properties are stored in the
 ``BathArray`` instance.
 
-Central Spin Hamiltonian
-..................................
+Central spin Hamiltonian
+........................
 
 The central spin Hamiltonian is provided as attributes of the ``CenterArray`` object:
 
@@ -110,8 +110,8 @@ to the central spin Hamiltonian, one needs to add::
 
 For details see ``Center`` documentation.
 
-Spin-Bath Hamiltonian
-........................................
+Spin-bath Hamiltonian
+.....................
 
 The interactions between central spin and bath spins and are provided
 in the ``.A`` attribute of the ``BathArray`` object in :math:`\mathrm{kHz}`.
@@ -158,7 +158,7 @@ Interaction tensors can be either:
      ('13C', [-17.027,  28.843, -19.681], [[-0.903, -2.081,  1.42 ], [-2.081,  1.393, -2.405], [ 1.42 , -2.405, -0.49 ]], [[0., 0., 0.], [0., 0., 0.], [0., 0., 0.]])]
 
 Bath Hamiltonian
-..................................
+................
 
 The self interaction tensors of the bath spins is stored in the ``.Q`` attribute of the ``BathArray`` object.
 By default they are set to 0. They can be either:
