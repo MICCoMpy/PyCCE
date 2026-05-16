@@ -22,8 +22,7 @@ class SpinMatrix:
         self.p = self.plus
 
         for i in range(dim - 1):
-            self.plus[i, i + 1] += np.sqrt(s * (s + 1) -
-                                           projections[i] * projections[i + 1])
+            self.plus[i, i + 1] += np.sqrt(s * (s + 1) - projections[i] * projections[i + 1])
 
         self.minus = self.plus.conj().T
         self.m = self.minus
@@ -31,7 +30,7 @@ class SpinMatrix:
         self.s = s
         self.dim = dim
 
-        self.x = 1 / 2. * (self.plus + self.minus)
+        self.x = 1 / 2.0 * (self.plus + self.minus)
         self.y = 1 / 2j * (self.plus - self.minus)
         self.z = np.diag(projections[::-1])
 
@@ -78,7 +77,7 @@ class MatrixDict(MutableMapping):
 
     def __setitem__(self, key, value):
         if not isinstance(value, SpinMatrix):
-            raise ValueError('Illegal definition of MatrixDict element. Only accepts SpinMatrix objects')
+            raise ValueError("Illegal definition of MatrixDict element. Only accepts SpinMatrix objects")
         self._data[key] = value
 
     def __iter__(self):
@@ -100,7 +99,7 @@ _smc = MatrixDict()
 from scipy.special import comb
 
 
-def _a(k, q, m, j=1., i=1):
+def _a(k, q, m, j=1.0, i=1):
     if k == q and m == 0:
         return 1
     elif q + m > k or m < 0:
@@ -233,10 +232,7 @@ def spinvec(j, dimensions):
 
     """
     x, y, z = numba_gen_sm(dimensions[j])
-    vec = np.stack((expand(x, j, dimensions),
-                    expand(y, j, dimensions),
-                    expand(z, j, dimensions))
-                   )
+    vec = np.stack((expand(x, j, dimensions), expand(y, j, dimensions), expand(z, j, dimensions)))
     return vec
 
 
@@ -255,11 +251,10 @@ def numba_gen_sm(dim):
     plus = np.zeros((dim, dim), dtype=np.complex128)
 
     for i in range(dim - 1):
-        plus[i, i + 1] += np.sqrt(s * (s + 1) -
-                                  projections[i] * projections[i + 1])
+        plus[i, i + 1] += np.sqrt(s * (s + 1) - projections[i] * projections[i + 1])
 
     minus = plus.conj().T
-    x = 1 / 2. * (plus + minus)
+    x = 1 / 2.0 * (plus + minus)
     y = 1 / 2j * (plus - minus)
     z = np.diag(projections[::-1])
     return x, y, z

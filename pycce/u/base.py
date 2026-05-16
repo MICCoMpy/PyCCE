@@ -34,8 +34,7 @@ class Propagator:
     def generate_base_hamiltonian(self):
         return 1
 
-    def generate_rotations(self, pulses, dimensions=None,
-                           bath=None, vectors=None, central_spin=None):
+    def generate_rotations(self, pulses, dimensions=None, bath=None, vectors=None, central_spin=None):
         """
         Generate list of matrix representations of the rotations, induced by the sequence of the pulses.
 
@@ -95,13 +94,13 @@ class Propagator:
 
             if p.bath_names is not None:
                 if vectors.shape != bath.shape:
-                    vectors = vectors[:bath.shape[0]]
+                    vectors = vectors[: bath.shape[0]]
                     # print(vectors.shape)
                 properties = np.broadcast(p.bath_names, p.bath_axes, p.bath_angles)
 
                 for name, axis, angle in properties:
                     if angle:
-                        which = (bath.N == name)
+                        which = bath.N == name
 
                         if any(which):
                             vecs = vectors[which]
@@ -119,7 +118,7 @@ class Propagator:
         return delays, rots
 
 
-_rot = {'x': 0, 'y': 1, 'z': 2}
+_rot = {"x": 0, "y": 1, "z": 2}
 
 
 def bath_rotation(vectors, axis, angle):

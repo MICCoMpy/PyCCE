@@ -6,8 +6,7 @@ from pycce.bath.map import InteractionMap
 from pycce.constants import ELECTRON_GYRO, PI2
 from pycce.h.total import central_hamiltonian
 from pycce.sm import _smc
-from pycce.utilities import expand, rotate_coordinates, rotate_tensor, outer, \
-    normalize
+from pycce.utilities import expand, rotate_coordinates, rotate_tensor, outer, normalize
 
 
 def _attr_arr_setter(self, attr, value, dtype=np.float64):
@@ -63,11 +62,10 @@ class Center:
 
             Default 0.
     """
-    _state_mapping = {0: 'beta', 1: 'alpha'}
 
-    def __init__(self, position=None,
-                 spin=0, D=0, E=0,
-                 gyro=ELECTRON_GYRO, alpha=None, beta=None, detuning=0):
+    _state_mapping = {0: "beta", 1: "alpha"}
+
+    def __init__(self, position=None, spin=0, D=0, E=0, gyro=ELECTRON_GYRO, alpha=None, beta=None, detuning=0):
 
         if position is None:
             position = np.array([0, 0, 0])
@@ -144,15 +142,15 @@ class Center:
         self._sigma = None
 
     def get_projections(self, which):
-        if which == 'alpha' or which == 1:
+        if which == "alpha" or which == 1:
             return self.projections_alpha
-        elif which == 'beta' or which == 0:
+        elif which == "beta" or which == 0:
             return self.projections_beta
 
     def get_projections_all(self, which):
-        if which == 'alpha' or which == 1:
+        if which == "alpha" or which == 1:
             return self.projections_alpha_all
-        elif which == 'beta' or which == 0:
+        elif which == "beta" or which == 0:
             return self.projections_beta_all
 
     @property
@@ -162,7 +160,7 @@ class Center:
 
     @xyz.setter
     def xyz(self, position):
-        _attr_arr_setter(self, '_xyz', position)
+        _attr_arr_setter(self, "_xyz", position)
 
     @property
     def gyro(self):
@@ -176,7 +174,7 @@ class Center:
 
     @gyro.setter
     def gyro(self, gyro):
-        _attr_arr_setter(self, '_gyro', gyro)
+        _attr_arr_setter(self, "_gyro", gyro)
 
     @property
     def zfs(self):
@@ -185,7 +183,7 @@ class Center:
 
     @zfs.setter
     def zfs(self, zfs):
-        _attr_arr_setter(self, '_zfs', zfs)
+        _attr_arr_setter(self, "_zfs", zfs)
 
     @property
     def s(self):
@@ -194,7 +192,7 @@ class Center:
 
     @s.setter
     def s(self, spin):
-        _attr_arr_setter(self, '_s', spin)
+        _attr_arr_setter(self, "_s", spin)
 
     @property
     def detuning(self):
@@ -210,12 +208,11 @@ class Center:
     def so(self):
         return self._so
 
-
     @detuning.setter
     def detuning(self, detune):
-        _attr_arr_setter(self, '_detuning', detune)
+        _attr_arr_setter(self, "_detuning", detune)
 
-    def add_single_jump(self, operator, rate=1, units='rad', square_root=False, which=None):
+    def add_single_jump(self, operator, rate=1, units="rad", square_root=False, which=None):
         """
         Add single-spin jump operator for the spin to be used in the Lindbladian master equation CCE.
 
@@ -240,7 +237,7 @@ class Center:
         """
         if not square_root:
             rate = np.sqrt(rate)
-        if 'rad' in units:
+        if "rad" in units:
             rate = rate / np.sqrt(PI2)
 
         if isinstance(operator, str):
@@ -248,8 +245,8 @@ class Center:
         else:
             operator = np.asarray(operator, dtype=np.complex128)
             dimensions = self.dim
-            assert operator.shape == (dimensions, dimensions), f'Operator should have shape {dimensions, dimensions}'
-            self.so['A'] = operator * rate
+            assert operator.shape == (dimensions, dimensions), f"Operator should have shape {dimensions, dimensions}"
+            self.so["A"] = operator * rate
 
     def set_zfs(self, D=0, E=0):
         """
@@ -302,11 +299,11 @@ class Center:
         index of the energy state to be considered as one.
         """
 
-        return self._get_state('alpha')
+        return self._get_state("alpha")
 
     @alpha.setter
     def alpha(self, state):
-        self._set_state('alpha', state)
+        self._set_state("alpha", state)
 
     @property
     def beta(self):
@@ -317,11 +314,11 @@ class Center:
 
         index of the energy state to be considered as one.
         """
-        return self._get_state('beta')
+        return self._get_state("beta")
 
     @beta.setter
     def beta(self, state):
-        self._set_state('beta', state)
+        self._set_state("beta", state)
 
     @property
     def dim(self):
@@ -333,18 +330,20 @@ class Center:
         r"""
         Generate Pauli matrices of the qubit in :math:`S_z` basis.
         """
-        assert np.isclose(np.inner(self.alpha.conj(), self.beta), 0), \
-            f"Pauli matrix can be generated only for orthogonal states, " \
-            f"{self.alpha} and {self.beta} are not orthogonal"
+        assert np.isclose(np.inner(self.alpha.conj(), self.beta), 0), (
+            f"Pauli matrix can be generated only for orthogonal states, " f"{self.alpha} and {self.beta} are not orthogonal"
+        )
 
         alpha_x_alpha = outer(self.alpha, self.alpha)
         beta_x_beta = outer(self.beta, self.beta)
         alpha_x_beta = outer(self.alpha, self.beta)
         beta_x_alpha = outer(self.beta, self.alpha)
 
-        self._sigma = {'x': alpha_x_beta + beta_x_alpha,
-                       'y': -1j * alpha_x_beta + 1j * beta_x_alpha,
-                       'z': alpha_x_alpha - beta_x_beta}
+        self._sigma = {
+            "x": alpha_x_beta + beta_x_alpha,
+            "y": -1j * alpha_x_beta + 1j * beta_x_alpha,
+            "z": alpha_x_alpha - beta_x_beta,
+        }
 
     @property
     def sigma(self):
@@ -359,26 +358,26 @@ class Center:
         if state is not None:
             state = np.asarray(state)
             if state.size == 1 and np.issubdtype(state.dtype, int):
-                setattr(self, name + '_index', int(state))
+                setattr(self, name + "_index", int(state))
             elif state.dtype == bool:
-                setattr(self, name + '_index', state)
+                setattr(self, name + "_index", state)
             else:
                 assert state.size == np.prod(self.dim), f"Incorrect format of {name}: {state}"
-                setattr(self, '_' + name, normalize(state))
+                setattr(self, "_" + name, normalize(state))
 
                 # remove index if manually set alpha state
-                setattr(self, name + '_index', None)
+                setattr(self, name + "_index", None)
         else:
-            setattr(self, '_' + name, state)
+            setattr(self, "_" + name, state)
         self._sigma = None
 
     def _get_state(self, name):
 
-        state = getattr(self, '_' + name)
+        state = getattr(self, "_" + name)
         if state is not None:
             return state
 
-        state = getattr(self, name + '_index')
+        state = getattr(self, name + "_index")
         if state is not None:
             return state
 
@@ -402,7 +401,7 @@ class Center:
         """
 
         self.generate_hamiltonian(magnetic_field=magnetic_field, bath=bath, projected_bath_state=projected_bath_state)
-        self.energies, self.eigenvectors = np.linalg.eigh(self.hamiltonian.data, UPLO='U')
+        self.energies, self.eigenvectors = np.linalg.eigh(self.hamiltonian.data, UPLO="U")
 
         if self.alpha_index is not None:
             self._alpha = np.ascontiguousarray(self.eigenvectors[:, self.alpha_index])
@@ -410,10 +409,16 @@ class Center:
             self._beta = np.ascontiguousarray(self.eigenvectors[:, self.beta_index])
 
     def __repr__(self):
-        message = f"{self.__class__.__name__}" + ("\n(s: " + self.s.__str__() +
-                                                  ",\nxyz:\n" + self.xyz.__str__() +
-                                                  ",\nzfs:\n" + self.zfs.__str__() +
-                                                  ",\ngyro:\n" + self.gyro.__str__())
+        message = f"{self.__class__.__name__}" + (
+            "\n(s: "
+            + self.s.__str__()
+            + ",\nxyz:\n"
+            + self.xyz.__str__()
+            + ",\nzfs:\n"
+            + self.zfs.__str__()
+            + ",\ngyro:\n"
+            + self.gyro.__str__()
+        )
         if self._detuning.any():
             message += "\ndetuning: " + self.gyro.__str__()
         message += ")"
@@ -439,22 +444,21 @@ class Center:
                 first order contributions from the bath spins.
         """
         if magnetic_field is None:
-            magnetic_field = np.array([0., 0., 0.], dtype=np.float64)
+            magnetic_field = np.array([0.0, 0.0, 0.0], dtype=np.float64)
 
         if not callable(magnetic_field):
             magnetic_field = np.asarray(magnetic_field)
             if magnetic_field.size == 1:
-                magnetic_field = np.array([0., 0., magnetic_field.reshape(-1)[0]])
+                magnetic_field = np.array([0.0, 0.0, magnetic_field.reshape(-1)[0]])
 
         if isinstance(bath, BathArray):
             bath = bath.A
             projected_bath_state = bath.proj
 
-        self.hamiltonian = central_hamiltonian(self, magnetic_field, hyperfine=bath,
-                                               bath_state=projected_bath_state)
+        self.hamiltonian = central_hamiltonian(self, magnetic_field, hyperfine=bath, bath_state=projected_bath_state)
         return self.hamiltonian
 
-    def transform(self, rotation=None, style='col'):
+    def transform(self, rotation=None, style="col"):
         """
         Apply coordinate transformation to the central spin.
 
@@ -585,12 +589,9 @@ class CenterArray(Center, collections.abc.Sequence):
             Default is 0.
     """
 
-    def __init__(self, size=None, position=None,
-                 spin=None, D=0, E=0,
-                 gyro=ELECTRON_GYRO, imap=None,
-                 alpha=None,
-                 beta=None,
-                 detuning=0):
+    def __init__(
+        self, size=None, position=None, spin=None, D=0, E=0, gyro=ELECTRON_GYRO, imap=None, alpha=None, beta=None, detuning=0
+    ):
 
         if size is None:
             if spin is not None:
@@ -602,7 +603,7 @@ class CenterArray(Center, collections.abc.Sequence):
                 size = position.size // 3
 
             else:
-                raise ValueError('Size of the array is not provided')
+                raise ValueError("Size of the array is not provided")
 
         self.size = size
 
@@ -631,9 +632,13 @@ class CenterArray(Center, collections.abc.Sequence):
 
         super().__init__(position=position, spin=spin, D=D, E=E, gyro=gyro, alpha=alpha, beta=beta, detuning=detuning)
 
-        self._array = np.array([Center(position=p, spin=s[..., 0], D=zfs, gyro=g, detuning=d) for p, s, zfs, g, d in
-                                zip(self.xyz, self.s[:, np.newaxis], self.zfs, self.gyro, self.detuning)],
-                               dtype=object)
+        self._array = np.array(
+            [
+                Center(position=p, spin=s[..., 0], D=zfs, gyro=g, detuning=d)
+                for p, s, zfs, g, d in zip(self.xyz, self.s[:, np.newaxis], self.zfs, self.gyro, self.detuning)
+            ],
+            dtype=object,
+        )
 
         self._h = np.asarray([x.h for x in self._array], dtype=object)
 
@@ -643,7 +648,7 @@ class CenterArray(Center, collections.abc.Sequence):
         if imap is not None and not isinstance(imap, InteractionMap):
 
             if self.size < 2:
-                raise ValueError(f'Cannot assign interaction map for array of size {self.size}')
+                raise ValueError(f"Cannot assign interaction map for array of size {self.size}")
 
             imap = np.broadcast_to(imap, (self.size * (self.size - 1) // 2, 3, 3))
             imap = InteractionMap(rows=np.arange(self.size), columns=np.arange(1, self.size), tensors=imap)
@@ -689,11 +694,11 @@ class CenterArray(Center, collections.abc.Sequence):
 
         """
 
-        return self._get_state('alpha')
+        return self._get_state("alpha")
 
     @alpha.setter
     def alpha(self, state):
-        self._set_state('alpha', state)
+        self._set_state("alpha", state)
 
     @property
     def beta(self):
@@ -702,18 +707,18 @@ class CenterArray(Center, collections.abc.Sequence):
 
         **OR** index of the energy state to be considered as one.
         """
-        return self._get_state('beta')
+        return self._get_state("beta")
 
     @beta.setter
     def beta(self, state):
-        self._set_state('beta', state)
+        self._set_state("beta", state)
 
     @property
     def state(self):
         r"""
         ndarray: Initial state of the qubit in gCCE simulations.
         Assumed to be :math:`\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})` unless provided."""
-        state = super(CenterArray, self)._get_state('state')
+        state = super(CenterArray, self)._get_state("state")
 
         if isinstance(state, np.ndarray) and state.dtype == bool:
             state = state.reshape(-1, 2)
@@ -736,7 +741,7 @@ class CenterArray(Center, collections.abc.Sequence):
 
     @state.setter
     def state(self, state):
-        self._set_state('state', state)
+        self._set_state("state", state)
 
     @property
     def gyro(self):
@@ -744,7 +749,7 @@ class CenterArray(Center, collections.abc.Sequence):
 
     @gyro.setter
     def gyro(self, gyro):
-        _attr_arr_setter(self, '_gyro', gyro)
+        _attr_arr_setter(self, "_gyro", gyro)
 
     def __getitem__(self, item):
         newarray = self._array.__getitem__(item)
@@ -767,12 +772,12 @@ class CenterArray(Center, collections.abc.Sequence):
 
             return ca
 
-    def add_single_jump(self, operator, rate=1, units='rad', square_root=False, which=None):
+    def add_single_jump(self, operator, rate=1, units="rad", square_root=False, which=None):
         if self.size == 1:
             self[0].add_single_jump(operator, rate=rate, units=units, square_root=square_root)
         else:
             if which is None:
-                raise ValueError('Multiple central spins detected but no which keyword is provided')
+                raise ValueError("Multiple central spins detected but no which keyword is provided")
             self[which].add_single_jump(operator, rate=rate, units=units, square_root=square_root)
 
     def __setitem__(self, key, val):
@@ -849,11 +854,11 @@ class CenterArray(Center, collections.abc.Sequence):
             else:
                 hf = bath[..., i, :, :]
 
-            c.generate_states(magnetic_field=magnetic_field,
-                              bath=hf, projected_bath_state=projected_bath_state)
+            c.generate_states(magnetic_field=magnetic_field, bath=hf, projected_bath_state=projected_bath_state)
 
-        super(CenterArray, self).generate_states(magnetic_field=magnetic_field,
-                                                 bath=bath, projected_bath_state=projected_bath_state)
+        super(CenterArray, self).generate_states(
+            magnetic_field=magnetic_field, bath=bath, projected_bath_state=projected_bath_state
+        )
         if self.state_index is not None and isinstance(self.state_index, (int, np.integer)):
             self._state = np.ascontiguousarray(self.eigenvectors[:, self.state_index])
 
@@ -942,9 +947,9 @@ class CenterArray(Center, collections.abc.Sequence):
             float: Energy of the qubit state.
         """
 
-        if which == 'alpha' or which == True:
+        if which == "alpha" or which == True:
             return self.energy_alpha
-        elif which == 'beta' or which == False:
+        elif which == "beta" or which == False:
             return self.energy_beta
 
     def generate_sigma(self):
@@ -961,17 +966,17 @@ class CenterArray(Center, collections.abc.Sequence):
                     pass
 
     def _check_states(self):
-        for n in ['alpha', 'beta']:
+        for n in ["alpha", "beta"]:
             s = getattr(self, n)
             if s is None or isinstance(s, int):
-                raise ValueError(f'Wrong {n} format: {s}')
+                raise ValueError(f"Wrong {n} format: {s}")
 
     def _get_state(self, name):
-        state = getattr(self, '_' + name)
+        state = getattr(self, "_" + name)
         if state is not None:
             return state
 
-        state = getattr(self, name + '_index')
+        state = getattr(self, name + "_index")
         if state is not None:
             return state
 
@@ -1018,10 +1023,12 @@ def _close_state_index(state, eiv, level_confidence=0.95):
     indexes = np.argwhere(ev_state * ev_state.conj() > level_confidence).flatten()
 
     if not indexes.size:
-        raise ValueError(f"Initial qubit state is below F = {level_confidence} "
-                         f"to the eigenstate of central spin Hamiltonian.\n"
-                         f"Qubit level:\n{repr(state)}\n"
-                         f"Eigenstates (rows):\n{repr(eiv.T)}")
+        raise ValueError(
+            f"Initial qubit state is below F = {level_confidence} "
+            f"to the eigenstate of central spin Hamiltonian.\n"
+            f"Qubit level:\n{repr(state)}\n"
+            f"Eigenstates (rows):\n{repr(eiv.T)}"
+        )
     return indexes[0]
 
 
@@ -1051,10 +1058,10 @@ def generate_projections(state_a, state_b=None, spins=None):
         spin = (state_a.size - 1) / 2
         sm = _smc[spin]
 
-        projections = np.array([state_a.conj() @ sm.x @ state_b,
-                                state_a.conj() @ sm.y @ state_b,
-                                state_a.conj() @ sm.z @ state_b],
-                               dtype=np.complex128)
+        projections = np.array(
+            [state_a.conj() @ sm.x @ state_b, state_a.conj() @ sm.y @ state_b, state_a.conj() @ sm.z @ state_b],
+            dtype=np.complex128,
+        )
     else:
         projections = []
         dim = (np.asarray(spins) * 2 + 1 + 1e-8).astype(int)
@@ -1065,10 +1072,10 @@ def generate_projections(state_a, state_b=None, spins=None):
             smy = expand(sm.y, i, dim)
             smz = expand(sm.z, i, dim)
 
-            p = np.array([state_a.conj() @ smx @ state_b,
-                          state_a.conj() @ smy @ state_b,
-                          state_a.conj() @ smz @ state_b],
-                         dtype=np.complex128)
+            p = np.array(
+                [state_a.conj() @ smx @ state_b, state_a.conj() @ smy @ state_b, state_a.conj() @ smz @ state_b],
+                dtype=np.complex128,
+            )
             projections.append(p)
 
     return projections

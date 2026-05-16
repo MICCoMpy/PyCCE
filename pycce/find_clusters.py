@@ -12,7 +12,9 @@ class _Clusters(MutableMapping):
     NOT IMPLEMENTED YET. Specific Class for storing the clusters objects
     """
 
-    def __init__(self, ):
+    def __init__(
+        self,
+    ):
         self._data = {}
 
     def __getitem__(self, key):
@@ -78,10 +80,10 @@ def generate_clusters(bath, r_dipole, order, r_inner=0, ignore=None, strong=Fals
 
     if ignore is not None and order > 0:
         if isinstance(ignore, (str, np.str)):
-            clusters[1] = clusters[1][bath[clusters[1]]['N'] != ignore].reshape(-1, 1)
+            clusters[1] = clusters[1][bath[clusters[1]]["N"] != ignore].reshape(-1, 1)
         else:
             for n in ignore:
-                clusters[1] = clusters[1][bath[clusters[1]]['N'] != n].reshape(-1, 1)
+                clusters[1] = clusters[1][bath[clusters[1]]["N"] != n].reshape(-1, 1)
 
     return clusters
 
@@ -103,23 +105,23 @@ def make_graph(bath, r_dipole, r_inner=0, ignore=None, max_size=5000):
     """
 
     if bath.size < max_size:
-        dist_matrix = np.linalg.norm(bath['xyz'][:, np.newaxis, :] - bath['xyz'][np.newaxis, :, :], axis=-1)
+        dist_matrix = np.linalg.norm(bath["xyz"][:, np.newaxis, :] - bath["xyz"][np.newaxis, :, :], axis=-1)
         atoms_within = np.logical_and(dist_matrix < r_dipole, dist_matrix > r_inner)
 
     else:
         atoms_within = np.zeros((bath.size, bath.size), dtype=bool)
         for i, a in enumerate(bath):
-            dist = np.linalg.norm(bath['xyz'][i:] - a['xyz'], axis=-1)
+            dist = np.linalg.norm(bath["xyz"][i:] - a["xyz"], axis=-1)
             atoms_within[i, i:] = (dist < r_dipole) & (dist > r_inner)
     if ignore is not None:
         if isinstance(ignore, (str, np.str)):
-            atoms_within = atoms_within & (bath['N'] != ignore)[np.newaxis, :]
+            atoms_within = atoms_within & (bath["N"] != ignore)[np.newaxis, :]
         else:
             for n in ignore:
-                atoms_within = atoms_within & (bath['N'] != n)[np.newaxis, :]
+                atoms_within = atoms_within & (bath["N"] != n)[np.newaxis, :]
 
     if bath.shape[0] == 0:
-        print('No spins, no neighbours.')
+        print("No spins, no neighbours.")
 
     # Generate sparse connectivity matrix
     graph = csr_matrix(atoms_within, dtype=bool)
@@ -128,13 +130,14 @@ def make_graph(bath, r_dipole, r_inner=0, ignore=None, max_size=5000):
 
 
 # Import from connected components scipy
-def connected_components(csgraph, directed=False, connection='weak', return_labels=True):
+def connected_components(csgraph, directed=False, connection="weak", return_labels=True):
     """
     Find connected components using ``scipy.sparse.csgraph``.
     See documentation of ``scipy.sparse.csgraph.connected_components``
     """
-    return scipy.sparse.csgraph.connected_components(csgraph, directed=directed, connection=connection,
-                                                     return_labels=return_labels)
+    return scipy.sparse.csgraph.connected_components(
+        csgraph, directed=directed, connection=connection, return_labels=return_labels
+    )
 
 
 def find_subclusters(maximum_order, graph, labels, n_components, strong=False):
@@ -162,7 +165,7 @@ def find_subclusters(maximum_order, graph, labels, n_components, strong=False):
         clusters[k] = []
     # print('Number of disjointed clusters is {}'.format(n_components))
     for component in range(n_components):
-        vert_pos = (labels == component)
+        vert_pos = labels == component
         vertices = np.nonzero(vert_pos)[0]
 
         # print('{} cluster contains {} components'.format(component, ncomp))
@@ -174,7 +177,7 @@ def find_subclusters(maximum_order, graph, labels, n_components, strong=False):
         if vertices.size >= 2 and maximum_order > 1:
             # Retrieve upper right triangle (remove i,j pairs with i>j),
             # choose only rows corresponding to vertices in the subcluster
-            csrmat = scipy.sparse.triu(graph, k=0, format='csr')[vertices]
+            csrmat = scipy.sparse.triu(graph, k=0, format="csr")[vertices]
             # Change to coordinate format of matrix
             coomat = csrmat.tocoo()
             # rows, col give row and colum indexes, which correspond to
@@ -278,7 +281,7 @@ def find_subclusters(maximum_order, graph, labels, n_components, strong=False):
         if clusters[o]:
             clusters[o] = np.concatenate(clusters[o], axis=0)
         else:
-            print('Set of clusters of order {} is empty!'.format(o))
+            print("Set of clusters of order {} is empty!".format(o))
             clusters.pop(o)
 
     return clusters
@@ -368,7 +371,7 @@ def _default_strength(bath, bonds):
     if len(gyros_2.shape) > 1:
         gyros_2 = np.abs(gyros_2.reshape(gyros_2.shape[0], -1)).max(axis=1)
 
-    return np.abs(gyros_1 * gyros_2 / r ** 3)  # * (1 - 2 * cos_theta ** 2))
+    return np.abs(gyros_1 * gyros_2 / r**3)  # * (1 - 2 * cos_theta ** 2))
 
 
 def find_valid_subclusters(graph, maximum_order, nclusters=None, bath=None, strong=False, compute_strength=None):
@@ -400,7 +403,7 @@ def find_valid_subclusters(graph, maximum_order, nclusters=None, bath=None, stro
     if maximum_order > 1:
         strength = {}
         # Retrieve upper right triangle (remove i,j pairs with i>j),
-        csrmat = scipy.sparse.triu(graph, k=0, format='csr')
+        csrmat = scipy.sparse.triu(graph, k=0, format="csr")
         # Change to coordinate format of matrix
         coomat = csrmat.tocoo()
         row_ind, col_ind = coomat.row, coomat.col
@@ -414,8 +417,8 @@ def find_valid_subclusters(graph, maximum_order, nclusters=None, bath=None, stro
             strength[2] = strength[2][ordered]
 
             if 2 in nclusters:
-                bonds = bonds[:nclusters[2]]
-                strength[2] = strength[2][:nclusters[2]]
+                bonds = bonds[: nclusters[2]]
+                strength[2] = strength[2][: nclusters[2]]
 
         clusters[2] = bonds
 
@@ -463,8 +466,7 @@ def find_valid_subclusters(graph, maximum_order, nclusters=None, bath=None, stro
                     tripletstrength += teststrength
 
                 if strong and triplets.any():
-                    unique, index, counts = np.unique(np.sort(triplets, axis=1), axis=0, return_index=True,
-                                                      return_counts=True)
+                    unique, index, counts = np.unique(np.sort(triplets, axis=1), axis=0, return_index=True, return_counts=True)
 
                     triplets = unique[counts == order - 1]
 
@@ -505,11 +507,11 @@ def find_valid_subclusters(graph, maximum_order, nclusters=None, bath=None, stro
                     ltstr = ltstr[ordered_by_strength]
 
                     if order in nclusters:
-                        ltstr = ltstr[:nclusters[order]]
-                        ltriplets = ltriplets[:nclusters[order]]
+                        ltstr = ltstr[: nclusters[order]]
+                        ltriplets = ltriplets[: nclusters[order]]
 
             except ValueError:
-                print('Set of clusters of order {} is empty!'.format(order))
+                print("Set of clusters of order {} is empty!".format(order))
                 break
 
             clusters[order] = ltriplets

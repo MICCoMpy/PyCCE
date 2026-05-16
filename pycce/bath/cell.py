@@ -62,16 +62,13 @@ class BathCell:
             where ``atom_i`` are lattice site types, and ``spin_i`` are spin types.
     """
 
-    _conv = {'rad': 1, 'deg': 2 * np.pi / 360}
-    _coord_types = ['angstrom', 'cell']
+    _conv = {"rad": 1, "deg": 2 * np.pi / 360}
+    _coord_types = ["angstrom", "cell"]
 
-    def __init__(self, a=None, b=None, c=None,
-                 alpha=None, beta=None, gamma=None,
-                 angle='rad', cell=None):
+    def __init__(self, a=None, b=None, c=None, alpha=None, beta=None, gamma=None, angle="rad", cell=None):
 
         if angle not in self._conv:
-            raise KeyError('Only angle available are: '
-                           ', '.join(self._conv.keys()))
+            raise KeyError("Only angle available are: " ", ".join(self._conv.keys()))
 
         if alpha is None:
             alpha = np.pi / 2
@@ -96,8 +93,13 @@ class BathCell:
         if cell is not None:
             self.cell = np.asarray(cell)
         else:
-            inbr = (1 + 2 * np.cos(alpha) * np.cos(beta) * np.cos(gamma) -
-                    np.cos(alpha) ** 2 - np.cos(beta) ** 2 - np.cos(gamma) ** 2)
+            inbr = (
+                1
+                + 2 * np.cos(alpha) * np.cos(beta) * np.cos(gamma)
+                - np.cos(alpha) ** 2
+                - np.cos(beta) ** 2
+                - np.cos(gamma) ** 2
+            )
 
             volume = a * b * c * inbr ** (1 / 2)
 
@@ -106,8 +108,7 @@ class BathCell:
             self.cell[0, 1] = b * np.cos(gamma)
             self.cell[1, 1] = b * np.sin(gamma)
             self.cell[0, 2] = c * np.cos(beta)
-            self.cell[1, 2] = c * (np.cos(alpha) - np.cos(beta) *
-                                   np.cos(gamma)) / np.sin(gamma)
+            self.cell[1, 2] = c * (np.cos(alpha) - np.cos(beta) * np.cos(gamma)) / np.sin(gamma)
             # cell is 3x3 matrix with entries:
             # cell = [a_x b_x c_x]
             #        [a_y b_y c_y]
@@ -145,9 +146,7 @@ class BathCell:
         # Rotational matrix
         # If z direction is opposite
         if abs(a @ b + 1) < FLOAT_ERROR_RANGE:
-            rotation = np.array([[0, 1, 0],
-                                 [1, 0, 0],
-                                 [0, 0, -1]])
+            rotation = np.array([[0, 1, 0], [1, 0, 0], [0, 0, -1]])
 
         elif abs(a @ b - 1) < FLOAT_ERROR_RANGE:
             rotation = np.eye(3)
@@ -185,7 +184,7 @@ class BathCell:
         self._zdir = zd / np.linalg.norm(zd)
         self._zdir[np.abs(self._zdir) < FLOAT_ERROR_RANGE * np.max(np.abs(self._zdir))] = 0
 
-    def set_zdir(self, direction, type='cell'):
+    def set_zdir(self, direction, type="cell"):
         """
         Set z-direction of the cell.
 
@@ -197,15 +196,15 @@ class BathCell:
                 in the cartresian reference frame.
 
         """
-        if type == 'cell':
+        if type == "cell":
             direction = np.asarray(direction)
-        elif type == 'angstrom':
+        elif type == "angstrom":
             direction = self.to_cell(np.asarray(direction))
         else:
-            raise ValueError('Unknown direction type.')
+            raise ValueError("Unknown direction type.")
         self.zdir = direction
 
-    def add_atoms(self, *args, type='cell'):
+    def add_atoms(self, *args, type="cell"):
         """
         Add coordinates of the lattice sites to the unit cell.
 
@@ -236,15 +235,14 @@ class BathCell:
         """
 
         for tup in args:
-            if type == 'cell':
+            if type == "cell":
                 coord = np.asarray(tup[1])
 
-            elif type == 'angstrom':
+            elif type == "angstrom":
                 coord = self.to_cell(tup[1])
 
             else:
-                raise ValueError('Unknown coordinates type. Supported:'
-                                 '\n'.join(str(x) for x in self._coord_types))
+                raise ValueError("Unknown coordinates type. Supported:" "\n".join(str(x) for x in self._coord_types))
 
             if tup[0] in self.atoms:
                 self.atoms[tup[0]].append(coord)
@@ -290,7 +288,7 @@ class BathCell:
 
         """
 
-        remove_digits = str.maketrans('', '', digits)
+        remove_digits = str.maketrans("", "", digits)
 
         for tup in args:
             try:
@@ -379,7 +377,7 @@ class BathCell:
         cnumber = int(size * np.linalg.norm(axb) / (axb @ self.cell[:, 2]) + 1)
         # print(anumber, bnumber, cnumber)
 
-        dt = np.dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])
+        dt = np.dtype([("N", np.str_, 16), ("xyz", np.float64, (3,))])
         atoms = []
 
         for a in isotopes:
@@ -389,10 +387,7 @@ class BathCell:
             sites_xyz = np.asarray(self.atoms[a]) @ self.cell.T
             # print(sites_xyz)
 
-            maxind = np.array([anumber,
-                               bnumber,
-                               cnumber,
-                               nsites], dtype=np.int32)
+            maxind = np.array([anumber, bnumber, cnumber, nsites], dtype=np.int32)
 
             natoms = np.prod(maxind, dtype=np.int32)
             # 0, 1,2, .. natoms
@@ -402,9 +397,7 @@ class BathCell:
             for i in isotopes[a]:
                 conc = isotopes[a][i]
                 nisotopes = int(round(natoms * conc))
-                seedsites = rgen.choice(atom_seedsites[~mask],
-                                        nisotopes, replace=False,
-                                        shuffle=False)
+                seedsites = rgen.choice(atom_seedsites[~mask], nisotopes, replace=False, shuffle=False)
 
                 mask += np.isin(atom_seedsites, seedsites)
                 bcn = bnumber * cnumber * nsites
@@ -422,15 +415,13 @@ class BathCell:
                 # indexes of the sites
                 nindexes = ((seedsites % bcn) % cn) % nsites
 
-                indexes = np.column_stack((aindexes,
-                                           bindexes,
-                                           cindexes))
+                indexes = np.column_stack((aindexes, bindexes, cindexes))
 
-                uc_positions = np.einsum('jk,ik->ij', self.cell, indexes)
+                uc_positions = np.einsum("jk,ik->ij", self.cell, indexes)
 
                 subatoms = np.zeros(indexes.shape[0], dtype=dt)
-                subatoms['N'] = i
-                subatoms['xyz'] = uc_positions + sites_xyz[nindexes]
+                subatoms["N"] = i
+                subatoms["xyz"] = uc_positions + sites_xyz[nindexes]
 
                 atoms.append(subatoms)
 
@@ -457,9 +448,9 @@ class BathCell:
             return self.cell @ coord
 
         elif len(coord.shape) == 2:
-            return np.einsum('jk,ik->ij', self.cell, coord)
+            return np.einsum("jk,ik->ij", self.cell, coord)
         else:
-            raise ValueError('Improper coordinates format')
+            raise ValueError("Improper coordinates format")
 
     def to_cell(self, coord):
         """
@@ -478,9 +469,9 @@ class BathCell:
             return np.linalg.inv(self.cell) @ coord
 
         elif len(coord.shape) == 2:
-            return np.einsum('jk,ik->ij', np.linalg.inv(self.cell), coord)
+            return np.einsum("jk,ik->ij", np.linalg.inv(self.cell), coord)
         else:
-            raise ValueError('Improper coordinates format')
+            raise ValueError("Improper coordinates format")
 
     @classmethod
     def from_ase(cls, atoms_object):
@@ -519,10 +510,10 @@ class BathCell:
             na += 1
             m += f"{len(self.atoms[k])} positions for {k}"
             try:
-                im = ' with'
+                im = " with"
                 for ik in self.isotopes[k]:
                     im += f" {ik}: {self.isotopes[k][ik]}"
-                im += '.\n'
+                im += ".\n"
             except KeyError:
                 im = ".\n"
             m += im
@@ -535,12 +526,10 @@ class BathCell:
         return m
 
 
-_remove_digits = str.maketrans('', '', '+-^1234567890')
+_remove_digits = str.maketrans("", "", "+-^1234567890")
 
 
-def random_bath(names, size, number=1000, density=None, types=None,
-                density_units='cm-3', center=None,
-                seed=None):
+def random_bath(names, size, number=1000, density=None, types=None, density_units="cm-3", center=None, seed=None):
     r"""
     Generate random bath containing spins with names provided with argument ``name`` in the box of size ``size``.
     By default generates coordinates in range (-size/2; +size/2) but this behavior can be changed by providing
@@ -596,29 +585,28 @@ def random_bath(names, size, number=1000, density=None, types=None,
         BathArray with shape (np.prod(number),): Array of the bath spins with random positions.
     """
     size = np.asarray(size)
-    unit_conversion = {'a': 1, 'cm': 1e-8, 'm': 1e-10}
+    unit_conversion = {"a": 1, "cm": 1e-8, "m": 1e-10}
     name = np.asarray(names)
 
     if size.size == 1:
         size = np.array([size, size, size])
 
     elif size.size > 3:
-        raise RuntimeError('Wrong size format')
+        raise RuntimeError("Wrong size format")
 
     if center is None:
         center = size / 2
 
     if density is not None:
         du = density_units.lower().translate(_remove_digits)
-        power = re.findall(r'\d+', density_units.lower())
+        power = re.findall(r"\d+", density_units.lower())
 
         sc = np.count_nonzero(size != 0)
 
         if power:
             powa = int(power[0])
             if sc != powa:
-                warnings.warn(f'size dimensions {sc} do not agree with density units {density_units}',
-                              stacklevel=2)
+                warnings.warn(f"size dimensions {sc} do not agree with density units {density_units}", stacklevel=2)
         else:
             powa = sc
 
@@ -635,7 +623,7 @@ def random_bath(names, size, number=1000, density=None, types=None,
     if name.shape:
         counter = 0
         for n, no in zip(name, number):
-            spins.N[counter:counter + no] = n
+            spins.N[counter : counter + no] = n
             counter += no
 
     else:
@@ -699,9 +687,8 @@ def defect(cell, atoms, add=None, remove=None):
 
         position = cell @ position_cc
 
-        offsets = np.linalg.norm((atoms['xyz'] - position), axis=1)
-        where = np.logical_and(np.core.defchararray.find(atoms['N'], name) != -1,
-                               offsets <= err_range)
+        offsets = np.linalg.norm((atoms["xyz"] - position), axis=1)
+        where = np.logical_and(np.core.defchararray.find(atoms["N"], name) != -1, offsets <= err_range)
 
     elif remove is not None:
         where = np.zeros(defective_atoms.shape, dtype=bool)
@@ -713,10 +700,9 @@ def defect(cell, atoms, add=None, remove=None):
             position = cell @ position_cc
             # print(name, position)
             # print(np.core.defchararray.find(bath['N'], name) != -1)
-            offsets = np.linalg.norm((atoms['xyz'] - position), axis=1)
+            offsets = np.linalg.norm((atoms["xyz"] - position), axis=1)
             # print(offsets <= err_range)
-            where += np.logical_and(np.core.defchararray.find(atoms['N'], name) != -1,
-                                    offsets <= err_range)
+            where += np.logical_and(np.core.defchararray.find(atoms["N"], name) != -1, offsets <= err_range)
     if np.count_nonzero(where):
         # print('I see {} removals'.format(np.count_nonzero(where)))
         # print('Removing: \n', bath[where])

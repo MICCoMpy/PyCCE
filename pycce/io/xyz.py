@@ -5,7 +5,6 @@ from pycce.bath.array import BathArray
 
 from .base import set_isotopes
 
-
 # hbar mu0 /4pi I have no idea about units, from mengs code
 # UPDATE: derived, it checks out
 # HBAR = 1.054571729
@@ -57,7 +56,7 @@ def read_xyz(xyz, skiprows: int = 2, spin_types=None, isotopes=None, imap=None):
     elif isinstance(xyz, np.ndarray):
         dataset = xyz
     else:
-        dt_read = np.dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])
+        dt_read = np.dtype([("N", np.str_, 16), ("xyz", np.float64, (3,))])
         dataset = np.loadtxt(xyz, dtype=dt_read, skiprows=skiprows)
 
     with warnings.catch_warnings(record=True) as w:

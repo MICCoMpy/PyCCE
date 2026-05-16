@@ -5,7 +5,7 @@ import numpy as np
 from pycce.bath.array import common_isotopes, common_concentrations
 from pycce.constants import BOHR_TO_ANGSTROM
 
-coord_types = ['crystal', 'bohr', 'angstrom', 'alat']
+coord_types = ["crystal", "bohr", "angstrom", "alat"]
 
 
 class DFTCoordinates:
@@ -63,8 +63,8 @@ class DFTCoordinates:
 
         obj.cell = change_to_angstrom(self.cell.T, self.cell_units, alat=self.alat).T
         obj.coordinates = change_to_angstrom(self.coordinates, self.coordinates_units, alat=obj.alat, cell=obj.cell)
-        obj.cell_units = 'angstrom'
-        obj.coordinates_units = 'angstrom'
+        obj.cell_units = "angstrom"
+        obj.coordinates_units = "angstrom"
         return obj
 
     def get_angstrom(self, coordinate, units):
@@ -112,15 +112,15 @@ def change_to_angstrom(coordinates, units, alat=None, cell=None):
     """
     coordinates = np.asarray(coordinates)
 
-    if units == 'angstrom':
+    if units == "angstrom":
         coordinates = coordinates
-    if units == 'bohr':
+    if units == "bohr":
         coordinates = coordinates * BOHR_TO_ANGSTROM
-    if units == 'alat':
+    if units == "alat":
         coordinates = coordinates * alat
-    if units == 'crystal':
+    if units == "crystal":
         if len(coordinates.shape) > 1:
-            coordinates = np.einsum('jk,ik->ij', cell, coordinates)
+            coordinates = np.einsum("jk,ik->ij", cell, coordinates)
         else:
             coordinates = cell @ coordinates
 
@@ -144,7 +144,7 @@ def fortran_value(value):
     if value in bools:
         value = bools[value]
 
-    elif value.strip('+-').isdigit():
+    elif value.strip("+-").isdigit():
         value = int(value)
 
     elif value[0] in str_separators:
@@ -152,9 +152,9 @@ def fortran_value(value):
 
     else:
         try:
-            value = float(value.replace('d', 'e'))
+            value = float(value.replace("d", "e"))
         except ValueError:
-            raise ValueError(f'{value} is incorrect')
+            raise ValueError(f"{value} is incorrect")
 
     return value
 
@@ -202,7 +202,7 @@ def find_first_index(word, lines, start=0, case_sensitive=False):
     try:
         ind = next(yield_index(word, lines, start=start, case_sensitive=case_sensitive))
     except StopIteration:
-        raise KeyError(f'Could not find {word}')
+        raise KeyError(f"Could not find {word}")
     return ind
 
 
@@ -250,5 +250,5 @@ def set_isotopes(array, isotopes=None, inplace=True, spin_types=None):
             array.types[which]
 
         except KeyError:
-            warnings.warn(f'Unknown element {n}. Skipping')
+            warnings.warn(f"Unknown element {n}. Skipping")
     return array

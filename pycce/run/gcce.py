@@ -220,7 +220,7 @@ class gCCE(RunObject):
             if self.store_states:
                 self.cluster_evolved_states = result
             # |dm><dm|
-            result = np.einsum('ki,kj->kij', result, result.conj())
+            result = np.einsum("ki,kj->kij", result, result.conj())
 
         initial_shape = result.shape
         result.shape = (initial_shape[0], *dimensions, *dimensions)
@@ -303,11 +303,9 @@ class gCCE(RunObject):
         for delay, rotation in zip(self.delays, self.rotations):
             times += delay
 
-            eigexp = np.exp(-1j * np.outer(delay, evalues),
-                            dtype=np.complex128)
+            eigexp = np.exp(-1j * np.outer(delay, evalues), dtype=np.complex128)
 
-            u = np.matmul(np.einsum('ij,kj->kij', evec, eigexp, dtype=np.complex128),
-                          evec.conj().T)
+            u = np.matmul(np.einsum("ij,kj->kij", evec, eigexp, dtype=np.complex128), evec.conj().T)
 
             full_u = np.matmul(u, full_u)
 
@@ -322,8 +320,10 @@ class gCCE(RunObject):
             full_u = np.matmul(u, full_u)
 
         elif not which.all():
-            raise ValueError(f"Pulse sequence time steps add up to larger than total times. Delays at"
-                             f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time.")
+            raise ValueError(
+                f"Pulse sequence time steps add up to larger than total times. Delays at"
+                f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time."
+            )
 
         return full_u
 
@@ -355,10 +355,13 @@ class gCCE(RunObject):
             full_u = np.matmul(u, full_u)
 
         elif not which.all():
-            raise ValueError(f"Pulse sequence time steps add up to larger than total times. Delays at"
-                             f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time.")
+            raise ValueError(
+                f"Pulse sequence time steps add up to larger than total times. Delays at"
+                f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time."
+            )
 
         return full_u
+
 
 # def propagator(timespace, hamiltonian,
 #                pulses=None, as_delay=False):

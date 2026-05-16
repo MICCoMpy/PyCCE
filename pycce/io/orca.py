@@ -8,8 +8,7 @@ from pycce.constants import MHZ_TO_KHZ, EFG_CONVERSION
 from .base import DFTCoordinates, find_first_index, yield_index, set_isotopes
 
 
-def read_orca(fname, isotopes=None, types=None, center=None,
-              find_isotopes=True, rotation_matrix=None, rm_style='col'):
+def read_orca(fname, isotopes=None, types=None, center=None, find_isotopes=True, rotation_matrix=None, rm_style="col"):
     r"""
     Function to read ORCA output containing the hyperfines couplings and EFG tensors.
 
@@ -44,22 +43,22 @@ def read_orca(fname, isotopes=None, types=None, center=None,
     with warnings.catch_warnings(record=True):
         atoms = BathArray(array=output.coordinates, names=output.names, types=types)
 
-    start = find_first_index('ELECTRIC AND MAGNETIC HYPERFINE STRUCTURE', lines)
+    start = find_first_index("ELECTRIC AND MAGNETIC HYPERFINE STRUCTURE", lines)
 
     efgs = []
     hyperfines = []
     a_indexes = []
     q_indexes = []
-    for ind in yield_index('Nucleus', lines, start=start, case_sensitive=True):
+    for ind in yield_index("Nucleus", lines, start=start, case_sensitive=True):
         sline = lines[ind].split()
-        atom_index = int(re.sub(r'\D', '', sline[1]))
+        atom_index = int(re.sub(r"\D", "", sline[1]))
         atom_name = re.sub(r"\d+", "", sline[1])
 
         # assert atoms[atom_index]['N'] == atom_name, (f"Name mismatch at {atom_index}{atom_name}"
         #                                              f" {atoms[atom_index]['N']} expected")
 
         try:
-            n = find_first_index('Raw HFC matrix', lines, start=ind) + 2
+            n = find_first_index("Raw HFC matrix", lines, start=ind) + 2
             tensor = []
             for _ in range(3):
                 line = lines[n]
@@ -71,7 +70,7 @@ def read_orca(fname, isotopes=None, types=None, center=None,
             pass
 
         try:
-            n = find_first_index('Raw EFG matrix', lines, start=ind) + 1
+            n = find_first_index("Raw EFG matrix", lines, start=ind) + 1
             tensor = []
             for _ in range(3):
                 line = lines[n]
@@ -126,7 +125,7 @@ class ORCACoordinates(DFTCoordinates):
     def __init__(self, orca_output):
         super().__init__()
         self.cell = np.eye(3)
-        self.cell_units = 'angstrom'
+        self.cell_units = "angstrom"
         self.read_output(orca_output)
 
     def read_output(self, orca_output):
@@ -142,7 +141,7 @@ class ORCACoordinates(DFTCoordinates):
         except TypeError:
             lines = orca_output
 
-        index = find_first_index('CARTESIAN COORDINATES (ANGSTROEM)', lines) + 1
+        index = find_first_index("CARTESIAN COORDINATES (ANGSTROEM)", lines) + 1
         names = []
         coordinates = []
 
@@ -159,6 +158,6 @@ class ORCACoordinates(DFTCoordinates):
             except (IndexError, ValueError):
                 break
 
-        self.coordinates_units = 'angstrom'
+        self.coordinates_units = "angstrom"
         self.coordinates = np.asarray(coordinates)
-        self.names = np.array(names, dtype='<U16')
+        self.names = np.array(names, dtype="<U16")

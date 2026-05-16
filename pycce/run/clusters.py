@@ -1,6 +1,7 @@
 """
 This module contains information about the way the cluster expansion is implemented in the package.
 """
+
 import functools
 import operator
 import warnings
@@ -11,23 +12,20 @@ from pycce.sm import _smc
 try:
     from mpi4py import MPI
 
-    mpiop = {'imul': MPI.PROD,
-             'mul': MPI.PROD,
-             'prod': MPI.PROD,
-             'iadd': MPI.SUM,
-             'add': MPI.SUM,
-             'sum': MPI.SUM
-             }
+    mpiop = {"imul": MPI.PROD, "mul": MPI.PROD, "prod": MPI.PROD, "iadd": MPI.SUM, "add": MPI.SUM, "sum": MPI.SUM}
 
 except ImportError:
     mpiop = None
 
 
-def cluster_expansion_decorator(_func=None, *,
-                                result_operator=operator.imul,
-                                contribution_operator=operator.ipow,
-                                removal_operator=operator.itruediv,
-                                addition_operator=np.prod):
+def cluster_expansion_decorator(
+    _func=None,
+    *,
+    result_operator=operator.imul,
+    contribution_operator=operator.ipow,
+    removal_operator=operator.itruediv,
+    addition_operator=np.prod,
+):
     """
     Decorator for creating cluster correlation expansion of the method of ``RunObject`` class.
 
@@ -57,16 +55,19 @@ def cluster_expansion_decorator(_func=None, *,
         def cluster_expansion(self, *arg, **kwarg):
 
             if self.direct:
-                return direct_approach(function, self, *arg,
-                                       result_operator=result_operator,
-                                       removal_operator=removal_operator,
-                                       addition_operator=addition_operator,
-                                       **kwarg)
+                return direct_approach(
+                    function,
+                    self,
+                    *arg,
+                    result_operator=result_operator,
+                    removal_operator=removal_operator,
+                    addition_operator=addition_operator,
+                    **kwarg,
+                )
             else:
-                return optimized_approach(function, self, *arg,
-                                          result_operator=result_operator,
-                                          contribution_operator=contribution_operator,
-                                          **kwarg)
+                return optimized_approach(
+                    function, self, *arg, result_operator=result_operator, contribution_operator=contribution_operator, **kwarg
+                )
 
         return cluster_expansion
 
@@ -76,10 +77,7 @@ def cluster_expansion_decorator(_func=None, *,
         return inner_cluster_expansion_decorator(_func)
 
 
-def optimized_approach(function, self, *arg,
-                       result_operator=operator.imul,
-                       contribution_operator=operator.ipow,
-                       **kwarg):
+def optimized_approach(function, self, *arg, result_operator=operator.imul, contribution_operator=operator.ipow, **kwarg):
     """
     Optimized approach to compute cluster correlation expansion.
 
@@ -105,7 +103,7 @@ def optimized_approach(function, self, *arg,
         try:
             from mpi4py import MPI
         except ImportError:
-            warnings.warn('Parallel failed: mpi4py is not found. Running serial.')
+            warnings.warn("Parallel failed: mpi4py is not found. Running serial.")
             self.parallel = False
 
     if self.parallel:
@@ -158,8 +156,7 @@ def optimized_approach(function, self, *arg,
                 # containv is 1D bool array with values of i-element True
                 # if i-subcluster of
                 # subclusters[higherorder] contains v
-                containv = np.count_nonzero(
-                    np.isin(subclusters[higherorder], v), axis=1) == v.size
+                containv = np.count_nonzero(np.isin(subclusters[higherorder], v), axis=1) == v.size
 
                 # Power of cluster v is decreased by sum of powers of all the higher orders,
                 # As all of them have to be divided by v
@@ -204,11 +201,9 @@ def optimized_approach(function, self, *arg,
     return root_result
 
 
-def direct_approach(function, self, *arg,
-                    result_operator=operator.imul,
-                    removal_operator=operator.itruediv,
-                    addition_operator=np.prod,
-                    **kwarg):
+def direct_approach(
+    function, self, *arg, result_operator=operator.imul, removal_operator=operator.itruediv, addition_operator=np.prod, **kwarg
+):
     """
     Direct approach to compute cluster correlation expansion.
 
@@ -235,7 +230,7 @@ def direct_approach(function, self, *arg,
         try:
             from mpi4py import MPI
         except ImportError:
-            warnings.warn('Parallel failed: mpi4py is not found. Running serial')
+            warnings.warn("Parallel failed: mpi4py is not found. Running serial")
             self.parallel = False
             MPI = None
 
@@ -298,7 +293,7 @@ def direct_approach(function, self, *arg,
             result_shape = comm.bcast(result_shape, root=0)
 
             chunk = np.zeros((nclusters, *result_shape), dtype=np.complex128)
-            chunk[start:start + block] = current_order.reshape(block, *result_shape)
+            chunk[start : start + block] = current_order.reshape(block, *result_shape)
 
             currrent_buffer = np.zeros((nclusters, *result_shape), dtype=np.complex128)
             comm.Allreduce(chunk, currrent_buffer, MPI.SUM)
@@ -313,9 +308,7 @@ def direct_approach(function, self, *arg,
     return result
 
 
-def interlaced_decorator(_func=None, *,
-                         result_operator=operator.imul,
-                         contribution_operator=operator.ipow):
+def interlaced_decorator(_func=None, *, result_operator=operator.imul, contribution_operator=operator.ipow):
     """
     Decorator for creating interlaced cluster correlation expansion of the method of ``RunObject`` class.
 
@@ -345,7 +338,7 @@ def interlaced_decorator(_func=None, *,
                 try:
                     from mpi4py import MPI
                 except ImportError:
-                    warnings.warn('Parallel failed: mpi4py is not found. Running serial.')
+                    warnings.warn("Parallel failed: mpi4py is not found. Running serial.")
                     self.parallel = False
 
             if self.parallel:
@@ -388,8 +381,7 @@ def interlaced_decorator(_func=None, *,
                     supercluster = []
 
                     for higherorder in revorders[:visited]:
-                        containv = np.count_nonzero(
-                            np.isin(subclusters[higherorder], v), axis=1) == v.size
+                        containv = np.count_nonzero(np.isin(subclusters[higherorder], v), axis=1) == v.size
 
                         supercluster.append(subclusters[higherorder][containv].ravel())
                         current_power[index] -= np.sum(power[higherorder][containv], dtype=np.int32)

@@ -1,12 +1,13 @@
 import numpy as np
-from numba import jit, types #  generated_jit,
+from numba import jit, types  #  generated_jit,
 
 from pycce.constants import HBAR_MU0_O4PI, PI2, ELECTRON_GYRO
 from pycce.utilities import tensor_vdot, vec_tensor_vec
 from numba.extending import overload
 
+
 @jit(cache=True, nopython=True)
-def expanded_single(ivec, gyro, mfield, self_tensor, detuning=.0):
+def expanded_single(ivec, gyro, mfield, self_tensor, detuning=0.0):
     """
     Function to compute the single bath spin term.
 
@@ -39,18 +40,22 @@ def expanded_single(ivec, gyro, mfield, self_tensor, detuning=.0):
 def _innerzeeman(gyro):
 
     if isinstance(gyro, float):
+
         def z(ivec, gyro, mfield):
             return -gyro / PI2 * (mfield[0] * ivec[0] + mfield[1] * ivec[1] + mfield[2] * ivec[2])
 
     # else assume tensor
     else:
+
         def z(ivec, gyro, mfield):
             gsvec = tensor_vdot(gyro / PI2, ivec)
             return mfield[0] * gsvec[0] + mfield[1] * gsvec[1] + mfield[2] * gsvec[2]
 
     return z
 
+
 overload(_innerzeeman)(lambda gyro: _innerzeeman)
+
 
 @jit(cache=True, nopython=True)
 def zeeman(ivec, gyro, mfield):
@@ -67,6 +72,7 @@ def zeeman(ivec, gyro, mfield):
     """
     return _innerzeeman(gyro)(ivec, gyro, mfield)
 
+
 def _inner_dd_tensor(g1, g2):
     """
     Generate dipole-dipole interaction tensor.
@@ -82,29 +88,38 @@ def _inner_dd_tensor(g1, g2):
 
     """
     if isinstance(g2, float) and isinstance(g1, float):
+
         def func(coord_1, coord_2, g1, g2):
             p_tensor = gen_pos_tensor(coord_1, coord_2) * HBAR_MU0_O4PI / PI2
             p_tensor *= g2 * g1
             return p_tensor
 
     elif isinstance(g1, float):
+
         def func(coord_1, coord_2, g1, g2):
             p_tensor = gen_pos_tensor(coord_1, coord_2) * HBAR_MU0_O4PI / PI2
             p_tensor = g1 * p_tensor @ g2
             return p_tensor
+
     elif isinstance(g2, float):
+
         def func(coord_1, coord_2, g1, g2):
             p_tensor = gen_pos_tensor(coord_1, coord_2) * HBAR_MU0_O4PI / PI2
             p_tensor = g1 @ p_tensor * g2
             return p_tensor
+
     else:
+
         def func(coord_1, coord_2, g1, g2):
             p_tensor = gen_pos_tensor(coord_1, coord_2) * HBAR_MU0_O4PI / PI2
             p_tensor = g1 @ p_tensor @ g2
             return p_tensor
+
     return func
 
+
 overload(_inner_dd_tensor)(lambda g1, g2: _inner_dd_tensor)
+
 
 @jit(cache=True, nopython=True)
 def dd_tensor(coord_1, coord_2, g1, g2):
@@ -121,7 +136,8 @@ def dd_tensor(coord_1, coord_2, g1, g2):
         ndarray with shape (3, 3): Interaction tensor.
 
     """
-    return _inner_dd_tensor(g1,g2)(coord_1, coord_2, g1, g2)
+    return _inner_dd_tensor(g1, g2)(coord_1, coord_2, g1, g2)
+
 
 @jit(cache=True, nopython=True)
 def dipole_dipole(coord_1, coord_2, g1, g2, ivec_1, ivec_2):
@@ -160,7 +176,7 @@ def gen_pos_tensor(coord_1, coord_2):
     pos = coord_1 - coord_2
     r = np.linalg.norm(pos)
 
-    return -(3 * np.outer(pos, pos) - np.eye(3, dtype=np.complex128) * r ** 2) / (r ** 5)
+    return -(3 * np.outer(pos, pos) - np.eye(3, dtype=np.complex128) * r**2) / (r**5)
 
 
 def bath_interactions(nspin, ivectors):
@@ -187,7 +203,7 @@ def bath_interactions(nspin, ivectors):
 
                 ivec_1 = ivectors[i]
                 ivec_2 = ivectors[j]
-                dd += dipole_dipole(n1['xyz'], n2['xyz'], n1.gyro, n2.gyro, ivec_1, ivec_2)
+                dd += dipole_dipole(n1["xyz"], n2["xyz"], n1.gyro, n2.gyro, ivec_1, ivec_2)
     else:
         for i in range(nnuclei):
             for j in range(i + 1, nnuclei):
@@ -201,7 +217,7 @@ def bath_interactions(nspin, ivectors):
                     tensor = imap[i, j]
                     dd += vec_tensor_vec(ivec_1, tensor, ivec_2)
                 except KeyError:
-                    dd += dipole_dipole(n1['xyz'], n2['xyz'], n1.gyro, n2.gyro, ivec_1, ivec_2)
+                    dd += dipole_dipole(n1["xyz"], n2["xyz"], n1.gyro, n2.gyro, ivec_1, ivec_2)
     return dd
 
 
@@ -378,8 +394,7 @@ def overhauser_central(svec, others_hyperfines, others_state):
 
 
 @jit(cache=True, nopython=True)
-def overhauser_bath(ivec, position, gyro,
-                    other_gyros, others_position, others_state):
+def overhauser_bath(ivec, position, gyro, other_gyros, others_position, others_state):
     """
     Compute Overhauser field term on the bath spin in the cluster from all other spins, not included in the cluster.
 
@@ -402,8 +417,8 @@ def overhauser_bath(ivec, position, gyro,
     pre = np.asarray(gyro * other_gyros * HBAR_MU0_O4PI / PI2)
 
     pos = position - others_position
-    r = np.sqrt((pos ** 2).sum(axis=-1))
-    zfield = (pre / r ** 5 * (r ** 2 - 3 * pos[..., 2] ** 2) * others_state).sum()
+    r = np.sqrt((pos**2).sum(axis=-1))
+    zfield = (pre / r**5 * (r**2 - 3 * pos[..., 2] ** 2) * others_state).sum()
 
     return zfield * ivec[2]  # + xfield * ivec[0] + yfield * ivec[1]
 
@@ -480,8 +495,7 @@ def projected_addition(vectors, bath, center, state):
 
             projections_state_all = c.get_projections_all(state)
 
-            addition += bath_mediated(hf, vectors, energy,
-                                      center.energies, projections_state_all)
+            addition += bath_mediated(hf, vectors, energy, center.energies, projections_state_all)
 
     return addition
 
@@ -503,7 +517,7 @@ def center_external_addition(vectors, cluster, outer_spin, outer_state):
     addition = 0
     ncenters = vectors.shape[0] - cluster.size
 
-    for i, v in enumerate(vectors[cluster.size:]):
+    for i, v in enumerate(vectors[cluster.size :]):
         if ncenters == 1:
             hf = outer_spin.A
         else:
@@ -530,8 +544,7 @@ def bath_external_point_dipole(vectors, cluster, outer_spin, outer_state):
     """
     addition = 0
     for ivec, n in zip(vectors, cluster):
-        addition += overhauser_bath(ivec, n.xyz, n.gyro, outer_spin.gyro,
-                                    outer_spin.xyz, outer_state)
+        addition += overhauser_bath(ivec, n.xyz, n.gyro, outer_spin.gyro, outer_spin.xyz, outer_state)
     return addition
 
 
@@ -571,7 +584,7 @@ def external_spins_field(vectors, indexes, bath, projected_state):
         outer_mask[:] = True
         outer_mask[indexes] = False
 
-        where_index = (imap_indexes == ind)
+        where_index = imap_indexes == ind
 
         if where_index.any():
             remove_j[j] = False
@@ -588,7 +601,6 @@ def external_spins_field(vectors, indexes, bath, projected_state):
             outer_spin = bath[outer_mask]
             outer_state = projected_state[outer_mask]
             n = bath[ind]
-            addition += overhauser_bath(ivec, n.xyz, n.gyro, outer_spin.gyro,
-                                        outer_spin.xyz, outer_state)
+            addition += overhauser_bath(ivec, n.xyz, n.gyro, outer_spin.gyro, outer_spin.xyz, outer_state)
 
     return addition

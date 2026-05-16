@@ -12,7 +12,7 @@ from pycce.utilities import gen_state_list, vector_from_s, rotate_coordinates, r
 
 HANDLED_FUNCTIONS = {}
 
-_set_str_kinds = {'U', 'S'}
+_set_str_kinds = {"U", "S"}
 
 _stevens_str_doc = r"""
             dict: Dictionary with additional spin Hamiltonian parameters.
@@ -146,13 +146,25 @@ class BathArray(np.ndarray):
 
     """
 
-    _dtype_names = ('N', 'xyz', 'A', 'Q')
+    _dtype_names = ("N", "xyz", "A", "Q")
 
-    def __new__(subtype, shape=None, array=None,
-                names=None, hyperfines=None, quadrupoles=None,
-                types=None, imap=None,
-                ca=None, sn=None, hf=None, q=None, efg=None, state=None,
-                center=1):
+    def __new__(
+        subtype,
+        shape=None,
+        array=None,
+        names=None,
+        hyperfines=None,
+        quadrupoles=None,
+        types=None,
+        imap=None,
+        ca=None,
+        sn=None,
+        hf=None,
+        q=None,
+        efg=None,
+        state=None,
+        center=1,
+    ):
         # Create the ndarray instance of our type, given the usual
         # ndarray input arguments. This will call the standard
         # ndarray constructor, but return an object of our type.
@@ -162,13 +174,16 @@ class BathArray(np.ndarray):
         else:
             atupl = (center, 3, 3)
 
-        _dtype_bath = np.dtype([('N', np.str_, 16),
-                                ('xyz', np.float64, (3,)),
-                                ('A', np.float64, atupl),
-                                ('Q', np.float64, (3, 3)),
-                                # ('state', object),
-                                # ('proj', np.float64),
-                                ])
+        _dtype_bath = np.dtype(
+            [
+                ("N", np.str_, 16),
+                ("xyz", np.float64, (3,)),
+                ("A", np.float64, atupl),
+                ("Q", np.float64, (3, 3)),
+                # ('state', object),
+                # ('proj', np.float64),
+            ]
+        )
 
         if array is None and ca is not None:
             array = ca
@@ -190,14 +205,12 @@ class BathArray(np.ndarray):
             for a in (array, hyperfines, quadrupoles):
                 if a is not None:
                     try:
-                        obj = super(BathArray, subtype).__new__(subtype, (np.asarray(a).shape[0],),
-                                                                dtype=_dtype_bath)
+                        obj = super(BathArray, subtype).__new__(subtype, (np.asarray(a).shape[0],), dtype=_dtype_bath)
                     except IndexError:  # Empty tuple
-                        obj = super(BathArray, subtype).__new__(subtype, np.asarray(a).shape,
-                                                                dtype=_dtype_bath)
+                        obj = super(BathArray, subtype).__new__(subtype, np.asarray(a).shape, dtype=_dtype_bath)
                     break
             else:
-                raise ValueError('No shape provided')
+                raise ValueError("No shape provided")
 
         obj.types = SpinDict()
         obj.imap = imap
@@ -221,14 +234,14 @@ class BathArray(np.ndarray):
                 for n in array.dtype.names:
                     obj[n] = array[n]
             else:
-                obj['xyz'] = array.reshape(-1, 3)
+                obj["xyz"] = array.reshape(-1, 3)
 
         if names is not None:
-            obj['N'] = np.asarray(names).reshape(-1)
+            obj["N"] = np.asarray(names).reshape(-1)
         if hyperfines is not None:
-            obj['A'] = np.asarray(hyperfines).reshape(-1, *atupl)
+            obj["A"] = np.asarray(hyperfines).reshape(-1, *atupl)
         if quadrupoles is not None:
-            obj['Q'] = np.asarray(quadrupoles).reshape(-1, 3, 3)
+            obj["Q"] = np.asarray(quadrupoles).reshape(-1, 3, 3)
         elif efg is not None:
             obj.from_efg(efg)
 
@@ -247,7 +260,8 @@ class BathArray(np.ndarray):
         #    (we're in the middle of the BathArray.__new__
         #    constructor, and BathArray stuff will be set when we return to
         #    BathArray.__new__)
-        if obj is None: return
+        if obj is None:
+            return
         # From view casting - e.g arr.view(BathArray):
         #    obj is arr
         #    (type(obj) can be BathArray)
@@ -264,9 +278,9 @@ class BathArray(np.ndarray):
         #                   'This can lead to unexpected results.',
         #                   RuntimeWarning, stacklevel=2)
 
-        self.types = getattr(obj, 'types', None)
-        self.imap = getattr(obj, 'imap', None)
-        self._state = getattr(obj, '_state', None)
+        self.types = getattr(obj, "types", None)
+        self.imap = getattr(obj, "imap", None)
+        self._state = getattr(obj, "_state", None)
         # We do not need to return anything
 
     def __array_function__(self, func, types, args, kwargs):
@@ -292,16 +306,16 @@ class BathArray(np.ndarray):
         if self.imap is None:
             super().sort(axis=axis, kind=kind, order=order)
         else:
-            raise NotImplementedError('Inplace sort is implemented only when .imap is None')
+            raise NotImplementedError("Inplace sort is implemented only when .imap is None")
 
     @_add_args(_stevens_str_doc)
     @property
     def h(self):
-        return _get_sd_attribute(self, 'h')
+        return _get_sd_attribute(self, "h")
 
     @property
     def so(self):
-        return _get_sd_attribute(self, 'so')
+        return _get_sd_attribute(self, "so")
 
     @property
     def name(self):
@@ -312,22 +326,22 @@ class BathArray(np.ndarray):
             While the value of this attribute should be the same as the ``N`` field of the BathArray instance,
             ``.name`` *should not* be used for production as it creates a *new* array from ``types`` dictionary.
         """
-        return _get_sd_attribute(self, 'name')
+        return _get_sd_attribute(self, "name")
 
     @name.setter
     def name(self, initial_value):
-        _set_sd_attribute(self, 'name', initial_value)
+        _set_sd_attribute(self, "name", initial_value)
 
     @property
     def s(self):
         """
         ndarray: Array of the ``spin`` (spin value) attribute for each spin in the array from ``types`` dictionary.
         """
-        return _get_sd_attribute(self, 's')
+        return _get_sd_attribute(self, "s")
 
     @s.setter
     def s(self, initial_value):
-        _set_sd_attribute(self, 's', initial_value)
+        _set_sd_attribute(self, "s", initial_value)
 
     @property
     def dim(self):
@@ -335,7 +349,7 @@ class BathArray(np.ndarray):
         ndarray: Array of the ``dim`` (dimensions of the spin) attribute
             for each spin in the array from ``types`` dictionary.
         """
-        return _get_sd_attribute(self, 'dim')
+        return _get_sd_attribute(self, "dim")
 
     @property
     def gyro(self):
@@ -343,11 +357,11 @@ class BathArray(np.ndarray):
         ndarray: Array of the ``gyro`` (gyromagnetic ratio)
             attribute for each spin in the array from ``types`` dictionary.
         """
-        return _get_sd_attribute(self, 'gyro')
+        return _get_sd_attribute(self, "gyro")
 
     @gyro.setter
     def gyro(self, initial_value):
-        _set_sd_attribute(self, 'gyro', initial_value)
+        _set_sd_attribute(self, "gyro", initial_value)
 
     @property
     def q(self):
@@ -355,11 +369,11 @@ class BathArray(np.ndarray):
         ndarray: Array of the ``q`` (quadrupole moment)
             attribute for each spin in the array from ``types`` dictionary.
         """
-        return _get_sd_attribute(self, 'q')
+        return _get_sd_attribute(self, "q")
 
     @q.setter
     def q(self, initial_value):
-        _set_sd_attribute(self, 'q', initial_value)
+        _set_sd_attribute(self, "q", initial_value)
 
     @property
     def detuning(self):
@@ -367,88 +381,88 @@ class BathArray(np.ndarray):
         ndarray: Array of the ``detuning``
             attribute for each spin in the array from ``types`` dictionary.
         """
-        return _get_sd_attribute(self, 'detuning')
+        return _get_sd_attribute(self, "detuning")
 
     @detuning.setter
     def detuning(self, initial_value):
-        _set_sd_attribute(self, 'detuning', initial_value)
+        _set_sd_attribute(self, "detuning", initial_value)
 
     @property
     def x(self):
         """
         ndarray: Array of x coordinates for each spin in the array (``bath['xyz'][:, 0]``).
         """
-        return self['xyz'][..., 0]
+        return self["xyz"][..., 0]
 
     @x.setter
     def x(self, val):
-        self['xyz'][..., 0] = val
+        self["xyz"][..., 0] = val
 
     @property
     def y(self):
         """
         ndarray: Array of y coordinates for each spin in the array (``bath['xyz'][:, 1]``).
         """
-        return self['xyz'][..., 1]
+        return self["xyz"][..., 1]
 
     @y.setter
     def y(self, val):
-        self['xyz'][..., 1] = val
+        self["xyz"][..., 1] = val
 
     @property
     def z(self):
         """
         ndarray: Array of z coordinates for each spin in the array (``bath['xyz'][:, 2]``).
         """
-        return self['xyz'][..., 2]
+        return self["xyz"][..., 2]
 
     @z.setter
     def z(self, val):
-        self['xyz'][..., 2] = val
+        self["xyz"][..., 2] = val
 
     @property
     def N(self):
         """
         ndarray: Array of name for each spin in the array (``bath['N']``).
         """
-        return self['N']
+        return self["N"]
 
     @N.setter
     def N(self, val):
-        self['N'] = val
+        self["N"] = val
 
     @property
     def xyz(self):
         """
         ndarray: Array of coordinates for each spin in the array (``bath['xyz']``).
         """
-        return self['xyz']
+        return self["xyz"]
 
     @xyz.setter
     def xyz(self, val):
-        self['xyz'] = val
+        self["xyz"] = val
 
     @property
     def A(self):
         """
         ndarray: Array of hyperfine tensors for each spin in the array (``bath['A']``).
         """
-        return self['A']
+        return self["A"]
 
     @A.setter
     def A(self, val):
-        self['A'] = val
+        self["A"] = val
 
     @property
     def Q(self):
         """
         ndarray: Array of quadrupole tensors for each spin in the array (``bath['Q']``).
         """
-        return self['Q']
+        return self["Q"]
 
     @Q.setter
     def Q(self, val):
-        self['Q'] = val
+        self["Q"] = val
 
     @property
     def nc(self):
@@ -547,7 +561,7 @@ class BathArray(np.ndarray):
                 return value
 
             except ValueError:
-                return self[self['N'] == item]
+                return self[self["N"] == item]
 
         else:
 
@@ -586,8 +600,8 @@ class BathArray(np.ndarray):
 
         val = np.asarray(val)
 
-        if (val.dtype.names is not None) and ('N' in val.dtype.names):
-            val = val['N']
+        if (val.dtype.names is not None) and ("N" in val.dtype.names):
+            val = val["N"]
 
         if val.dtype.kind in _set_str_kinds:
             if not val.shape:
@@ -610,9 +624,9 @@ class BathArray(np.ndarray):
     def __eq__(self, other):
         try:
 
-            xyzs = (self['xyz'] == other['xyz']).all(axis=-1)
-            hfs = (self['A'] == other['A']).reshape(*self.shape, -1).all(axis=-1)
-            qds = (self['Q'] == other['Q']).reshape(*self.shape, -1).all(axis=-1)
+            xyzs = (self["xyz"] == other["xyz"]).all(axis=-1)
+            hfs = (self["A"] == other["A"]).reshape(*self.shape, -1).all(axis=-1)
+            qds = (self["Q"] == other["Q"]).reshape(*self.shape, -1).all(axis=-1)
 
             return xyzs & hfs & qds
 
@@ -659,7 +673,7 @@ class BathArray(np.ndarray):
         else:
             self.imap[i, j] = tensor
 
-    def add_single_jump(self, operator, rate=1, units='rad', square_root=False, which=None):
+    def add_single_jump(self, operator, rate=1, units="rad", square_root=False, which=None):
         """
         Add single-spin jump operator for the given type of spins to be used in the Lindbladian master equation CCE.
 
@@ -686,7 +700,7 @@ class BathArray(np.ndarray):
         """
         if not square_root:
             rate = np.sqrt(rate)
-        if 'rad' in units:
+        if "rad" in units:
             rate = rate / np.sqrt(PI2)
 
         if which is None:
@@ -703,8 +717,8 @@ class BathArray(np.ndarray):
             if self.size > 1:
                 dimensions = self.dim[0]
 
-            assert operator.shape == (dimensions, dimensions), f'Operator should have shape {dimensions, dimensions}'
-            superoperators['A'] = operator * rate
+            assert operator.shape == (dimensions, dimensions), f"Operator should have shape {dimensions, dimensions}"
+            superoperators["A"] = operator * rate
 
     def update(self, ext_bath, error_range=0.2, ignore_isotopes=True, inplace=True):
         """
@@ -732,7 +746,7 @@ class BathArray(np.ndarray):
         bath = update_bath(self, ext_bath, error_range, ignore_isotopes, inplace)
         return bath
 
-    def transform(self, center=None, cell=None, rotation_matrix=None, style='col', inplace=True):
+    def transform(self, center=None, cell=None, rotation_matrix=None, style="col", inplace=True):
         """
         Coordinate transformation of BathArray.
 
@@ -765,8 +779,7 @@ class BathArray(np.ndarray):
             BathArray: Transformed array with bath spins.
         """
 
-        bath = transform(self, center=center, cell=cell, rotation_matrix=rotation_matrix,
-                         style=style, inplace=inplace)
+        bath = transform(self, center=center, cell=cell, rotation_matrix=rotation_matrix, style=style, inplace=inplace)
         return bath
 
     def from_center(self, center, inplace=True, cube=None, which=0, **kwarg):
@@ -984,7 +997,7 @@ class BathArray(np.ndarray):
 
         return np.linalg.norm(self.xyz - position, axis=-1)
 
-    def savetxt(self, filename, fmt='%18.8f', strip_isotopes=False, **kwargs):
+    def savetxt(self, filename, fmt="%18.8f", strip_isotopes=False, **kwargs):
         r"""
         Save name of the isotopes and their coordinates to the txt file of xyz format.
 
@@ -994,24 +1007,32 @@ class BathArray(np.ndarray):
             strip_isotopes (bool): True if remove numbers from the name of bath spins. Default False.
             **kwargs: Additional keywords of the ``numpy.savetxt`` function.
         """
-        kwargs.setdefault('comments', '')
-        ar = repack_fields(self.view(np.ndarray)[['N', 'xyz']]).view(
-            np.dtype([('N', 'U16'), ('x', 'f8'), ('y', 'f8'), ('z', 'f8')]))
+        kwargs.setdefault("comments", "")
+        ar = repack_fields(self.view(np.ndarray)[["N", "xyz"]]).view(
+            np.dtype([("N", "U16"), ("x", "f8"), ("y", "f8"), ("z", "f8")])
+        )
 
         if strip_isotopes:
-            ar['N'] = np.core.defchararray.strip(ar['N'], '1234567890')
+            ar["N"] = np.core.defchararray.strip(ar["N"], "1234567890")
 
-        header = f'{ar.size}\n'
-        for n, c in zip(*np.unique(ar['N'], return_counts=True)):
-            header += f'{n}{c} '
+        header = f"{ar.size}\n"
+        for n, c in zip(*np.unique(ar["N"], return_counts=True)):
+            header += f"{n}{c} "
 
-        kwargs.setdefault('header', header)
-        np.savetxt(filename, ar, fmt=('%s', fmt, fmt, fmt), **kwargs)
+        kwargs.setdefault("header", header)
+        np.savetxt(filename, ar, fmt=("%s", fmt, fmt, fmt), **kwargs)
 
     def expand(self, ncenters):
 
-        array = BathArray(array=self.xyz, quadrupoles=self.Q, names=self.N, center=ncenters, imap=self.imap,
-                          types=self.types, state=self.state)
+        array = BathArray(
+            array=self.xyz,
+            quadrupoles=self.Q,
+            names=self.N,
+            center=ncenters,
+            imap=self.imap,
+            types=self.types,
+            state=self.state,
+        )
 
         hyperfine = self.A
         if hyperfine.any():
@@ -1027,7 +1048,7 @@ class BathArray(np.ndarray):
 
             else:
                 limit = ocs if ocs < ncenters else ncenters
-                array.A[..., :limit + 1, :, :] = hyperfine[..., :limit + 1, :, :]
+                array.A[..., : limit + 1, :, :] = hyperfine[..., : limit + 1, :, :]
 
         return array
 
@@ -1102,7 +1123,7 @@ def concatenate(arrays, axis=0, out=None):
         if x.imap:
             imap += x.imap.shift(offset, inplace=False)
 
-        state[offset:offset + x.size] = x.state
+        state[offset : offset + x.size] = x.state
         offset += x.size
 
     new_array.types = types
@@ -1117,6 +1138,7 @@ def concatenate(arrays, axis=0, out=None):
 # @implements(np.broadcast_to)
 # def broadcast_to(array, shape):
 #     ...  # implementation of broadcast_to for MyArray objects
+
 
 def check_gyro(gyro):
     """
@@ -1179,7 +1201,7 @@ def point_dipole(pos, gyro_array, gyro_center):
     identity = np.eye(3, dtype=np.float64)
 
     try:
-        posxpos = np.einsum('...i,...j->...ij', pos, pos)
+        posxpos = np.einsum("...i,...j->...ij", pos, pos)
     except ValueError:
         posxpos = np.outer(pos, pos)
 
@@ -1197,11 +1219,11 @@ def point_dipole(pos, gyro_array, gyro_center):
 
         else:
             pref = gyro_center * gyro_array
-        out = -(3 * posxpos - identity * r ** 2) / (r ** 5)
+        out = -(3 * posxpos - identity * r**2) / (r**5)
         out = out * pref.reshape(*pref.shape, 1, 1) * HBAR_MU0_O4PI / PI2
         return out
 
-    out = -(3 * posxpos - identity * r ** 2) / (r ** 5) * HBAR_MU0_O4PI / PI2
+    out = -(3 * posxpos - identity * r**2) / (r**5) * HBAR_MU0_O4PI / PI2
 
     if not check_array:
         out = np.matmul(out, gyro_array)
@@ -1236,8 +1258,8 @@ def same_bath_indexes(barray_1, barray_2, error_range=0.2, ignore_isotopes=True)
     dist_matrix = np.linalg.norm(barray_1.xyz[:, np.newaxis, :] - barray_2.xyz[np.newaxis, :, :], axis=-1)
 
     if ignore_isotopes:
-        tb_names = np.core.defchararray.strip(barray_1.N, '1234567890')
-        ab_names = np.core.defchararray.strip(barray_2.N, '1234567890')
+        tb_names = np.core.defchararray.strip(barray_1.N, "1234567890")
+        ab_names = np.core.defchararray.strip(barray_2.N, "1234567890")
 
         same_names = tb_names[:, np.newaxis] == ab_names[np.newaxis, :]
 
@@ -1281,12 +1303,12 @@ def update_bath(total_bath, added_bath, error_range=0.2, ignore_isotopes=True, i
     indexes, ext_indexes = same_bath_indexes(total_bath, added_bath, error_range, ignore_isotopes)
     neq = total_bath.nc != added_bath.nc
     if neq and added_bath.nc != 1:
-        raise ValueError('Arrays correspond to different number of central spins.')
+        raise ValueError("Arrays correspond to different number of central spins.")
 
     for n in added_bath.dtype.names:
-        if ignore_isotopes and n == 'N':
+        if ignore_isotopes and n == "N":
             continue
-        if n == 'A' and neq:
+        if n == "A" and neq:
             total_bath[n][indexes, 0] = added_bath[n][ext_indexes]
         else:
             total_bath[n][indexes] = added_bath[n][ext_indexes]
@@ -1294,7 +1316,7 @@ def update_bath(total_bath, added_bath, error_range=0.2, ignore_isotopes=True, i
     return total_bath
 
 
-def transform(atoms, center=None, cell=None, rotation_matrix=None, style='col', inplace=True):
+def transform(atoms, center=None, cell=None, rotation_matrix=None, style="col", inplace=True):
     """
     Coordinate transformation of BathArray.
 
@@ -1328,9 +1350,9 @@ def transform(atoms, center=None, cell=None, rotation_matrix=None, style='col', 
         BathArray: Transformed array with bath spins.
     """
 
-    styles = ['col', 'row']
+    styles = ["col", "row"]
     if style.lower() not in styles:
-        raise ValueError('Unsupported style of matrices. Available styles are: ' + ', '.join(*styles))
+        raise ValueError("Unsupported style of matrices. Available styles are: " + ", ".join(*styles))
 
     if not inplace:
         atoms = atoms.copy()
@@ -1344,15 +1366,15 @@ def transform(atoms, center=None, cell=None, rotation_matrix=None, style='col', 
 
         return atoms
 
-    atoms['xyz'] -= np.asarray(center)
+    atoms["xyz"] -= np.asarray(center)
 
-    atoms['xyz'] = rotate_coordinates(atoms['xyz'], rotation=rotation_matrix, cell=cell, style=style)
+    atoms["xyz"] = rotate_coordinates(atoms["xyz"], rotation=rotation_matrix, cell=cell, style=style)
 
-    if 'A' in atoms.dtype.names:
-        atoms['A'] = rotate_tensor(atoms['A'], rotation=rotation_matrix, style=style)
+    if "A" in atoms.dtype.names:
+        atoms["A"] = rotate_tensor(atoms["A"], rotation=rotation_matrix, style=style)
 
-    if 'Q' in atoms.dtype.names:
-        atoms['Q'] = rotate_tensor(atoms['Q'], rotation=rotation_matrix, style=style)
+    if "Q" in atoms.dtype.names:
+        atoms["Q"] = rotate_tensor(atoms["Q"], rotation=rotation_matrix, style=style)
 
     return atoms
 
@@ -1361,7 +1383,7 @@ def _set_sd_attribute(array, attribute_name, initial_value):
     value = np.asarray(initial_value)
 
     if array.shape and value.shape == array.shape:
-        keys, ind = np.unique(array['N'], return_index=True)
+        keys, ind = np.unique(array["N"], return_index=True)
         values = value[ind]
 
         for k, v in zip(keys, values):
@@ -1374,7 +1396,7 @@ def _set_sd_attribute(array, attribute_name, initial_value):
 
         return
 
-    for k in np.unique(array['N']):
+    for k in np.unique(array["N"]):
         _inner_set_attr(array.types, k, attribute_name, initial_value)
 
         return
@@ -1393,7 +1415,7 @@ def _get_sd_attribute(array, attribute_name):
     if not array.shape:
         return getattr(array.types[array], attribute_name)
 
-    if (attribute_name == 'h') or (attribute_name == 'so'):
+    if (attribute_name == "h") or (attribute_name == "so"):
         if array.size == 1:
             return getattr(array.types[array[0]], attribute_name)
 
@@ -1402,12 +1424,12 @@ def _get_sd_attribute(array, attribute_name):
         if unique_names.size == 1:
             return getattr(array.types[array[0]], attribute_name)
 
-        raise RuntimeError('Hamiltonian and Jump operator terms can be modified only for single spin type at a time')
+        raise RuntimeError("Hamiltonian and Jump operator terms can be modified only for single spin type at a time")
 
     if array.size == 1:
         newarr = np.array([getattr(array.types[array.N[0]], attribute_name)])
 
-        if attribute_name == 'dim':
+        if attribute_name == "dim":
             newarr = newarr.astype(int)
 
         return newarr
@@ -1417,10 +1439,10 @@ def _get_sd_attribute(array, attribute_name):
     if unique_names.size == 1:
         n = unique_names[0]
         v = getattr(array.types[n], attribute_name)
-        if attribute_name == 'gyro' and isinstance(v, np.ndarray):
+        if attribute_name == "gyro" and isinstance(v, np.ndarray):
             values = np.tile(v, reps=(array.size, 1, 1))
         else:
-            if attribute_name == 'dim':
+            if attribute_name == "dim":
                 ones = np.ones(array.shape, dtype=int)
             else:
                 ones = np.ones(array.shape, dtype=np.float64)
@@ -1432,12 +1454,12 @@ def _get_sd_attribute(array, attribute_name):
         check = True
         for n in unique_names:
             v = getattr(array.types[n], attribute_name)
-            if attribute_name == 'gyro' and isinstance(v, np.ndarray):
+            if attribute_name == "gyro" and isinstance(v, np.ndarray):
                 check = False
             temp_values.append(v)
 
         if check:
-            if attribute_name == 'dim':
+            if attribute_name == "dim":
                 values = np.empty(array.shape, dtype=int)
             else:
                 values = np.empty(array.shape, dtype=np.float64)
@@ -1465,6 +1487,7 @@ def broadcast_array(array, root=0):
         BathArray or CenterArray: Broadcasted array.
     """
     import mpi4py
+
     comm = mpi4py.MPI.COMM_WORLD
     rank = comm.Get_rank()
 
@@ -1520,7 +1543,7 @@ class SpinType:
 
     """
 
-    def __init__(self, name, s=0., gyro=0., q=0., detuning=0.):
+    def __init__(self, name, s=0.0, gyro=0.0, q=0.0, detuning=0.0):
 
         self.name = name
         self.s = s
@@ -1535,8 +1558,13 @@ class SpinType:
         if not isinstance(obj, SpinType):
             return False
 
-        checks = (self.name == obj.name) & (self.s == obj.s) & (
-                self.gyro == obj.gyro) & (self.q == obj.q) & (self.detuning == obj.detuning)
+        checks = (
+            (self.name == obj.name)
+            & (self.s == obj.s)
+            & (self.gyro == obj.gyro)
+            & (self.q == obj.q)
+            & (self.detuning == obj.detuning)
+        )
 
         return checks
 
@@ -1554,7 +1582,6 @@ class SpinType:
             self._so = {}
         # thinking about making a key with coma, before coma - left redfield operator, after - right redfield operator
         return self._so
-
 
     @property
     def name(self):
@@ -1616,25 +1643,25 @@ class SpinType:
 
     def __repr__(self):
         try:
-            base_message = f'{self.name}: ({self.s:.1f}, {self.gyro:.4f}'
+            base_message = f"{self.name}: ({self.s:.1f}, {self.gyro:.4f}"
         except TypeError:
-            base_message = f'{self.name}: ({self.s}, {self.gyro}'
+            base_message = f"{self.name}: ({self.s}, {self.gyro}"
 
         if np.asarray(self.q).any():
             try:
-                m = f', {self.q:.4f}'
+                m = f", {self.q:.4f}"
             except TypeError:
-                m = f', {self.q}'
+                m = f", {self.q}"
             base_message += m
 
         if np.asarray(self.detuning).any():
             try:
-                m = f', {self.detuning:.4f}'
+                m = f", {self.detuning:.4f}"
             except TypeError:
-                m = f', {self.detuning}'
+                m = f", {self.detuning}"
             base_message += m
 
-        base_message += ')'
+        base_message += ")"
 
         return base_message
 
@@ -1685,7 +1712,7 @@ class SpinDict(UserDict):
         except TypeError:
             if key.shape:
                 try:
-                    names = key['N']
+                    names = key["N"]
                 except IndexError:
                     names = key
                 for k in names:
@@ -1694,7 +1721,7 @@ class SpinDict(UserDict):
 
             k = key[()]
             try:
-                k = k['N']
+                k = k["N"]
             except TypeError:
                 pass
             super().__delitem__(k)
@@ -1708,7 +1735,7 @@ class SpinDict(UserDict):
             key = np.asarray(key)
             if key.shape:
                 try:
-                    names = key['N']
+                    names = key["N"]
                 except IndexError:
                     names = key
 
@@ -1720,7 +1747,7 @@ class SpinDict(UserDict):
             k = key[()]
 
             try:
-                k = k['N']
+                k = k["N"]
             except TypeError:
                 pass
 
@@ -1731,7 +1758,7 @@ class SpinDict(UserDict):
 
         try:
             key = key[()]
-            return self._super_get_item(key['N'])
+            return self._super_get_item(key["N"])
             # self._super_get_item(key)
 
         except (TypeError, IndexError):
@@ -1740,7 +1767,7 @@ class SpinDict(UserDict):
             except TypeError:
 
                 if key.dtype.names:
-                    key = key['N']
+                    key = key["N"]
 
                 key = np.asarray(key)
                 if key.size == 1:
@@ -1751,8 +1778,7 @@ class SpinDict(UserDict):
                     detus = np.array([self._super_get_item(n).detuning])
                     return SpinType(key, s=spins, gyro=gyros, q=quads, detuning=detus)
                 else:
-                    raise TypeError('Unsupported key.')
-
+                    raise TypeError("Unsupported key.")
 
     # adding two objects
     def __add__(self, obj):
@@ -1763,7 +1789,7 @@ class SpinDict(UserDict):
         for k in {*keys_1, *keys_2}:
 
             if (k in keys_1) and (k in keys_2):
-                assert obj[k] == self[k], f'Error, type {k} has different properties in provided types'
+                assert obj[k] == self[k], f"Error, type {k} has different properties in provided types"
                 new_obj[k] = self[k]
 
             elif k in keys_1:
@@ -1777,10 +1803,10 @@ class SpinDict(UserDict):
         for k in self.data:
             message += f"{self.data[k]}, "
             if len(message) > 75:
-                message += '..., '
+                message += "..., "
                 break
 
-        message = message[:-2] + ')'
+        message = message[:-2] + ")"
 
         return message
 
@@ -1883,10 +1909,10 @@ def _process_key_operator(key, rate, sm):
         ndarray with shape (n,n): Resulting operator.
     """
     if isinstance(key, str):
-        if key.lower() == 'a':
+        if key.lower() == "a":
             return rate
 
-        separated = key.split('+')
+        separated = key.split("+")
         operator = 0
         for k in separated:
             current = None
@@ -1900,7 +1926,8 @@ def _process_key_operator(key, rate, sm):
 
     return operator
 
-_spin_not_found_message = lambda x: 'Spin type for {} was not provided and was not found in common isotopes.'.format(x)
+
+_spin_not_found_message = lambda x: "Spin type for {} was not provided and was not found in common isotopes.".format(x)
 
 import pandas as pd
 
@@ -1911,22 +1938,26 @@ import pandas as pd
 # except:
 import os
 
-__location__ = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__)))
-filepath = os.path.join(__location__, 'isotopes.txt')
-all_spins = pd.read_csv(filepath, sep='\s+', header=None, comment='%',
-                        names=['protons', 'nucleons', 'radioactive', 'symbol', 'name', 'spin', 'g', 'conc', 'q'])
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+filepath = os.path.join(__location__, "isotopes.txt")
+all_spins = pd.read_csv(
+    filepath,
+    sep="\s+",
+    header=None,
+    comment="%",
+    names=["protons", "nucleons", "radioactive", "symbol", "name", "spin", "g", "conc", "q"],
+)
 
 # only stable isotopes with nonzero spins
-spins = all_spins[(all_spins['spin'] > 0) & (all_spins['conc'] > 0)]
+spins = all_spins[(all_spins["spin"] > 0) & (all_spins["conc"] > 0)]
 
-_names = spins['nucleons'].astype(str) + spins['symbol']
-_gyros = spins['g'] / HBAR_SI * NUCLEAR_MAGNETON / 1e7
-_quads = spins['q']
-_spins = spins['spin']
+_names = spins["nucleons"].astype(str) + spins["symbol"]
+_gyros = spins["g"] / HBAR_SI * NUCLEAR_MAGNETON / 1e7
+_quads = spins["q"]
+_spins = spins["spin"]
 
-_mi = pd.MultiIndex.from_arrays([spins['symbol'], _names])
-_ser = pd.Series((spins['conc'] / 100).values, index=_mi)
+_mi = pd.MultiIndex.from_arrays([spins["symbol"], _names])
+_ser = pd.Series((spins["conc"] / 100).values, index=_mi)
 
 common_concentrations = {level: _ser.xs(level).to_dict() for level in _ser.index.levels[0]}
 """
@@ -1942,6 +1973,6 @@ The isotope is considered common if it is stable and has nonzero concentration i
 """
 
 # electron spin
-common_isotopes['e'] = SpinType('e', 1 / 2, ELECTRON_GYRO, 0)
+common_isotopes["e"] = SpinType("e", 1 / 2, ELECTRON_GYRO, 0)
 # allias for common_isotopes
 ci = common_isotopes

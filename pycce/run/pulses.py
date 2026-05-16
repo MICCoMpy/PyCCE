@@ -15,7 +15,8 @@ class BasePulse:
         y (float): Rotation angle about y-axis in radians.
         z (float): Rotation angle about z-axis in radians.
     """
-    axes = 'xyz'
+
+    axes = "xyz"
     indices = np.arange(3)
     indices.flags.writeable = False
 
@@ -42,7 +43,7 @@ class BasePulse:
 
         """
         if axis not in self.axes:
-            raise ValueError(f'Wrong axis format: {axis}')
+            raise ValueError(f"Wrong axis format: {axis}")
         ind = _rot[axis]
         angle = _check_angle(angle)
 
@@ -91,7 +92,7 @@ class BasePulse:
 
     @x.setter
     def x(self, x):
-        self.set_angle('x', x)
+        self.set_angle("x", x)
 
     @property
     def y(self):
@@ -100,7 +101,7 @@ class BasePulse:
 
     @y.setter
     def y(self, y):
-        self.set_angle('y', y)
+        self.set_angle("y", y)
 
     @property
     def z(self):
@@ -109,10 +110,10 @@ class BasePulse:
 
     @z.setter
     def z(self, z):
-        self.set_angle('z', z)
+        self.set_angle("z", z)
 
     def __repr__(self):
-        inner_message = '(' + ', '.join(f'{x}: {getattr(self, x):.2f}' for x in 'xyz') + ')'
+        inner_message = "(" + ", ".join(f"{x}: {getattr(self, x):.2f}" for x in "xyz") + ")"
         return inner_message
 
     def generate_rotation(self, spinvec, spin_half=False):
@@ -188,8 +189,9 @@ class Pulse(BasePulse, UserDict):
         (x: 1.57, y: 0.00, z: 0.00)
     """
 
-    def __init__(self, axis=None, angle=None, delay=None, which=None,
-                 bath_names=None, bath_axes=None, bath_angles=None, **kwargs):
+    def __init__(
+        self, axis=None, angle=None, delay=None, which=None, bath_names=None, bath_axes=None, bath_angles=None, **kwargs
+    ):
         super().__init__(**kwargs)
         self.data = {}
 
@@ -226,11 +228,11 @@ class Pulse(BasePulse, UserDict):
 
                 if (bath_axes is None) and (bath_angles.ndim > 1 or (bath_angles.size == 3)):
                     if bath_names.size == 3 and bath_angles.size == 3:
-                        warnings.warn('Ill defined bath angles format. Assuming same vector of angles for all spins.')
+                        warnings.warn("Ill defined bath angles format. Assuming same vector of angles for all spins.")
                     try:
                         bath_angles = bath_angles.reshape(-1, 3)
                     except ValueError:
-                        raise ValueError('Wrong bath angles format')
+                        raise ValueError("Wrong bath angles format")
                 elif axis is not None:
                     use_axes = True
                     bath_axes = np.array(axis).reshape(-1)
@@ -285,37 +287,37 @@ class Pulse(BasePulse, UserDict):
 
     def __repr__(self):
 
-        w = f'Pulse('
-        inner_message = ''
+        w = f"Pulse("
+        inner_message = ""
 
         if self.has_angle.any() is not None:
             if self.which is not None:
-                inner_message += f'{self.which}: '
+                inner_message += f"{self.which}: "
 
             x = super().__repr__()
             inner_message += x
 
         if self.bath_names is not None:
 
-            bm = ''
+            bm = ""
             for k in self:
                 if bm:
-                    bm += ', '
-                bm += f'{k}: ' + self[k].__repr__()
+                    bm += ", "
+                bm += f"{k}: " + self[k].__repr__()
             if inner_message:
-                inner_message += ', '
-            inner_message += '{' + bm + '}'
+                inner_message += ", "
+            inner_message += "{" + bm + "}"
 
         if self.delay is not None:
             if inner_message:
-                inner_message += ', '
-            inner_message += f't = {self.delay}'
+                inner_message += ", "
+            inner_message += f"t = {self.delay}"
 
-        w += inner_message + ')'
+        w += inner_message + ")"
         return w
 
 
-_rot = {'x': 0, 'y': 1, 'z': 2}
+_rot = {"x": 0, "y": 1, "z": 2}
 
 
 def _check_angle(angle):
