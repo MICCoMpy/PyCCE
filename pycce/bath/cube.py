@@ -9,29 +9,133 @@ from ..constants import BOHR_TO_ANGSTROM, HBAR_MU0_O4PI, ELECTRON_GYRO, PI2
 # Copied from ASE
 chemical_symbols = [
     # 0
-    'X',
+    "X",
     # 1
-    'H', 'He',
+    "H",
+    "He",
     # 2
-    'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne',
+    "Li",
+    "Be",
+    "B",
+    "C",
+    "N",
+    "O",
+    "F",
+    "Ne",
     # 3
-    'Na', 'Mg', 'Al', 'Si', 'P', 'spin_matrix', 'Cl', 'Ar',
+    "Na",
+    "Mg",
+    "Al",
+    "Si",
+    "P",
+    "spin_matrix",
+    "Cl",
+    "Ar",
     # 4
-    'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn',
-    'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr',
+    "K",
+    "Ca",
+    "Sc",
+    "Ti",
+    "V",
+    "Cr",
+    "Mn",
+    "Fe",
+    "Co",
+    "Ni",
+    "Cu",
+    "Zn",
+    "Ga",
+    "Ge",
+    "As",
+    "Se",
+    "Br",
+    "Kr",
     # 5
-    'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd',
-    'In', 'Sn', 'Sb', 'Te', 'I', 'Xe',
+    "Rb",
+    "Sr",
+    "Y",
+    "Zr",
+    "Nb",
+    "Mo",
+    "Tc",
+    "Ru",
+    "Rh",
+    "Pd",
+    "Ag",
+    "Cd",
+    "In",
+    "Sn",
+    "Sb",
+    "Te",
+    "I",
+    "Xe",
     # 6
-    'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy',
-    'Ho', 'Er', 'Tm', 'Yb', 'Lu',
-    'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi',
-    'Po', 'At', 'Rn',
+    "Cs",
+    "Ba",
+    "La",
+    "Ce",
+    "Pr",
+    "Nd",
+    "Pm",
+    "Sm",
+    "Eu",
+    "Gd",
+    "Tb",
+    "Dy",
+    "Ho",
+    "Er",
+    "Tm",
+    "Yb",
+    "Lu",
+    "Hf",
+    "Ta",
+    "W",
+    "Re",
+    "Os",
+    "Ir",
+    "Pt",
+    "Au",
+    "Hg",
+    "Tl",
+    "Pb",
+    "Bi",
+    "Po",
+    "At",
+    "Rn",
     # 7
-    'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk',
-    'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr',
-    'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds', 'Rg', 'Cn', 'Nh', 'Fl', 'Mc',
-    'Lv', 'Ts', 'Og']
+    "Fr",
+    "Ra",
+    "Ac",
+    "Th",
+    "Pa",
+    "U",
+    "Np",
+    "Pu",
+    "Am",
+    "Cm",
+    "Bk",
+    "Cf",
+    "Es",
+    "Fm",
+    "Md",
+    "No",
+    "Lr",
+    "Rf",
+    "Db",
+    "Sg",
+    "Bh",
+    "Hs",
+    "Mt",
+    "Ds",
+    "Rg",
+    "Cn",
+    "Nh",
+    "Fl",
+    "Mc",
+    "Lv",
+    "Ts",
+    "Og",
+]
 
 
 class Cube:
@@ -52,7 +156,8 @@ class Cube:
         integral (float): Data integrated over cube.
         spin (float): integral / 2 - total spin.
     """
-    _dt = np.dtype([('N', np.str_, 16), ('xyz', np.float64, (3,))])
+
+    _dt = np.dtype([("N", np.str_, 16), ("xyz", np.float64, (3,))])
 
     def __init__(self, filename):
 
@@ -82,23 +187,23 @@ class Cube:
             with warnings.catch_warnings(record=True):
                 for j in range(natoms):
                     tot = next(content).split()
-                    self.atoms[j]['N'] = chemical_symbols[int(tot[0])]
-                    self.atoms[j]['xyz'] = [float(x) for x in tot[2:]]
+                    self.atoms[j]["N"] = chemical_symbols[int(tot[0])]
+                    self.atoms[j]["xyz"] = [float(x) for x in tot[2:]]
 
             if self.size[0] > 0:
-                self.atoms['xyz'] *= BOHR_TO_ANGSTROM
+                self.atoms["xyz"] *= BOHR_TO_ANGSTROM
 
             data = [float(x) for line in content for x in line.split()]
 
         if self.size[0] < 0:
             self.data = np.array(data).reshape(np.abs(self.size))
         else:
-            self.data = np.array(data).reshape(np.abs(self.size)) / (BOHR_TO_ANGSTROM ** 3)
+            self.data = np.array(data).reshape(np.abs(self.size)) / (BOHR_TO_ANGSTROM**3)
 
         # detect if diagonal
         # (see https://stackoverflow.com/questions/43884189/check-if-a-large-matrix-is-diagonal-matrix-in-python)
         if np.any(self.voxel.reshape(-1)[:-1].reshape(2, 4)[:, 1:]):
-            warnings.warn('Voxel might be non-orthogonal. Correctness of the results is not tested')
+            warnings.warn("Voxel might be non-orthogonal. Correctness of the results is not tested")
 
         na = np.newaxis
         a = np.arange(self.size[0])[:, na] * self.voxel[0][na, :]
@@ -148,8 +253,8 @@ class Cube:
             self.origin += shift
 
         if rotmatrix is not None:
-            assert (np.isclose(np.linalg.det(rotmatrix), 1.)), 'Determinant of R is not equal to 1'
-            self.grid = np.einsum('ij,abcj->abci', rotmatrix.T, self.grid)
+            assert np.isclose(np.linalg.det(rotmatrix), 1.0), "Determinant of R is not equal to 1"
+            self.grid = np.einsum("ij,abcj->abci", rotmatrix.T, self.grid)
             self.origin = rotmatrix.T @ self.origin
             self.atoms.transform(rotation_matrix=rotmatrix)
         return
@@ -173,7 +278,7 @@ class Cube:
             try:
                 import mpi4py
             except ImportError:
-                warnings.warn('Could not find mpi4py. Using the serial implementation instead')
+                warnings.warn("Could not find mpi4py. Using the serial implementation instead")
                 parallel = False
 
         if parallel:
@@ -189,7 +294,7 @@ class Cube:
             spin = self.spin
 
         if np.around(spin * 2) != np.around(self.integral):
-            warnings.warn(f'provided spin: {spin:.2f} is not equal to one from spin density: {self.integral / 2:.2f}')
+            warnings.warn(f"provided spin: {spin:.2f} is not equal to one from spin density: {self.integral / 2:.2f}")
 
         if rank == root:
             gyro_e, _ = check_gyro(gyro_e)
@@ -205,8 +310,7 @@ class Cube:
             position = comm.bcast(position, root)
 
         if len(position.shape) <= 1:
-            return _cube_integrate(self.data, self.grid, self.voxel, spin,
-                                   position, gyro_n, gyro_e)
+            return _cube_integrate(self.data, self.grid, self.voxel, spin, position, gyro_n, gyro_e)
 
         npos = position.shape[0]
         nshape = (npos, *gyro_n.shape[1:])
@@ -219,8 +323,7 @@ class Cube:
             gyro_n = gyro_n[start:end]
 
         if position.size:
-            hyperfine = _cube_integrate_array(self.data, self.grid, self.voxel, spin, position,
-                                              gyro_n, gyro_e)
+            hyperfine = _cube_integrate_array(self.data, self.grid, self.voxel, spin, position, gyro_n, gyro_e)
         else:
             hyperfine = np.zeros((0, 3, 3), dtype=np.float64)
 
@@ -233,8 +336,9 @@ class Cube:
             sendcounts = tuple((end - start) * 3 * 3 for (start, end) in start_ends)
             displacements = tuple(start * 3 * 3 for (start, end) in start_ends)
 
-            comm.Allgatherv([hyperfine.flatten(), mpi4py.MPI.DOUBLE],
-                            [total_hyperfine, sendcounts, displacements, mpi4py.MPI.DOUBLE])
+            comm.Allgatherv(
+                [hyperfine.flatten(), mpi4py.MPI.DOUBLE], [total_hyperfine, sendcounts, displacements, mpi4py.MPI.DOUBLE]
+            )
 
             total_hyperfine = total_hyperfine.reshape(npos, 3, 3)
             comm.Barrier()
@@ -277,19 +381,18 @@ def _cube_integrate(data, grid, voxel, spin, position, gyro_n, gyro_e=ELECTRON_G
     """
     pos = grid - position
 
-    dist = np.sqrt(np.sum(pos ** 2, axis=-1))
+    dist = np.sqrt(np.sum(pos**2, axis=-1))
 
     hyperfine = np.zeros((3, 3), dtype=np.float64)
     for i in range(3):
         for j in range(3):
 
             if i == j:
-                integrand = - data * (3 * pos[:, :, :, i] * pos[:, :, :, j] - dist ** 2) / dist ** 5
+                integrand = -data * (3 * pos[:, :, :, i] * pos[:, :, :, j] - dist**2) / dist**5
             else:
-                integrand = - data * (3 * pos[:, :, :, i] * pos[:, :, :, j]) / dist ** 5
+                integrand = -data * (3 * pos[:, :, :, i] * pos[:, :, :, j]) / dist**5
 
-            hyperfine[i, j] = np.trapz(np.trapz(np.trapz(integrand))) * HBAR_MU0_O4PI / (
-                    2 * spin * PI2) * np.linalg.det(voxel)
+            hyperfine[i, j] = np.trapz(np.trapz(np.trapz(integrand))) * HBAR_MU0_O4PI / (2 * spin * PI2) * np.linalg.det(voxel)
 
     if gyro_e.ndim < 2:
         hyperfine = hyperfine * gyro_e

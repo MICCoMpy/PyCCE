@@ -68,8 +68,6 @@ def collapse_superoperator(superoperators, index, dims):
     return full_lindb
 
 
-
-
 def incoherent_superoperator(spins, dims=None, offset=0):
     r"""
     Generate dissipators for all bath spins in the cluster.
@@ -148,7 +146,7 @@ def vec_to_mat(vector):
     """
     side = np.sqrt(vector.shape[-1])
     if not int(side) == side:
-        raise ValueError('Unsupported vector shape')
+        raise ValueError("Unsupported vector shape")
     return vector.reshape(*vector.shape[:-1], int(side), int(side))
 
 
@@ -184,6 +182,7 @@ class LindbladgCCE(gCCE):
         **kwargs: Keyword arguments of the ``gCCE``.
 
     """
+
     def __init__(self, *args, **kwargs):
         self.superoperator = None
         super().__init__(*args, **kwargs)
@@ -224,8 +223,7 @@ class LindbladgCCE(gCCE):
         """
         self.superoperator = coherent_superoperator(self.hamiltonian)
         self.superoperator += incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions)
-        self.superoperator += incoherent_superoperator(self.center, self.base_hamiltonian.dimensions,
-                                                       offset=self.cluster.size)
+        self.superoperator += incoherent_superoperator(self.center, self.base_hamiltonian.dimensions, offset=self.cluster.size)
 
     def super_propagator(self):
         """
@@ -315,11 +313,9 @@ class LindbladgCCE(gCCE):
         for delay, rotation in zip(self.delays, rotations):
             times += delay
 
-            eigexp = np.exp(np.outer(delay, evalues),
-                            dtype=np.complex128)
+            eigexp = np.exp(np.outer(delay, evalues), dtype=np.complex128)
 
-            u = np.matmul(np.einsum('ij,kj->kij', evec, eigexp, dtype=np.complex128),
-                          evec.conj().T)
+            u = np.matmul(np.einsum("ij,kj->kij", evec, eigexp, dtype=np.complex128), evec.conj().T)
 
             full_u = np.matmul(u, full_u)
 
@@ -334,8 +330,10 @@ class LindbladgCCE(gCCE):
             full_u = np.matmul(u, full_u)
 
         elif not which.all():
-            raise ValueError(f"Pulse sequence time steps add up to larger than total times. Delays at"
-                             f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time.")
+            raise ValueError(
+                f"Pulse sequence time steps add up to larger than total times. Delays at"
+                f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time."
+            )
 
         return full_u
 
@@ -374,8 +372,10 @@ class LindbladgCCE(gCCE):
             full_u = np.matmul(u, full_u)
 
         elif not which.all():
-            raise ValueError(f"Pulse sequence time steps add up to larger than total times. Delays at"
-                             f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time.")
+            raise ValueError(
+                f"Pulse sequence time steps add up to larger than total times. Delays at"
+                f"{self.timespace[(self.timespace - times) < 0]} ms are longer than total time."
+            )
 
         return full_u
 
@@ -460,6 +460,7 @@ class LindbladCCE(CCE):
         **kwargs: Keyword arguments of the ``CCE``.
 
     """
+
     def __init__(self, *args, **kwargs):
         self.superoperator = None
         super().__init__(*args, **kwargs)
@@ -491,15 +492,13 @@ class LindbladCCE(CCE):
         """
         self.get_hamiltonian_variable_bath_state(index)
 
-        ha = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors,
-                                                   self.cluster, self.center, alpha)
+        ha = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, alpha)
 
-        hb = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors,
-                                                   self.cluster, self.center, beta)
+        hb = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, beta)
 
-        addition = (incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions) +
-                    incoherent_superoperator(self.center, self.base_hamiltonian.dimensions,
-                                             offset=self.cluster.size))
+        addition = incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions) + incoherent_superoperator(
+            self.center, self.base_hamiltonian.dimensions, offset=self.cluster.size
+        )
         self.superoperator = projected_coherent_superoperator(ha, hb) + addition
 
         if return_two:
@@ -583,7 +582,7 @@ class LindbladCCE(CCE):
         for p, delay, rotation in zip(self.pulses, self.delays, rotations):
             if np.any(delay):
                 eigen_exp = np.exp(-1j * np.outer(delay, eval01), dtype=np.complex128)
-                u01 = np.matmul(np.einsum('...ij,...j->...ij', evec01, eigen_exp, dtype=np.complex128), evec01.conj().T)
+                u01 = np.matmul(np.einsum("...ij,...j->...ij", evec01, eigen_exp, dtype=np.complex128), evec01.conj().T)
 
                 times += delay
 
@@ -609,13 +608,15 @@ class LindbladCCE(CCE):
         if ((self.timespace - times)[~which] >= 0).all():
 
             eigen_exp = np.exp(-1j * np.outer(self.timespace - times, eval01), dtype=np.complex128)
-            u01 = np.matmul(np.einsum('...ij,...j->...ij', evec01, eigen_exp, dtype=np.complex128), evec01.conj().T)
+            u01 = np.matmul(np.einsum("...ij,...j->...ij", evec01, eigen_exp, dtype=np.complex128), evec01.conj().T)
 
             nonunitary = np.matmul(u01, nonunitary)
 
         elif not which.all():
-            raise ValueError(f"Pulse sequence time steps add up to larger than total times"
-                             f"{np.argwhere((self.timespace - times) < 0)} are longer than total time.")
+            raise ValueError(
+                f"Pulse sequence time steps add up to larger than total times"
+                f"{np.argwhere((self.timespace - times) < 0)} are longer than total time."
+            )
 
         return nonunitary
 

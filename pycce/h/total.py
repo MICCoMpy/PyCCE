@@ -67,7 +67,7 @@ def total_hamiltonian(bath, center, mfield):
             # print('tensor', c.zfs.flags['C_CONTIGUOUS'])
             totalh += self_central(vectors[bath.size + i], mfield, c.zfs, c.gyro, c.detuning)
 
-    totalh += center_interactions(center, vectors[bath.size:])
+    totalh += center_interactions(center, vectors[bath.size :])
     totalh += custom_hamiltonian(center, dims, offset=bath.size)
     totalh += custom_hamiltonian(bath, dims)
 
@@ -122,13 +122,11 @@ def central_hamiltonian(center, magnetic_field, hyperfine=None, bath_state=None)
 
     if single_center:
         if callable(magnetic_field):
-            totalh = self_central(vectors[0], magnetic_field(center.xyz),
-                                  center.zfs, center.gyro, center.detuning)
+            totalh = self_central(vectors[0], magnetic_field(center.xyz), center.zfs, center.gyro, center.detuning)
         else:
             # print('svec', vectors[0].flags['C_CONTIGUOUS'])
             # print('tensor', center.zfs.flags['C_CONTIGUOUS'])
-            totalh = self_central(vectors[0], magnetic_field,
-                                  center.zfs, center.gyro, center.detuning)
+            totalh = self_central(vectors[0], magnetic_field, center.zfs, center.gyro, center.detuning)
         if hyperfine is not None and bath_state is not None:
             totalh += overhauser_central(vectors[0], hyperfine, bath_state)
         return totalh
@@ -198,5 +196,3 @@ def custom_single(h, index, dims):
         add = _process_key_operator(key, h[key], sm)
         ham += add
     return expand(ham, index, dims)
-
-

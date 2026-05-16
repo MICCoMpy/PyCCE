@@ -1,6 +1,7 @@
 """
 Module with helper functions to obtain CPMG coherence from the noise autocorrelation function.
 """
+
 import numba
 import numpy as np
 import scipy.integrate
@@ -67,15 +68,14 @@ def filterfunc(ts, tau, npulses):
             fs[i] = scipy.integrate.quad(_integrand, u, bad_points[0], args=(u, tau, npulses))[0]
 
             for j in range(1, bad_points.size):
-                fs[i] += scipy.integrate.quad(_integrand, bad_points[j - 1], bad_points[j],
-                                              args=(u, tau, npulses))[0]
+                fs[i] += scipy.integrate.quad(_integrand, bad_points[j - 1], bad_points[j], args=(u, tau, npulses))[0]
 
             fs[i] += scipy.integrate.quad(_integrand, bad_points[-1], 2 * tau - u, args=(u, tau, npulses))[0]
 
     return fs
 
 
-def gaussian_phase(timespace, corr, npulses, units='khz'):
+def gaussian_phase(timespace, corr, npulses, units="khz"):
     """
     Compute average random phase squared assuming Gaussian noise.
 
@@ -87,14 +87,18 @@ def gaussian_phase(timespace, corr, npulses, units='khz'):
     Returns:
         ndarray with shape (n,): Random phase accumulated by the qubit.
     """
-    if 'rad' not in units:
-        corr *= PI2 ** 2
+    if "rad" not in units:
+        corr *= PI2**2
     timespace = np.asarray(timespace)
     chis = np.zeros(timespace.shape, dtype=np.complex128)
     for i, tau in enumerate(timespace):
         if tau == 0:
             chis[i] = 0
         else:
-            chis[i] = np.trapz(corr[timespace <= tau] * filterfunc(timespace[timespace <= tau], tau, npulses),
-                               timespace[timespace <= tau]) / 2
+            chis[i] = (
+                np.trapz(
+                    corr[timespace <= tau] * filterfunc(timespace[timespace <= tau], tau, npulses), timespace[timespace <= tau]
+                )
+                / 2
+            )
     return chis

@@ -5,11 +5,23 @@ from pycce.bath.array import BathArray, transform
 from pycce.constants import MHZ_TO_KHZ, BOHR_TO_ANGSTROM, EFG_CONVERSION
 from pycce.io.base import DFTCoordinates, fortran_value, find_first_index, set_isotopes
 
-qe_coord_types = ['crystal', 'bohr', 'angstrom', 'alat']
+qe_coord_types = ["crystal", "bohr", "angstrom", "alat"]
 
 
-def read_qe(pwfile, hyperfine=None, efg=None, s=1, pwtype=None, types=None, isotopes=None,
-            center=None, center_type=None, rotation_matrix=None, rm_style='col', find_isotopes=True):
+def read_qe(
+    pwfile,
+    hyperfine=None,
+    efg=None,
+    s=1,
+    pwtype=None,
+    types=None,
+    isotopes=None,
+    center=None,
+    center_type=None,
+    rotation_matrix=None,
+    rm_style="col",
+    find_isotopes=True,
+):
     r"""
     Function to read PW/GIPAW output from Quantum ESPRESSO into BathArray.
 
@@ -64,9 +76,7 @@ def read_qe(pwfile, hyperfine=None, efg=None, s=1, pwtype=None, types=None, isot
     coord, names = pwoutput.coordinates, pwoutput.names
 
     with warnings.catch_warnings(record=True) as w:
-        atoms = BathArray(array=coord, names=names,
-                          hyperfines=couplings,
-                          types=types)
+        atoms = BathArray(array=coord, names=names, hyperfines=couplings, types=types)
 
     if find_isotopes:
         set_isotopes(atoms, isotopes=isotopes, spin_types=types)
@@ -101,15 +111,15 @@ class PWCoordinates(DFTCoordinates):
         super().__init__()
 
         if not pwtype:
-            pwtype = filename.split('.')[-1]
+            pwtype = filename.split(".")[-1]
 
-        if pwtype == 'in':
+        if pwtype == "in":
             self.parse_input(filename, to_angstrom=to_angstrom)
-        elif pwtype == 'out':
+        elif pwtype == "out":
             self.parse_output(filename, to_angstrom=to_angstrom)
 
         else:
-            raise TypeError('Unsupported pw_type! Only .out or .in are supported')
+            raise TypeError("Unsupported pw_type! Only .out or .in are supported")
 
     def parse_output(self, filename, to_angstrom=False):
         """
@@ -125,11 +135,11 @@ class PWCoordinates(DFTCoordinates):
         """
         with open(filename) as f:
             lines = f.readlines()
-        alat_index = find_first_index('lattice parameter (alat)', lines)
+        alat_index = find_first_index("lattice parameter (alat)", lines)
 
         self.alat = float(lines[alat_index].split()[-2]) * BOHR_TO_ANGSTROM
 
-        cell_index = find_first_index('crystal axes', lines) + 1
+        cell_index = find_first_index("crystal axes", lines) + 1
         cell = []
         for index in range(cell_index, cell_index + 3):
             row_split = lines[index].split()
@@ -137,16 +147,16 @@ class PWCoordinates(DFTCoordinates):
             cell.append(cell_row)
 
         self.cell = np.asarray(cell).T
-        self.cell_units = 'alat'
+        self.cell_units = "alat"
 
         # read coordinates
 
         names = []
         coordinates = []
         try:
-            final_kw = 'Begin final coordinates'
+            final_kw = "Begin final coordinates"
             start = find_first_index(final_kw, lines)
-            coord_kw = 'ATOMIC_POSITIONS'
+            coord_kw = "ATOMIC_POSITIONS"
             index = find_first_index(coord_kw, lines, start=start)
             coord_units = get_ctype(lines[index])
 
@@ -164,9 +174,9 @@ class PWCoordinates(DFTCoordinates):
                     break
 
         except KeyError:
-            coord_units = 'alat'
+            coord_units = "alat"
 
-            coord_kw = 'Cartesian axes'
+            coord_kw = "Cartesian axes"
             index = find_first_index(coord_kw, lines) + 2
             while True:
                 try:
@@ -184,7 +194,7 @@ class PWCoordinates(DFTCoordinates):
 
         self.coordinates_units = coord_units
         self.coordinates = np.asarray(coordinates)
-        self.names = np.array(names, dtype='<U16')
+        self.names = np.array(names, dtype="<U16")
 
         if to_angstrom:
             self.to_angstrom(inplace=True)
@@ -205,18 +215,18 @@ class PWCoordinates(DFTCoordinates):
         namelists = read_qe_namelists(input_string.lower())
         lines = input_string.splitlines()
 
-        alat = namelists['system'].get('celldm(1)', None)
+        alat = namelists["system"].get("celldm(1)", None)
 
         if alat is None:
-            alat = namelists['system'].get('a', None)
+            alat = namelists["system"].get("a", None)
         else:
             alat *= BOHR_TO_ANGSTROM
 
-        cell = cell_from_system(namelists['system'])
+        cell = cell_from_system(namelists["system"])
         if cell is not None:
-            cell_units = 'bohr'
+            cell_units = "bohr"
         else:
-            index = find_first_index('CELL_PARAMETERS', lines)
+            index = find_first_index("CELL_PARAMETERS", lines)
             cell_units = get_ctype(lines[index])
             self.cell_units = cell_units
             cell = []
@@ -228,29 +238,29 @@ class PWCoordinates(DFTCoordinates):
 
             cell = np.asarray(cell).T
 
-            if cell_units == 'alat' and alat is None:
-                raise ValueError('alat was not found')
+            if cell_units == "alat" and alat is None:
+                raise ValueError("alat was not found")
 
             if alat is None:
-                assert cell_units in ['bohr', 'angstrom']
-                alat = cell[0, 0] * BOHR_TO_ANGSTROM ** (cell_units == 'bohr')
+                assert cell_units in ["bohr", "angstrom"]
+                alat = cell[0, 0] * BOHR_TO_ANGSTROM ** (cell_units == "bohr")
 
         self.cell = cell
         self.cell_units = cell_units
         self.alat = alat
 
-        index = find_first_index('ATOMIC_POSITIONS', lines)
+        index = find_first_index("ATOMIC_POSITIONS", lines)
         coord_units = get_ctype(lines[index])
 
         names = []
         coords = []
 
-        for i in range(index + 1, index + 1 + namelists['system']['nat']):
+        for i in range(index + 1, index + 1 + namelists["system"]["nat"]):
             row_split = lines[i].split()
             names.append(row_split[0])
             coords.append([float(x) for x in row_split[1:]])
 
-        self.names = np.array(names, dtype='<U16')
+        self.names = np.array(names, dtype="<U16")
         self.coordinates = np.asarray(coords)
         self.coordinates_units = coord_units
 
@@ -277,11 +287,11 @@ def cell_from_system(sdict):
             and x, y, z are their coordinates in the cartesian reference frame.
 
     """
-    ibrav = sdict.get('ibrav', None)
+    ibrav = sdict.get("ibrav", None)
     if ibrav == 0:
         return None
-    params = ['a', 'b', 'c', 'cosab', 'cosac', 'cosbc']
-    celldm = [sdict.get(f'celldm({i + 1})', 0) for i in range(6)]
+    params = ["a", "b", "c", "cosab", "cosac", "cosbc"]
+    celldm = [sdict.get(f"celldm({i + 1})", 0) for i in range(6)]
     if not any(celldm):
         abc = [sdict.get(a, 0) for a in params]
         celldm = celldms_from_abc(ibrav, abc)
@@ -386,20 +396,16 @@ def cell_from_system(sdict):
 
     elif ibrav == 14:
         singam = np.sqrt(1 - celldm[5] ** 2)
-        term = (1 + 2 * celldm[3] * celldm[4] * celldm[5] - celldm[3] ** 2 - celldm[4] ** 2 - celldm[5] ** 2)
+        term = 1 + 2 * celldm[3] * celldm[4] * celldm[5] - celldm[3] ** 2 - celldm[4] ** 2 - celldm[5] ** 2
         term = np.sqrt(term / (1 - celldm[5] ** 2))
 
-        v1 = celldm[0] * np.array([1,
-                                   0,
-                                   0])
-        v2 = celldm[0] * np.array([celldm[1] * celldm[5],
-                                   celldm[1] * singam,
-                                   0])
-        v3 = celldm[0] * np.array([celldm[2] * celldm[4],
-                                   celldm[2] * (celldm[3] - celldm[4] * celldm[5]) / singam,
-                                   celldm[2] * term])
+        v1 = celldm[0] * np.array([1, 0, 0])
+        v2 = celldm[0] * np.array([celldm[1] * celldm[5], celldm[1] * singam, 0])
+        v3 = celldm[0] * np.array(
+            [celldm[2] * celldm[4], celldm[2] * (celldm[3] - celldm[4] * celldm[5]) / singam, celldm[2] * term]
+        )
     else:
-        raise ValueError('Unsupported ibrav')
+        raise ValueError("Unsupported ibrav")
 
     cell = np.stack([v1, v2, v3], axis=1)
 
@@ -423,7 +429,7 @@ def celldms_from_abc(ibrav, abc_list):
     """
     a, b, c, cosab, cosac, cosbc = abc_list
 
-    celldm = [0.] * 6
+    celldm = [0.0] * 6
     celldm[0] = a / BOHR_TO_ANGSTROM
     celldm[1] = b / a
     celldm[2] = c / a
@@ -507,8 +513,8 @@ def read_hyperfine(filename, spin=1):
     with open(filename) as f:
         lines = f.readlines()
 
-    dipol_keyword = 'total dipolar (symmetrized)'
-    contact_keyword = 'Fermi contact in MHz'
+    dipol_keyword = "total dipolar (symmetrized)"
+    contact_keyword = "Fermi contact in MHz"
 
     dipolars = read_gipaw_tensors(lines, dipol_keyword, conversion=conversion)
     start = find_first_index(contact_keyword, lines) + 2
@@ -535,7 +541,7 @@ def read_efg(filename):
         ndarray with shape (n, 3,3): Array of EFG tensors.
 
     """
-    efg_kw = 'total EFG (symmetrized)'
+    efg_kw = "total EFG (symmetrized)"
     with open(filename) as f:
         lines = f.readlines()
 
@@ -557,22 +563,22 @@ def read_qe_namelists(input_string):
     """
     namelists = {}
 
-    for block in input_string.split('/\n'):
+    for block in input_string.split("/\n"):
 
-        if not '&' in block:
+        if not "&" in block:
             # means we are out of namelists
             break
 
-        lines = [s.strip() for s in block.splitlines() if (s.strip() and s[0] != '!')]
-        index = find_first_index('&', lines)
-        block_name = lines[index].strip('&\t ')
+        lines = [s.strip() for s in block.splitlines() if (s.strip() and s[0] != "!")]
+        index = find_first_index("&", lines)
+        block_name = lines[index].strip("&\t ")
 
         namelists[block_name] = {}
-        for row in lines[index + 1:]:
-            for pair in row.split(','):
+        for row in lines[index + 1 :]:
+            for pair in row.split(","):
                 if not pair.strip():
                     continue
-                name, _, value = (x.strip(',\t ').lower() for x in pair.partition("="))
+                name, _, value = (x.strip(",\t ").lower() for x in pair.partition("="))
                 namelists[block_name][name] = fortran_value(value)
 
     return namelists
@@ -592,9 +598,10 @@ def get_ctype(lin):
     try:
         coord_type = next(filter(lambda x: x in lin.lower(), qe_coord_types))
     except IndexError:
-        raise ValueError(f'{lin} type is not supported.\nAllowed types: ', ' '.join(*qe_coord_types))
+        raise ValueError(f"{lin} type is not supported.\nAllowed types: ", " ".join(*qe_coord_types))
 
     return coord_type
+
 
 # ELSEIF (ibrav == 7) THEN
 #    !

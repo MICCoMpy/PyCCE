@@ -127,20 +127,24 @@ class RunObject:
 
     Default: ``numpy.prod``."""
 
-    def __init__(self, timespace,
-                 clusters, bath,
-                 magnetic_field,
-                 center=None,
-                 pulses=None,
-                 nbstates=None,
-                 seed=None,
-                 masked=True,
-                 parallel=False,
-                 direct=False,
-                 parallel_states=False,
-                 store_states=False,
-                 as_delay=False,
-                 **kwargs):
+    def __init__(
+        self,
+        timespace,
+        clusters,
+        bath,
+        magnetic_field,
+        center=None,
+        pulses=None,
+        nbstates=None,
+        seed=None,
+        masked=True,
+        parallel=False,
+        direct=False,
+        parallel_states=False,
+        store_states=False,
+        as_delay=False,
+        **kwargs,
+    ):
 
         self.nbstates = nbstates
         """int: Number of random bath states to sample over in bath state sampling runs."""
@@ -331,11 +335,13 @@ class RunObject:
 
     @property
     def __inner_kernel(self):
-        return cluster_expansion_decorator(self.kernel,
-                                           result_operator=self.result_operator,
-                                           contribution_operator=self.contribution_operator,
-                                           removal_operator=self.removal_operator,
-                                           addition_operator=self.addition_operator)
+        return cluster_expansion_decorator(
+            self.kernel,
+            result_operator=self.result_operator,
+            contribution_operator=self.contribution_operator,
+            removal_operator=self.removal_operator,
+            addition_operator=self.addition_operator,
+        )
 
     def run(self, *args, **kwargs):
         """
@@ -372,8 +378,7 @@ class RunObject:
             ndarray: Results of the calculations.
 
         """
-        self.result = self.__inner_sampled_run(*args,
-                                               **kwargs)
+        self.result = self.__inner_sampled_run(*args, **kwargs)
         return self.result
 
     def interlaced_kernel(self, cluster, supercluster, *args, **kwargs):
@@ -429,8 +434,7 @@ class RunObject:
             # Note that if put others in different line the updated bath state might not copy properly
 
             if self.projected_states is not None:
-                self.projected_states[outer_indexes] = generate_rotated_projected_states(self.bath[outer_indexes],
-                                                                                         self.pulses)
+                self.projected_states[outer_indexes] = generate_rotated_projected_states(self.bath[outer_indexes], self.pulses)
 
             self._check_hamiltonian()
             result += self.compute_result()
@@ -443,9 +447,9 @@ class RunObject:
 
     @property
     def __inner_interlaced_kernel(self):
-        return interlaced_decorator(self.interlaced_kernel,
-                                    result_operator=self.result_operator,
-                                    contribution_operator=self.contribution_operator)
+        return interlaced_decorator(
+            self.interlaced_kernel, result_operator=self.result_operator, contribution_operator=self.contribution_operator
+        )
 
     def interlaced_run(self, *args, **kwargs):
         """
@@ -483,8 +487,7 @@ class RunObject:
             ndarray: Results of the calculations.
 
         """
-        self.result = self.__inner_sampled_interlaced_run(*args,
-                                                          **kwargs)
+        self.result = self.__inner_sampled_interlaced_run(*args, **kwargs)
         return self.result
 
     @classmethod
@@ -503,7 +506,7 @@ class RunObject:
         parameters = vars(sim).copy()
 
         for k in list(parameters.keys()):
-            if k[0] == '_':
+            if k[0] == "_":
                 parameters[k[1:]] = parameters.pop(k)
 
         parameters.update(**kwargs)
@@ -534,9 +537,9 @@ class RunObject:
             # 2) Create meshgrid out of this list with the dimensions (sc.size, dim_1, dim_2, 1, dim_4, ..., dim_n)
             #    where dim is dimensions of the nuclear spin and 1 in case only one projection is given
             # 3) Transpose to change to (dim_n, dim_n-1, ..., dim_4, 1, dim_2, dim_1, sc.size)
-            states = np.asarray(np.meshgrid(
-                *[np.linspace(-sc[i].s, sc[i].s, sc[i].dim) if not his[i] else sc[i].proj for i in
-                  range(sc.size)])).T.reshape(-1, sc.size)
+            states = np.asarray(
+                np.meshgrid(*[np.linspace(-sc[i].s, sc[i].s, sc[i].dim) if not his[i] else sc[i].proj for i in range(sc.size)])
+            ).T.reshape(-1, sc.size)
 
         for single in states:
             yield single
@@ -557,7 +560,7 @@ class RunObject:
         cs = self.center
         bath = self.cluster
         ndims = len(dimensions)
-        bathvectors = vectors[:bath.shape[0]]
+        bathvectors = vectors[: bath.shape[0]]
 
         shortdims = None
         csindex = None
@@ -603,12 +606,11 @@ class RunObject:
                         c = cs[i]
                         if i not in separate_svec:
                             separate_svec[i] = from_sigma(c.sigma, csindex, shortdims) / 2
-                        rotation = np.dot(p.generate_rotation(separate_svec[i], spin_half=True),
-                                          rotation)
+                        rotation = np.dot(p.generate_rotation(separate_svec[i], spin_half=True), rotation)
 
             for name in p:
 
-                which = (bath.N == name)
+                which = bath.N == name
 
                 if any(which):
                     vecs = bathvectors[which]
@@ -632,8 +634,7 @@ class RunObject:
         if self.projected_states is None:
 
             if self.has_states:
-                addition = external_spins_field(self.base_hamiltonian.vectors, self.cluster_indexes, self.bath,
-                                                self.bath.proj)
+                addition = external_spins_field(self.base_hamiltonian.vectors, self.cluster_indexes, self.bath, self.bath.proj)
                 # addition = zero_order_addition(self.base_hamiltonian.vectors, self.cluster, self.others,
                 #                                self.others.proj)
                 self.hamiltonian = self.base_hamiltonian.data + addition
@@ -657,8 +658,9 @@ class RunObject:
         if self.has_states:
             # addition = zero_order_addition(self.base_hamiltonian.vectors, self.cluster, self.others,
             #                                self.projected_states[self.others_mask, index])
-            addition = external_spins_field(self.base_hamiltonian.vectors, self.cluster_indexes, self.bath,
-                                            self.projected_states[:, index])
+            addition = external_spins_field(
+                self.base_hamiltonian.vectors, self.cluster_indexes, self.bath, self.projected_states[:, index]
+            )
         else:
             addition = 0
 
@@ -707,7 +709,7 @@ def generate_rotated_projected_states(bath, pulses):
 
             for name in p:
 
-                which = (bath.N == name)
+                which = bath.N == name
 
                 if any(which):
                     spin = bath.types[name].s
@@ -725,7 +727,7 @@ def generate_rotated_projected_states(bath, pulses):
     return np.swapaxes(projected, 0, -1)
 
 
-_rot = {'x': 0, 'y': 1, 'z': 2}
+_rot = {"x": 0, "y": 1, "z": 2}
 
 
 def pulse_bath_rotation(pulse, vectors):
@@ -762,11 +764,9 @@ def simple_propagator(timespace, hamiltonian):
     """
     evalues, evec = np.linalg.eigh(hamiltonian * PI2)
 
-    eigexp = np.exp(-1j * np.outer(timespace, evalues),
-                    dtype=np.complex128)
+    eigexp = np.exp(-1j * np.outer(timespace, evalues), dtype=np.complex128)
 
-    return np.matmul(np.einsum('...ij,...j->...ij', evec, eigexp, dtype=np.complex128),
-                     evec.conj().T)
+    return np.matmul(np.einsum("...ij,...j->...ij", evec, eigexp, dtype=np.complex128), evec.conj().T)
 
 
 @jit(cache=True, nopython=True)

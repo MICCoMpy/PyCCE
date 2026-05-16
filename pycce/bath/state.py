@@ -13,18 +13,13 @@ class BathState:
     Args:
         size (int): Number of bath states to be stored.
     """
-    _dtype_state = np.dtype([
-        ('proj', np.float64),
-        ('state', object),
-        ('hs', bool),
-        ('hps', bool),
-        ('pure', bool)
-    ])
+
+    _dtype_state = np.dtype([("proj", np.float64), ("state", object), ("hs", bool), ("hps", bool), ("pure", bool)])
 
     def __init__(self, size):
 
         self._data = np.zeros(size, dtype=self._dtype_state)
-        self._data['state'] = None
+        self._data["state"] = None
 
         self.__up_to_date = None
 
@@ -50,7 +45,7 @@ class BathState:
     def __setitem__(self, key, value):
         # Only allowed values are density matrices, vectors, or None
         self._up_to_date = False
-        self._data['hps'][key] = False
+        self._data["hps"][key] = False
 
         if value is None:
             self.state[key] = None
@@ -131,7 +126,7 @@ class BathState:
                                     #               "Assuming density matrix", stacklevel=2)
                                     fshape = inshape + value.shape
                                 else:
-                                    raise ValueError('Something is really wrong with this world.')
+                                    raise ValueError("Something is really wrong with this world.")
                                     # Else array of vectors
 
                             else:
@@ -197,19 +192,19 @@ class BathState:
         """
         ndarray: Return an underlying object array.
         """
-        return self._data['state']
+        return self._data["state"]
 
     @property
     def pure(self):
         """
         ndarray: Bool property. True if given entry is a pure state, False otherwise.
         """
-        return self._data['pure']
+        return self._data["pure"]
 
     @pure.setter
     def pure(self, pure):
 
-        self._data['pure'] = pure
+        self._data["pure"] = pure
 
     @property
     def _up_to_date(self):
@@ -237,7 +232,7 @@ class BathState:
         if not self._up_to_date:
             self._project()
 
-        return self._data['proj']
+        return self._data["proj"]
 
     @property
     def has_state(self):
@@ -246,7 +241,7 @@ class BathState:
         """
         # if self._in_need_of_checking.any():
         #     self._has_state[self._in_need_of_checking] = False
-        return self._data['hs']
+        return self._data["hs"]
 
     def project(self, rotation=None):
         """
@@ -260,25 +255,25 @@ class BathState:
             ndarray with shape (n, ): Array with projections of the state.
         """
         if rotation is None:
-            self._data['hps'] = False
+            self._data["hps"] = False
             self._project()
-            return self._data['proj'].copy()
+            return self._data["proj"].copy()
 
         projections = np.zeros(self.shape)
 
         if self.has_state.any():
-            projections[self.has_state] = project_bath_states(self.state[self.has_state],
-                                                              (not bool(self.state[self.has_state].shape)),
-                                                              rotation)
+            projections[self.has_state] = project_bath_states(
+                self.state[self.has_state], (not bool(self.state[self.has_state].shape)), rotation
+            )
         return projections
 
     def _project(self):
 
-        which = self.has_state & (~self._data['hps'])
+        which = self.has_state & (~self._data["hps"])
         if which.any():
             projected = project_bath_states(self.state[which], not bool(self.state[which].shape))
-            self._data['proj'][which] = projected
-            self._data['hps'][which] = True
+            self._data["proj"][which] = projected
+            self._data["hps"][which] = True
 
         self._up_to_date = True
 
@@ -392,8 +387,8 @@ def project_bath_states(states, single=False, rotation=None):
 
         else:
             # Assume vectors
-            z_psi = np.einsum('ij,...j->...i', sz, ndstates)
-            projected_bath_state = np.einsum('...j,...j->...', ndstates.conj(), z_psi).real
+            z_psi = np.einsum("ij,...j->...i", sz, ndstates)
+            projected_bath_state = np.einsum("...j,...j->...", ndstates.conj(), z_psi).real
             # projected_bath_state = ndstates
 
     # if len(projected_bath_state.shape) > 1 and not np.any(projected_bath_state[:, :2]):

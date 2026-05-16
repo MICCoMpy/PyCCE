@@ -3,8 +3,7 @@ import operator
 import numpy as np
 import pycce.center
 from pycce import dimensions_spinvectors
-from pycce.h import total_hamiltonian, conditional_hyperfine, \
-    Hamiltonian, bath_hamiltonian
+from pycce.h import total_hamiltonian, conditional_hyperfine, Hamiltonian, bath_hamiltonian
 from pycce.run.base import RunObject, simple_propagator, generate_initial_state
 
 _rows = None
@@ -32,6 +31,7 @@ _newcols = None
 #         bottom = np.count_nonzero(density_matrix, axis=0)
 #         bottom[bottom == 0] = 1
 #         corr = top / bottom
+
 
 def correlation_it_j0(operator_i, operator_j, dm0_expanded, U):
     """
@@ -83,15 +83,15 @@ def compute_correlations(nspin, dm0_expanded, U, central_spin=None):
 
     dimensions, vectors = dimensions_spinvectors(nspin, central_spin=central_spin)
     if central_spin is not None and central_spin.size > 1:
-        raise ValueError('Correlation calculations are supported only for single central spin')
+        raise ValueError("Correlation calculations are supported only for single central spin")
 
     if len(nspin.A.shape) == len(nspin.shape) + 2:
         for j, n in enumerate(nspin):
             ivec = vectors[j]
-            hyperfine_tensor = n['A']
-            aivec = np.array([hyperfine_tensor[0, 0] * ivec[0],
-                              hyperfine_tensor[1, 1] * ivec[1],
-                              hyperfine_tensor[2, 2] * ivec[2]])
+            hyperfine_tensor = n["A"]
+            aivec = np.array(
+                [hyperfine_tensor[0, 0] * ivec[0], hyperfine_tensor[1, 1] * ivec[1], hyperfine_tensor[2, 2] * ivec[2]]
+            )
             # aivec = np.einsum('ij,jkl->ikl', hyperfine_tensor, ivec)
             # Still don't understand why this doesn't work
             a_is += aivec
@@ -107,10 +107,10 @@ def compute_correlations(nspin, dm0_expanded, U, central_spin=None):
         for i in range(nspin.A.shape[len(nspin.shape)]):
             for j, n in enumerate(nspin):
                 ivec = vectors[j]
-                hyperfine_tensor = n['A'][i]
-                aivec = np.array([hyperfine_tensor[0, 0] * ivec[0],
-                                  hyperfine_tensor[1, 1] * ivec[1],
-                                  hyperfine_tensor[2, 2] * ivec[2]])
+                hyperfine_tensor = n["A"][i]
+                aivec = np.array(
+                    [hyperfine_tensor[0, 0] * ivec[0], hyperfine_tensor[1, 1] * ivec[1], hyperfine_tensor[2, 2] * ivec[2]]
+                )
                 a_is += aivec
 
             AI_z.append(correlation_it_j0(a_is[2], a_is[2], dm0_expanded, U))
@@ -131,6 +131,7 @@ class gCCENoise(RunObject):
         **kwargs: Keyword arguments of the ``RunObject``.
 
     """
+
     result_operator = operator.iadd
     """Overridden operator which will combine the result of expansion: ``operator.iadd``."""
     contribution_operator = operator.imul
@@ -208,6 +209,7 @@ class CCENoise(RunObject):
         **kwargs: Keyword arguments of the ``RunObject``.
 
     """
+
     result_operator = operator.iadd
     """Overridden operator which will combine the result of expansion: ``operator.iadd``."""
     contribution_operator = operator.imul
@@ -231,7 +233,7 @@ class CCENoise(RunObject):
         super().preprocess()
         self.center.generate_projections()
         if self.center.size > 1:
-            raise ValueError('Correlation calculations are supported only for single central spin')
+            raise ValueError("Correlation calculations are supported only for single central spin")
 
         self.projections = (np.abs(self.center.projections_alpha) + np.abs(self.center.projections_beta)) / 2
         # self.projections = generate_projections(self.state)
@@ -260,9 +262,9 @@ class CCENoise(RunObject):
             hsingle = 0
             for i, proj in enumerate(self.projections):
                 if self.center.size > 1:
-                    hf = n['A'][i]
+                    hf = n["A"][i]
                 else:
-                    hf = n['A']
+                    hf = n["A"]
 
                 hsingle += conditional_hyperfine(hf, ivec, proj)
 

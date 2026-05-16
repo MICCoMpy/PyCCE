@@ -26,11 +26,12 @@ def generate_bath_state(bath, nbstates, seed=None, parallel=False):
     if parallel:
         try:
             import mpi4py
+
             comm = mpi4py.MPI.COMM_WORLD
             rank = comm.Get_rank()
 
         except ImportError:
-            print('Parallel failed: mpi4py is not found. Running serial')
+            print("Parallel failed: mpi4py is not found. Running serial")
             parallel = False
 
     dimensions = np.empty(bath.shape, dtype=np.int32)
@@ -63,14 +64,13 @@ def monte_carlo_method_decorator(func):
     """
 
     @functools.wraps(func)
-    def inner_method(self, *args,
-                     **kwargs):
+    def inner_method(self, *args, **kwargs):
         seed = self.seed
         if self.parallel_states:
             try:
                 from mpi4py import MPI
             except ImportError:
-                print('Parallel failed: mpi4py is not found. Running serial')
+                print("Parallel failed: mpi4py is not found. Running serial")
                 self.parallel_states = False
 
         if isinstance(self.masked, bool) and not self.masked:
@@ -111,7 +111,7 @@ def monte_carlo_method_decorator(func):
 
                 proper = np.abs(result) <= self.masked
                 divider += proper.astype(np.int32)
-                result[~proper] = 0.
+                result[~proper] = 0.0
 
             total += result
 
@@ -126,9 +126,7 @@ def monte_carlo_method_decorator(func):
             result_shape = comm.bcast(result_shape, root=0)
             total = np.asarray(total)
             if not total.shape:
-                total = np.zeros(result_shape,
-
-                                 dtype=np.complex128)
+                total = np.zeros(result_shape, dtype=np.complex128)
             root_result = ma.array(np.zeros(result_shape), dtype=np.complex128)
             comm.Allreduce(total, root_result, MPI.SUM)
 

@@ -30,8 +30,8 @@ def rotmatrix(initial_vector, final_vector):
 
     c = a @ b  # Cosine between vectors
     # if they're antiparallel
-    if c == -1.:
-        raise ValueError('Vectors are antiparallel')
+    if c == -1.0:
+        raise ValueError("Vectors are antiparallel")
 
     v = np.cross(a, b)
     screw_v = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
@@ -54,10 +54,9 @@ def expand(matrix, i, dim):
         ndarray with shape (prod(dim), prod(dim)): Expanded matrix.
     """
     dbefore = dim[:i].prod()
-    dafter = dim[i + 1:].prod()
+    dafter = dim[i + 1 :].prod()
 
-    expanded_matrix = np.kron(np.kron(np.eye(dbefore, dtype=np.complex128), matrix),
-                              np.eye(dafter, dtype=np.complex128))
+    expanded_matrix = np.kron(np.kron(np.eye(dbefore, dtype=np.complex128), matrix), np.eye(dafter, dtype=np.complex128))
 
     return expanded_matrix
 
@@ -105,6 +104,7 @@ def partial_trace(dmarray, dimensions, sel):
 
     return dmarray
 
+
 def partial_inner_product(avec, total, dimensions, index=-1):
     r"""
     Returns partial inner product :math:`\ket{b}=\bra{a}\ket{\psi}`, where :math:`\ket{a}` provided by
@@ -144,7 +144,7 @@ def shorten_dimensions(dimensions, central_number):
 
     """
     if central_number > 1:
-        shortdims = dimensions[:-central_number + 1].copy()
+        shortdims = dimensions[: -central_number + 1].copy()
         # reduced dimension so all central spin dimensions are gathered in one
         shortdims[-1] = np.prod(dimensions[-central_number:])
     else:
@@ -204,7 +204,7 @@ def vvdot(vec_1, vec_2):
     return result
 
 
-def rotate_tensor(tensor, rotation=None, style='col'):
+def rotate_tensor(tensor, rotation=None, style="col"):
     """
     Rootate tensor in real space, given rotation matrix.
 
@@ -218,7 +218,7 @@ def rotate_tensor(tensor, rotation=None, style='col'):
     """
     if rotation is None:
         return tensor
-    if style.lower == 'row':
+    if style.lower == "row":
         rotation = rotation.T
     if np.isclose(np.linalg.inv(rotation), rotation.T, rtol=1e-04).all():
         invrot = rotation.T
@@ -232,7 +232,7 @@ def rotate_tensor(tensor, rotation=None, style='col'):
     return (res + np.swapaxes(res, -1, -2)) / 2
 
 
-def rotate_coordinates(xyz, rotation=None, cell=None, style='col'):
+def rotate_coordinates(xyz, rotation=None, cell=None, style="col"):
     """
     Rootate coordinates in real space, given rotation matrix.
 
@@ -245,13 +245,13 @@ def rotate_coordinates(xyz, rotation=None, cell=None, style='col'):
     Returns:
         ndarray with shape (..., 3)): Array of rotated coordinates.
     """
-    if style.lower() == 'row':
+    if style.lower() == "row":
         if rotation is not None:
             rotation = rotation.T
         if cell is not None:
             cell = cell.T
     if cell is not None:
-        xyz = np.einsum('jk,...k->...j', cell, xyz)
+        xyz = np.einsum("jk,...k->...j", cell, xyz)
     if rotation is not None:
         if np.isclose(np.linalg.inv(rotation), rotation.T).all():
             invrot = rotation.T
@@ -259,7 +259,7 @@ def rotate_coordinates(xyz, rotation=None, cell=None, style='col'):
             warnings.warn(f"Rotation {rotation} changes distances. Is that desired behavior?", stacklevel=2)
             invrot = np.linalg.inv(rotation)
 
-        xyz = np.einsum('jk,...k->...j', invrot, xyz)
+        xyz = np.einsum("jk,...k->...j", invrot, xyz)
     #  Suppress very small deviations
     xyz[np.isclose(xyz, 0)] = 0
 

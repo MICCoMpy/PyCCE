@@ -89,10 +89,12 @@ def _close_state_index(state, eiv, level_confidence=0.95):
     indexes = np.argwhere((eiv.T @ state) ** 2 > level_confidence).flatten()
 
     if not indexes.size:
-        raise ValueError(f"Initial qubit state is below F = {level_confidence} "
-                         f"to the eigenstate of central spin Hamiltonian.\n"
-                         f"Qubit level:\n{repr(state)}"
-                         f"Eigenstates (rows):\n{repr(eiv.T)}")
+        raise ValueError(
+            f"Initial qubit state is below F = {level_confidence} "
+            f"to the eigenstate of central spin Hamiltonian.\n"
+            f"Qubit level:\n{repr(state)}"
+            f"Eigenstates (rows):\n{repr(eiv.T)}"
+        )
     return indexes[0]
 
 
@@ -126,8 +128,7 @@ class CCE(RunObject):
 
     """
 
-    def __init__(self, *args, second_order=False,
-                 level_confidence=0.95, **kwargs):
+    def __init__(self, *args, second_order=False, level_confidence=0.95, **kwargs):
         self.key_alpha = None
         self.key_beta = None
 
@@ -198,10 +199,10 @@ class CCE(RunObject):
                     self.use_pulses = True
 
                 if not c1 or not (np.isclose(angles, np.pi) | np.isclose(angles, 0)).all():
-                    raise ValueError('Only pi-pulses are supported in CCE. Use gCCE for user-defined sequences.')
+                    raise ValueError("Only pi-pulses are supported in CCE. Use gCCE for user-defined sequences.")
 
                 if not c0 and self.second_order:
-                    raise ValueError('Only full flip pulses are supported in CCE with second order corrections')
+                    raise ValueError("Only full flip pulses are supported in CCE with second order corrections")
 
         except TypeError:
             self.pulses = self.initial_pulses
@@ -252,7 +253,7 @@ class CCE(RunObject):
         unitary_0, unitary_1 = self.propagators()
 
         if self.states is None:
-            coherence_function = np.einsum('zij,zij->z', unitary_0, unitary_1.conj()) / unitary_0.shape[1]
+            coherence_function = np.einsum("zij,zij->z", unitary_0, unitary_1.conj()) / unitary_0.shape[1]
             if self.store_states:
                 self.cluster_evolved_states = unitary_0 / unitary_0.shape[1], unitary_1 / unitary_1.shape[1]
         else:
@@ -275,7 +276,7 @@ class CCE(RunObject):
                 rightside = unitary_1 @ dm
                 leftside = unitary_0 @ dm
 
-                coherence_function = np.einsum('ki,ki->k', leftside.conj(), rightside)
+                coherence_function = np.einsum("ki,ki->k", leftside.conj(), rightside)
                 if self.store_states:
                     self.cluster_evolved_states = leftside, rightside
 
@@ -305,11 +306,9 @@ class CCE(RunObject):
     def _proj_ham(self, index=0, alpha=True, beta=False):
         self.get_hamiltonian_variable_bath_state(index)
 
-        ha = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors,
-                                                   self.cluster, self.center, alpha)
+        ha = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, alpha)
 
-        hb = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors,
-                                                   self.cluster, self.center, beta)
+        hb = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, beta)
 
         return ha, hb
 
@@ -397,9 +396,9 @@ class CCE(RunObject):
 
                 eigen_exp1 = np.exp(-1j * np.outer(delay, eval1), dtype=np.complex128)
 
-                u0 = np.matmul(np.einsum('...ij,...j->...ij', evec0, eigen_exp0, dtype=np.complex128), evec0.conj().T)
+                u0 = np.matmul(np.einsum("...ij,...j->...ij", evec0, eigen_exp0, dtype=np.complex128), evec0.conj().T)
 
-                u1 = np.matmul(np.einsum('...ij,...j->...ij', evec1, eigen_exp1, dtype=np.complex128), evec1.conj().T)
+                u1 = np.matmul(np.einsum("...ij,...j->...ij", evec1, eigen_exp1, dtype=np.complex128), evec1.conj().T)
 
                 times += delay
 
@@ -429,23 +428,21 @@ class CCE(RunObject):
         which = np.isclose(self.timespace, times)
         if ((self.timespace - times)[~which] >= 0).all():
 
-            eigen_exp0 = np.exp(-1j * np.outer(self.timespace - times,
-                                               eval0), dtype=np.complex128)
-            eigen_exp1 = np.exp(-1j * np.outer(self.timespace - times,
-                                               eval1), dtype=np.complex128)
+            eigen_exp0 = np.exp(-1j * np.outer(self.timespace - times, eval0), dtype=np.complex128)
+            eigen_exp1 = np.exp(-1j * np.outer(self.timespace - times, eval1), dtype=np.complex128)
 
-            u0 = np.matmul(np.einsum('ij,kj->kij', evec0, eigen_exp0, dtype=np.complex128),
-                           evec0.conj().T)
+            u0 = np.matmul(np.einsum("ij,kj->kij", evec0, eigen_exp0, dtype=np.complex128), evec0.conj().T)
 
-            u1 = np.matmul(np.einsum('ij,kj->kij', evec1, eigen_exp1, dtype=np.complex128),
-                           evec1.conj().T)
+            u1 = np.matmul(np.einsum("ij,kj->kij", evec1, eigen_exp1, dtype=np.complex128), evec1.conj().T)
 
             unitary_0 = np.matmul(u0, unitary_0)
             unitary_1 = np.matmul(u1, unitary_1)
 
         elif not which.all():
-            raise ValueError(f"Pulse sequence time steps add up to larger than total times"
-                             f"{np.argwhere((self.timespace - times) < 0)} are longer than total time.")
+            raise ValueError(
+                f"Pulse sequence time steps add up to larger than total times"
+                f"{np.argwhere((self.timespace - times) < 0)} are longer than total time."
+            )
 
         return unitary_0, unitary_1
 
@@ -461,6 +458,7 @@ def _gen_key(p, key_alpha, key_beta):
                 key_alpha[index] = not key_alpha[index]
                 key_beta[index] = not key_beta[index]
     return key_alpha, key_beta
+
 
 # def compute_coherence(H0, H1, timespace, N, as_delay=False, states=None):
 #     """

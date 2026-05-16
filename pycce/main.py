@@ -369,9 +369,24 @@ class Simulator:
 
     """
 
-    def __init__(self, spin, position=None, alpha=None, beta=None, gyro=None, magnetic_field=None,
-                 D=None, E=0., r_dipole=None, order=None, bath=None, pulses=None, as_delay=False, n_clusters=None,
-                 **bath_kw):
+    def __init__(
+        self,
+        spin,
+        position=None,
+        alpha=None,
+        beta=None,
+        gyro=None,
+        magnetic_field=None,
+        D=None,
+        E=0.0,
+        r_dipole=None,
+        order=None,
+        bath=None,
+        pulses=None,
+        as_delay=False,
+        n_clusters=None,
+        **bath_kw,
+    ):
 
         self.center = None
         """CenterArray: Array of central spins."""
@@ -395,15 +410,14 @@ class Simulator:
             if gyro is None:
                 gyro = ELECTRON_GYRO
             if D is None:
-                D = 0.
+                D = 0.0
 
             if alpha is None:
                 alpha = 0
             if beta is None:
                 beta = 1
 
-            self.center = CenterArray(spin=spin, gyro=gyro, position=position, D=D, E=E,
-                                      alpha=alpha, beta=beta)
+            self.center = CenterArray(spin=spin, gyro=gyro, position=position, D=D, E=E, alpha=alpha, beta=beta)
         self._magnetic_field = None
         self.magnetic_field = magnetic_field
 
@@ -487,13 +501,14 @@ class Simulator:
         self.j = None
 
     def __repr__(self):
-        bm = (f"Simulator for center array of size {len(self.center)}.\n"
-              f"magnetic field:\n{self.magnetic_field.__repr__()}\n\n"
-              f"Parameters of cluster expansion:\n"
-              f"r_bath: {self.r_bath}\n"
-              f"r_dipole: {self.r_dipole}\n"
-              f"order: {self.order}\n"
-              )
+        bm = (
+            f"Simulator for center array of size {len(self.center)}.\n"
+            f"magnetic field:\n{self.magnetic_field.__repr__()}\n\n"
+            f"Parameters of cluster expansion:\n"
+            f"r_bath: {self.r_bath}\n"
+            f"r_dipole: {self.r_dipole}\n"
+            f"order: {self.order}\n"
+        )
 
         if self.bath is not None:
             bm += f"\nBath consists of {self.bath.size} spins.\n"
@@ -638,7 +653,7 @@ class Simulator:
     def pulses(self, pulses):
 
         try:
-            pulses = ([('x', np.pi), ('y', np.pi)] * ((pulses + 1) // 2))[:pulses]
+            pulses = ([("x", np.pi), ("y", np.pi)] * ((pulses + 1) // 2))[:pulses]
         except TypeError:
             pulses = pulses
 
@@ -723,7 +738,7 @@ class Simulator:
         try:
             self._bath = bath_array.view(BathArray)
         except AttributeError as e:
-            print('Bath array should be ndarray or a subclass')
+            print("Bath array should be ndarray or a subclass")
             raise e
 
         self.total_bath = self._bath
@@ -842,26 +857,31 @@ class Simulator:
         self.clusters = None
 
         if self.r_dipole is None:
-            raise ValueError('r_dipole was not set')
+            raise ValueError("r_dipole was not set")
         elif self.order is None:
-            raise ValueError('order was not set')
+            raise ValueError("order was not set")
 
-        clusters = generate_clusters(self.bath, self.r_dipole, self.order,
-                                     r_inner=r_inner, strong=strong, ignore=ignore, nclusters=self.n_clusters)
+        clusters = generate_clusters(
+            self.bath, self.r_dipole, self.order, r_inner=r_inner, strong=strong, ignore=ignore, nclusters=self.n_clusters
+        )
 
         self.clusters = clusters
 
         return self.clusters
 
-    def read_bath(self, bath=None, r_bath=None,
-                  skiprows=1,
-                  external_bath=None,
-                  hyperfine=None,
-                  types=None,
-                  error_range=None,
-                  ext_r_bath=None,
-                  imap=None,
-                  func_kw=None):
+    def read_bath(
+        self,
+        bath=None,
+        r_bath=None,
+        skiprows=1,
+        external_bath=None,
+        hyperfine=None,
+        types=None,
+        error_range=None,
+        ext_r_bath=None,
+        imap=None,
+        func_kw=None,
+    ):
         r"""
         Read spin bath from the file or from the ``BathArray``.
 
@@ -971,10 +991,10 @@ class Simulator:
 
             self._external_bath = self.external_bath[where]
 
-        if self._hyperfine == 'pd' or (self._hyperfine is None and not bath.A.any()):
+        if self._hyperfine == "pd" or (self._hyperfine is None and not bath.A.any()):
             bath = bath.from_center(self.center)
 
-            self._hyperfine = 'pd'
+            self._hyperfine = "pd"
 
         elif isinstance(self._hyperfine, Cube):
             bath = bath.from_center(self.center, cube=self._hyperfine)
@@ -983,11 +1003,10 @@ class Simulator:
             bath = bath.from_func(self._hyperfine, **func_kw)
 
         if self.external_bath is not None:
-            bath = bath.update(self.external_bath, error_range=self._error_range, ignore_isotopes=True,
-                               inplace=True)
+            bath = bath.update(self.external_bath, error_range=self._error_range, ignore_isotopes=True, inplace=True)
 
         if not bath.size:
-            warnings.warn('Provided bath is empty.', stacklevel=2)
+            warnings.warn("Provided bath is empty.", stacklevel=2)
 
         self._bath = bath
 
@@ -998,7 +1017,7 @@ class Simulator:
         return self.bath
 
     @_add_args(_args + _returns)
-    def compute(self, timespace, quantity='coherence', method='cce', **kwargs):
+    def compute(self, timespace, quantity="coherence", method="cce", **kwargs):
         r"""
         General function for computing properties with CCE.
 
@@ -1106,11 +1125,11 @@ class Simulator:
                     - 'cce': conventional CCE, where interactions are mapped on 2 level pseudospin.
                     - 'gcce': Generalized CCE where central spin is included in each cluster.
         """
-        if quantity.lower() == 'noise':
-            kwargs.setdefault('masked', None)
+        if quantity.lower() == "noise":
+            kwargs.setdefault("masked", None)
 
         else:
-            kwargs.setdefault('masked', True)
+            kwargs.setdefault("masked", True)
 
         self.timespace = timespace
         self._prepare(**kwargs)
@@ -1136,13 +1155,13 @@ class Simulator:
 
         return result
 
-    def full_bath_compute(self, timespace, quantity='coherence', method='cce', **kwargs):
+    def full_bath_compute(self, timespace, quantity="coherence", method="cce", **kwargs):
         self.timespace = timespace
         self._prepare(**kwargs)
         return_dms = False
-        if quantity == 'dm':
+        if quantity == "dm":
             return_dms = True
-            quantity = 'coherence'
+            quantity = "coherence"
 
         runner = self._compute_func[method.lower()][quantity.lower()].from_simulator(self)
         if return_dms:
@@ -1166,43 +1185,40 @@ class Simulator:
             setattr(self, key, dict_with_attr[key])
 
     _compute_func = {
-        'cce': {
-            'coherence': CCE,
-            'noise': CCENoise
+        "cce": {"coherence": CCE, "noise": CCENoise},
+        "gcce": {
+            "coherence": gCCE,
+            "noise": gCCENoise,
         },
-        'gcce': {
-            'coherence': gCCE,
-            'noise': gCCENoise,
+        "megcce": {
+            "coherence": LindbladgCCE,
         },
-        'megcce': {
-            'coherence': LindbladgCCE,
-
+        "mecce": {
+            "coherence": LindbladCCE,
         },
-        'mecce': {
-            'coherence': LindbladCCE,
-
-        }
     }
 
     @_add_args(_args)
-    def _prepare(self,
-                 pulses=None,
-                 i=None,
-                 j=None,
-                 normalized=True,
-                 magnetic_field=None,
-                 as_delay=False,
-                 nbstates=None,
-                 seed=None,
-                 masked=True,
-                 parallel_states=False,
-                 fixstates=None,
-                 second_order=False,
-                 level_confidence=0.95,
-                 direct=False,
-                 parallel=False,
-                 interlaced=False,
-                 fulldm=False):
+    def _prepare(
+        self,
+        pulses=None,
+        i=None,
+        j=None,
+        normalized=True,
+        magnetic_field=None,
+        as_delay=False,
+        nbstates=None,
+        seed=None,
+        masked=True,
+        parallel_states=False,
+        fixstates=None,
+        second_order=False,
+        level_confidence=0.95,
+        direct=False,
+        parallel=False,
+        interlaced=False,
+        fulldm=False,
+    ):
         """
 
         Args:
@@ -1258,7 +1274,7 @@ def _broadcast_simulator(simulator=None, root=0):
     try:
         import mpi4py
     except ImportError:
-        raise RuntimeError('Could not find mpi4py. Cannot broadcast the Simulator')
+        raise RuntimeError("Could not find mpi4py. Cannot broadcast the Simulator")
 
     comm = mpi4py.MPI.COMM_WORLD
 

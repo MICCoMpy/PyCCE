@@ -68,7 +68,7 @@ class InteractionMap(MutableMapping):
                 return np.asarray(vs)
 
             except TypeError as e:
-                raise TypeError('invalid index format') from e
+                raise TypeError("invalid index format") from e
 
     def __delitem__(self, key):
         a, b = _index(key)
@@ -98,7 +98,7 @@ class InteractionMap(MutableMapping):
         a, b = _index(key)
 
         if isintlike(a) and isintlike(b):
-            assert value.size == 9, 'Tensor should have shape of (3, 3)'
+            assert value.size == 9, "Tensor should have shape of (3, 3)"
             if a < b:
                 self.mapping[a, b] = value
             else:
@@ -120,7 +120,7 @@ class InteractionMap(MutableMapping):
                             self.mapping[k, j] = v.T
 
             except TypeError as e:
-                raise TypeError('invalid index format') from e
+                raise TypeError("invalid index format") from e
         self._data = None
         self.indexes = None
 
@@ -169,8 +169,7 @@ class InteractionMap(MutableMapping):
         return self.mapping.items()
 
     def __gen_indexes(self):
-        self.indexes = np.fromiter((ind for pair in self.mapping.keys() for ind in pair),
-                                   dtype=np.int32).reshape(-1, 2)
+        self.indexes = np.fromiter((ind for pair in self.mapping.keys() for ind in pair), dtype=np.int32).reshape(-1, 2)
 
     def __gen_data(self):
         length = self.indexes.shape[0]
@@ -279,7 +278,7 @@ class InteractionMap(MutableMapping):
         for k in {*keys_1, *keys_2}:
 
             if (k in keys_1) and (k in keys_2):
-                assert (other[k] == self[k]).all(), f'Error, tensor {k} has different properties in provided mappings'
+                assert (other[k] == self[k]).all(), f"Error, tensor {k} has different properties in provided mappings"
                 new_obj[k] = self[k]
 
             elif k in keys_1:
@@ -327,7 +326,7 @@ class _CompressedIMap:
         # Indexes in the subspace 0, 1, 2, 3
         newindexes = np.arange(indexes.size, dtype=np.int32)
         # Which indexes are present
-        full = (self.indexes[:, :, np.newaxis] == indexes[np.newaxis, np.newaxis, :])
+        full = self.indexes[:, :, np.newaxis] == indexes[np.newaxis, np.newaxis, :]
         where = full.any(-1).all(-1)
         where_exactly = np.nonzero(full[where])
         # lastpairs[where_exactly[:-1]] = newindexes[where_exactly[-1]]
@@ -340,7 +339,7 @@ class _CompressedIMap:
         if not key.shape[-1] == 2:
             raise KeyError
 
-        unsorted = (key[..., :-1] > key[..., 1:])
+        unsorted = key[..., :-1] > key[..., 1:]
         any_unsorted = unsorted.any()
 
         if any_unsorted:
@@ -372,5 +371,5 @@ def _index(key):
     try:
         a, b = key
     except TypeError as e:
-        raise TypeError('invalid index format') from e
+        raise TypeError("invalid index format") from e
     return a, b
