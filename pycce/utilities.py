@@ -343,3 +343,50 @@ def vector_from_s(s, d):
     state_number = np.int32((d - 1) / 2 - s)
     vec_nucleus[state_number] = 1
     return vec_nucleus
+
+
+def commute(M, dim):
+    """
+    Converts the tensor product of Matrix (M = A \otimes B) to (E= A \otimes I \otimes B)
+    Args:
+        M(ndarray with shape (dim[i], dim[i])): Inital matrix (A \otimes B) .
+        dim (int): dimensions of the identity matrix I between A and B.
+    Returns:
+        ndarray with shape (M.shape[0]*dim, M.shape[0]*dim): Commuted tensor Matrix E (= A \otimes I \otimes B).
+    """
+
+    K_r = np.eye(int(np.sqrt(M.shape[0]).round()) * np.eye(dim).shape[0] * int(np.sqrt(M.shape[0]).round()))[
+        np.arange(int(np.sqrt(M.shape[0]).round()) * np.eye(dim).shape[0] * int(np.sqrt(M.shape[0]).round()))
+        .reshape(
+            (
+                int(np.sqrt(M.shape[0]).round()) * np.eye(dim).shape[0],
+                int(np.sqrt(M.shape[0]).round()),
+            ),
+            order="F",
+        )
+        .T.ravel(order="F"),
+        :,
+    ]
+
+    K_n = np.eye(M.shape[0])[
+        np.arange(M.shape[0])
+        .reshape((int(np.sqrt(M.shape[0]).round()), int(np.sqrt(M.shape[0]).round())), order="F")
+        .T.ravel(order="F"),
+        :,
+    ]
+
+    E = K_r @ (np.kron(K_n @ M @ K_n.T, np.eye(dim))) @ K_r.T
+    return E
+
+
+def kroncommute(AB):
+
+    K_j = np.eye(AB.shape[0])[
+        np.arange(AB.shape[0])
+        .reshape((int(np.sqrt(AB.shape[0]).round()), int(np.sqrt(AB.shape[0]).round())), order="F")
+        .T.ravel(order="F"),
+        :,
+    ]
+
+    BA = K_j @ AB @ K_j.T
+    return BA
