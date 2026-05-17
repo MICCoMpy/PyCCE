@@ -5,6 +5,7 @@ This module contains information about the way the cluster expansion is implemen
 import functools
 import operator
 import warnings
+from tqdm import tqdm
 
 import numpy as np
 from pycce.sm import _smc
@@ -106,13 +107,12 @@ def optimized_approach(function, self, *arg, result_operator=operator.imul, cont
             warnings.warn("Parallel failed: mpi4py is not found. Running serial.")
             self.parallel = False
 
+    rank, size = 0, 1
     if self.parallel:
         comm = MPI.COMM_WORLD
 
         size = comm.Get_size()
         rank = comm.Get_rank()
-    else:
-        rank = 0
 
     # If there is only one set of indexes for only one order,
     # Then for this subcluster nelements < maximum CCE order
@@ -139,6 +139,10 @@ def optimized_approach(function, self, *arg, result_operator=operator.imul, cont
         else:
             start = 0
             block = nclusters
+
+        if rank == 0:
+            n_current = 0
+            pbar = tqdm(total=nclusters, disable=not self.verbose, desc=f"order={order}", position=0, leave=True)
 
         for index in range(start, start + block):
 
@@ -170,6 +174,12 @@ def optimized_approach(function, self, *arg, result_operator=operator.imul, cont
 
             result = result_operator(result, vcalc)
 
+            # update pbar
+            if rank == 0:
+                step = min(size, nclusters - n_current)
+                pbar.update(step)
+                n_current += step
+
         if self.parallel:
             buffer = np.empty(current_power.shape, dtype=np.int32)
             comm.Allreduce(current_power, buffer, MPI.SUM)
@@ -178,8 +188,7 @@ def optimized_approach(function, self, *arg, result_operator=operator.imul, cont
         power[order] = current_power
 
         visited += 1
-        # print('Computed {} of order {} for {} clusters'.format(
-        #     function.__name__, order, subclusters[order].shape[0]))
+
     _smc.clear()
 
     if self.parallel:
@@ -237,15 +246,13 @@ def direct_approach(
     orders = sorted(subclusters)
     norders = len(orders)
 
+    rank, size = 0, 1
     if self.parallel:
         comm = MPI.COMM_WORLD
 
         size = comm.Get_size()
         rank = comm.Get_rank()
-    else:
-        rank = 0
-        comm = None
-    # print(dms_zero.mask)
+
     # If there is only one set of indexes for only one order,
     # Then for this subcluster nelements < maximum CCE order
     if norders == 1 and subclusters[orders[0]].shape[0] == 1:
@@ -253,7 +260,6 @@ def direct_approach(
 
         return function(verticles, *arg, **kwarg)
 
-        # print(zero_power)
     # The Highest possible L will have all powers of 1
     result_tilda = {}
     visited = 0
@@ -274,6 +280,10 @@ def direct_approach(
             start = 0
             block = nclusters
 
+        if rank == 0:
+            n_current = 0
+            pbar = tqdm(total=nclusters, disable=not self.verbose, desc=f"order={order}", position=0, leave=True)
+
         for index in range(start, start + block):
 
             v = subclusters[order][index]
@@ -285,6 +295,13 @@ def direct_approach(
                 vcalc = removal_operator(vcalc, lower_vcalc)
 
             current_order.append(vcalc)
+
+            # update pbar
+            if rank == 0:
+                step = min(size, nclusters - n_current)
+                pbar.update(step)
+                n_current += step
+
         current_order = np.array(current_order, copy=False)
 
         if self.parallel:
@@ -341,13 +358,12 @@ def interlaced_decorator(_func=None, *, result_operator=operator.imul, contribut
                     warnings.warn("Parallel failed: mpi4py is not found. Running serial.")
                     self.parallel = False
 
+            rank, size = 0, 1
             if self.parallel:
                 comm = MPI.COMM_WORLD
 
                 size = comm.Get_size()
                 rank = comm.Get_rank()
-            else:
-                rank = 0
 
             # If there is only one set of indexes for only one order,
             # Then for this subcluster nelements < maximum CCE order
@@ -406,8 +422,7 @@ def interlaced_decorator(_func=None, *, result_operator=operator.imul, contribut
                 power[order] = current_power
 
                 visited += 1
-                # print('Computed {} of order {} for {} clusters'.format(
-                #     function.__name__, order, subclusters[order].shape[0]))
+
             _smc.clear()
 
             if self.parallel:
