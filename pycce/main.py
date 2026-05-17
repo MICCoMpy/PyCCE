@@ -206,6 +206,11 @@ _args = r"""
                 Used in gCCE. True if return full density matrix of the central spin.
                 False if only return the computed property.
 
+                Default is **False**.
+
+            verbose (bool):
+                True if print the progress of the calculation.
+
                 Default is **False**."""
 
 
@@ -1218,6 +1223,7 @@ class Simulator:
         parallel=False,
         interlaced=False,
         fulldm=False,
+        verbose=False,
     ):
         """
 
@@ -1247,6 +1253,7 @@ class Simulator:
         self.masked = masked
         self.interlaced = interlaced
         self.fulldm = fulldm
+        self.verbose = verbose
 
         if parallel or parallel_states:
             self._broadcast()
