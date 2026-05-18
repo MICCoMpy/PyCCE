@@ -1,7 +1,8 @@
 import numpy as np
 import scipy
 from numpy import ma as ma
-from pycce.bath.array import BathArray, _process_key_operator
+from pycce.bath.array import BathArray
+from pycce.bath.map import process_key_operator, process_key_dissipator
 from pycce.constants import PI2
 from pycce.h import total_hamiltonian, projected_addition
 from pycce.run.base import RunObject, generate_initial_state, simple_propagator
@@ -37,6 +38,15 @@ def simple_incoherent_propagator(timespace, lindbladian):
     #                  evec.conj().T)
 
 
+def simple_dissipator(left, right):
+    eye = np.eye(left.shape[0], dtype=np.complex128)
+    ln_rho_rndag = op_to_supop(left, right.conj().T)
+    rho_rndag_ln = op_to_supop(eye, right.conj().T @ left)
+    rndag_ln_rho = op_to_supop(right.conj().T @ left, eye)
+    lindb = 1 / 2 * (2 * ln_rho_rndag - rho_rndag_ln - rndag_ln_rho)
+    return lindb
+
+
 def collapse_superoperator(superoperators, index, dims):
     """
     Generate incoherent superoperator from the dictionary containing all single-spin jump operators
@@ -52,20 +62,84 @@ def collapse_superoperator(superoperators, index, dims):
     Returns:
         ndarray with shape (N*N,N*N): Superoperator corresponding to single spin jump operators.
     """
-    sm = _smc[(dims[index] - 1) / 2]
     full_lindb = 0
-    eye = np.eye(dims.prod(), dtype=np.complex128)
     for key in superoperators:
-        collapse = _process_key_operator(key, superoperators[key], sm)
-
+        collapse = process_key_operator(key, superoperators[key], (dims[index] - 1) / 2)
         cn = expand(collapse, index, dims)
-        cn_rho_cndag = op_to_supop(cn, cn.conj().T)
-        rho_cndag_cn = op_to_supop(eye, cn.conj().T @ cn)
-        cndag_cn_rho = op_to_supop(cn.conj().T @ cn, eye)
-        lindb = 1 / 2 * (2 * cn_rho_cndag - rho_cndag_cn - cndag_cn_rho)
+        lindb = simple_dissipator(cn, cn)
+
         full_lindb += lindb
 
     return full_lindb
+
+
+def custom_superoperator(spins, dims=None, offset=0):
+    add = 0
+    if dims is None:
+        dims = spins.dim
+    ncenters = dims.size - spins.size
+    for indexes in spins.linmap:
+        for diss in spins.linmap[indexes]:
+            add += superoperator_from_dissipator(diss, indexes, dims, offset=offset, ncenters=ncenters)
+
+    return add
+
+
+def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=0):
+    left = None
+    right = None
+
+    for j, index in enumerate(indexes):
+        op = dissipator.left[j]
+        ifarray = isinstance(op, np.ndarray)
+        cond = op.any() if ifarray else bool(op)
+        if cond:
+            op = process_key_dissipator(dissipator.left[j], (dims[index] - 1) / 2)
+            innerleft = expand(op, index + offset, dims)
+
+            left = innerleft if left is None else np.matmul(left, innerleft)
+
+        if not dissipator.symmetric:
+            op = dissipator.right[j]
+            ifarray = isinstance(op, np.ndarray)
+            cond = op.any() if ifarray else bool(op)
+            if cond:
+                op = process_key_dissipator(dissipator.right[j], (dims[index] - 1) / 2)
+                innerright = expand(op, index + offset, dims)
+
+            right = innerright if right is None else np.matmul(right, innerright)
+
+    if ncenters:
+        for k in dissipator.center_left:
+            index = dims.size - (ncenters - k)
+            center_spin = (dims[index] - 1) / 2
+            op = process_key_dissipator(dissipator.center_left[k], center_spin)
+
+            innerleft = expand(op, index + offset, dims)
+
+            left = innerleft if left is None else np.matmul(left, innerleft)
+
+        if not dissipator.symmetric:
+            for k in dissipator.center_right:
+                index = dims.size - (ncenters - k)
+                center_spin = (dims[index] - 1) / 2
+                op = process_key_dissipator(dissipator.center_right[k], center_spin)
+
+                innerright = expand(op, index + offset, dims)
+
+                right = innerright if right is None else np.matmul(right, innerright)
+
+    if dissipator.symmetric:
+        right = left
+
+    if left is None and right is not None:
+        left = np.eye(right.shape[0], dtype=np.complex128)
+    elif right is None and left is not None:
+        right = np.eye(left.shape[0], dtype=np.complex128)
+    elif right is None and left is None:
+        return 0
+
+    return simple_dissipator(left, right) * dissipator.rate
 
 
 def incoherent_superoperator(spins, dims=None, offset=0):
@@ -206,9 +280,6 @@ class LindbladgCCE(gCCE):
     def postprocess(self):
         super().postprocess()
 
-        # else:
-        #     self.result = self.center.eigenvectors @ self.result @ self.center.eigenvectors.conj().T
-
     def generate_hamiltonian(self):
         ham = total_hamiltonian(self.cluster, self.center, self.magnetic_field)
 
@@ -224,6 +295,8 @@ class LindbladgCCE(gCCE):
         self.superoperator = coherent_superoperator(self.hamiltonian)
         self.superoperator += incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions)
         self.superoperator += incoherent_superoperator(self.center, self.base_hamiltonian.dimensions, offset=self.cluster.size)
+        if self.cluster.linmap:
+            self.superoperator += custom_superoperator(self.cluster, self.base_hamiltonian.dimensions, offset=0)
 
     def super_propagator(self):
         """
@@ -471,9 +544,6 @@ class LindbladCCE(CCE):
     def postprocess(self):
         super().postprocess()
 
-        # else:
-        #     self.result = self.center.eigenvectors @ self.result @ self.center.eigenvectors.conj().T
-
     def get_superoperator(self, alpha=True, beta=False, return_two=False, index=0):
         """
         Generate superoperator for the given state of the cluster.
@@ -496,9 +566,10 @@ class LindbladCCE(CCE):
 
         hb = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, beta)
 
-        addition = incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions) + incoherent_superoperator(
-            self.center, self.base_hamiltonian.dimensions, offset=self.cluster.size
-        )
+        addition = incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions)
+        if self.cluster.linmap:
+            addition += custom_superoperator(self.cluster, self.base_hamiltonian.dimensions, offset=0)
+
         self.superoperator = projected_coherent_superoperator(ha, hb) + addition
 
         if return_two:

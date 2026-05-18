@@ -2,7 +2,7 @@ import numpy as np
 from numba import jit, types  #  generated_jit,
 
 from pycce.constants import HBAR_MU0_O4PI, PI2, ELECTRON_GYRO
-from pycce.utilities import tensor_vdot, vec_tensor_vec
+from pycce.utilities import tensor_vdot, vec_tensor_vec, expand, commute
 from numba.extending import overload
 
 
@@ -216,6 +216,54 @@ def bath_interactions(nspin, ivectors):
                 try:
                     tensor = imap[i, j]
                     dd += vec_tensor_vec(ivec_1, tensor, ivec_2)
+                except KeyError:
+                    dd += dipole_dipole(n1["xyz"], n2["xyz"], n1.gyro, n2.gyro, ivec_1, ivec_2)
+    return dd
+
+
+def bath_interactions_extended_imap(nspin, ivectors):
+    """
+    Compute interactions between bath spins.
+
+    Args:
+        nspin (BathArray): Array of the bath spins in the given cluster.
+        ivectors (array-like): array of expanded spin vectors, each with shape (3, n, n).
+
+    Returns:
+        ndarray with shape (n, n): All intrabath interactions of bath spins in the cluster.
+
+    """
+    dims = np.round([iv[2][0, 0].real * 2 + 1 for iv in ivectors]).astype(int)
+    nnuclei = len(nspin)
+    imap = nspin.imap
+    dd = 0
+    if imap is None:
+        for i in range(nnuclei):
+            for j in range(i + 1, nnuclei):
+                n1 = nspin[i]
+                n2 = nspin[j]
+
+                ivec_1 = ivectors[i]
+                ivec_2 = ivectors[j]
+                dd += dipole_dipole(n1["xyz"], n2["xyz"], n1.gyro, n2.gyro, ivec_1, ivec_2)
+    else:
+        for i in range(nnuclei):
+            for j in range(i + 1, nnuclei):
+                n1 = nspin[i]
+                n2 = nspin[j]
+
+                ivec_1 = ivectors[i]
+                ivec_2 = ivectors[j]
+
+                try:
+                    tensor = imap[i, j]
+                    if tensor.shape == (3, 3):
+                        dd += vec_tensor_vec(ivec_1, tensor, ivec_2)
+                    else:
+                        if j - i > 1:
+                            tensor = commute(tensor, dims[i + 1 : j].prod())
+                        tensor = np.kron(np.eye(dims[:i].prod()), np.kron(tensor, np.eye(dims[j + 1 :].prod())))
+                        dd += tensor
                 except KeyError:
                     dd += dipole_dipole(n1["xyz"], n2["xyz"], n1.gyro, n2.gyro, ivec_1, ivec_2)
     return dd
@@ -585,8 +633,9 @@ def external_spins_field(vectors, indexes, bath, projected_state):
         outer_mask[indexes] = False
 
         where_index = imap_indexes == ind
+        s = (3, 3)
 
-        if where_index.any():
+        if bath.imap.data.shape[-2:] == s and where_index.any():
             remove_j[j] = False
             which_pairs = where_index.any(axis=1) & (~np.isin(imap_indexes, indexes[remove_j]).any(axis=1))
             remove_j[j] = True

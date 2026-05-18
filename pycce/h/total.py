@@ -1,7 +1,7 @@
 from pycce.sm import _smc
 from pycce.sm import dimensions_spinvectors
 from pycce.utilities import expand
-from pycce.bath.array import _process_key_operator
+from ..bath.map import process_key_operator
 from .base import Hamiltonian
 from .functions import *
 
@@ -23,7 +23,8 @@ def bath_hamiltonian(bath, mfield):
         Hamiltonian: Hamiltonian of the given cluster without qubit.
     """
     dims, vectors = dimensions_spinvectors(bath, central_spin=None)
-    clusterint = bath_interactions(bath, vectors) + custom_hamiltonian(bath, dims)
+    # clusterint = bath_interactions(bath, vectors) + custom_hamiltonian(bath, dims)
+    clusterint = bath_interactions_extended_imap(bath, vectors) + custom_hamiltonian(bath, dims)
 
     for ivec, n in zip(vectors, bath):
         if callable(mfield):
@@ -190,9 +191,8 @@ def custom_single(h, index, dims):
         ndarray with shape (N, N): Addition to the Hamiltonian.
 
     """
-    sm = _smc[(dims[index] - 1) / 2]
     ham = 0
     for key in h:
-        add = _process_key_operator(key, h[key], sm)
+        add = process_key_operator(key, h[key], (dims[index] - 1) / 2)
         ham += add
     return expand(ham, index, dims)
