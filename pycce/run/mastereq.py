@@ -6,11 +6,46 @@ from pycce.bath.map import process_key_operator, process_key_dissipator
 from pycce.constants import PI2
 from pycce.h import total_hamiltonian, projected_addition
 from pycce.run.base import RunObject, generate_initial_state, simple_propagator
-from pycce.utilities import shorten_dimensions, outer, expand
+from pycce.utilities import shorten_dimensions, outer
 from pycce.run.gcce import gCCE, rotation_propagator
-from pycce.run.cce import CCE, _rotmul, _gen_key
+from pycce.run.cce import CCE, _gen_key
 
 from pycce.sm import _smc
+
+import torch
+
+
+def _rotmul(rotation, u, **kwargs):
+    if rotation is not None and u is not None:
+        u = torch.matmul(rotation, u, **kwargs)
+    elif rotation is not None:
+        u = rotation
+
+    return u
+
+
+def expand(matrix, i, dim):
+    """
+    Expand matrix M from it's own dimensions to the total Hilbert space.
+
+    Args:
+        matrix (ndarray with shape (dim[i], dim[i])): Inital matrix.
+        i (int): Index of the spin dimensions in ``dim`` parameter.
+        dim (ndarray): Array pf dimensions of all spins present in the cluster.
+
+    Returns:
+        ndarray with shape (prod(dim), prod(dim)): Expanded matrix.
+    """
+    dbefore = dim[:i].prod()
+    dafter = dim[i + 1 :].prod()
+    matrix = matrix.contiguous()
+
+    expanded_matrix = torch.kron(
+        torch.kron(torch.eye(dbefore, dtype=matrix.dtype, device=matrix.device), matrix),
+        torch.eye(dafter, dtype=torch.complex128, device=matrix.device),
+    )
+
+    return expanded_matrix
 
 
 def simple_incoherent_propagator(timespace, lindbladian):
@@ -20,13 +55,13 @@ def simple_incoherent_propagator(timespace, lindbladian):
     Args:
 
         timespace (ndarray with shape (n, )): Time points at which to evaluate the propagator.
-        lindbladian (ndarray with shape (n, N, N)): Lindbladian superoperator of the system in matrix form.
+        lindbladian (ndarray with shape (N, N)): Lindbladian superoperator of the system in matrix form.
 
     Returns:
         ndarray with shape (n, N, N): Master equation propagators, evaluated at each timepoint. Use with vector form
             of density matrix.
     """
-    return scipy.linalg.expm(timespace[:, np.newaxis, np.newaxis] * lindbladian[np.newaxis, :] * PI2)
+    return torch.linalg.matrix_exp(timespace[:, None, None] * lindbladian[None, :, :] * PI2)
 
     # This is how I did it for coherent operator, doesn't work with non-Hermitian L
     # evalues, evec = np.linalg.eig(lindbladian * PI2)
@@ -39,7 +74,7 @@ def simple_incoherent_propagator(timespace, lindbladian):
 
 
 def simple_dissipator(left, right):
-    eye = np.eye(left.shape[0], dtype=np.complex128)
+    eye = torch.eye(left.shape[0], dtype=left.dtype, device=left.device)
     ln_rho_rndag = op_to_supop(left, right.conj().T)
     rho_rndag_ln = op_to_supop(eye, right.conj().T @ left)
     rndag_ln_rho = op_to_supop(right.conj().T @ left, eye)
@@ -47,7 +82,7 @@ def simple_dissipator(left, right):
     return lindb
 
 
-def collapse_superoperator(superoperators, index, dims):
+def collapse_superoperator(superoperators, index, dims, device="cpu"):
     """
     Generate incoherent superoperator from the dictionary containing all single-spin jump operators
     for ``index`` spin.
@@ -64,7 +99,7 @@ def collapse_superoperator(superoperators, index, dims):
     """
     full_lindb = 0
     for key in superoperators:
-        collapse = process_key_operator(key, superoperators[key], (dims[index] - 1) / 2)
+        collapse = torch.from_numpy(process_key_operator(key, superoperators[key], (dims[index] - 1) / 2)).to(device)
         cn = expand(collapse, index, dims)
         lindb = simple_dissipator(cn, cn)
 
@@ -73,19 +108,19 @@ def collapse_superoperator(superoperators, index, dims):
     return full_lindb
 
 
-def custom_superoperator(spins, dims=None, offset=0):
+def custom_superoperator(spins, dims=None, offset=0, device="cpu"):
     add = 0
     if dims is None:
         dims = spins.dim
     ncenters = dims.size - spins.size
     for indexes in spins.linmap:
         for diss in spins.linmap[indexes]:
-            add += superoperator_from_dissipator(diss, indexes, dims, offset=offset, ncenters=ncenters)
+            add += superoperator_from_dissipator(diss, indexes, dims, offset=offset, ncenters=ncenters, device=device)
 
     return add
 
 
-def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=0):
+def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=0, device="cpu"):
     left = None
     right = None
 
@@ -94,7 +129,7 @@ def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=
         ifarray = isinstance(op, np.ndarray)
         cond = op.any() if ifarray else bool(op)
         if cond:
-            op = process_key_dissipator(dissipator.left[j], (dims[index] - 1) / 2)
+            op = torch.from_numpy(process_key_dissipator(dissipator.left[j], (dims[index] - 1) / 2)).to(device)
             innerleft = expand(op, index + offset, dims)
 
             left = innerleft if left is None else np.matmul(left, innerleft)
@@ -104,7 +139,7 @@ def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=
             ifarray = isinstance(op, np.ndarray)
             cond = op.any() if ifarray else bool(op)
             if cond:
-                op = process_key_dissipator(dissipator.right[j], (dims[index] - 1) / 2)
+                op = torch.from_numpy(process_key_dissipator(dissipator.right[j], (dims[index] - 1) / 2)).to(device)
                 innerright = expand(op, index + offset, dims)
 
             right = innerright if right is None else np.matmul(right, innerright)
@@ -113,7 +148,7 @@ def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=
         for k in dissipator.center_left:
             index = dims.size - (ncenters - k)
             center_spin = (dims[index] - 1) / 2
-            op = process_key_dissipator(dissipator.center_left[k], center_spin)
+            op = torch.from_numpy(process_key_dissipator(dissipator.center_left[k], center_spin)).to(device)
 
             innerleft = expand(op, index + offset, dims)
 
@@ -123,7 +158,7 @@ def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=
             for k in dissipator.center_right:
                 index = dims.size - (ncenters - k)
                 center_spin = (dims[index] - 1) / 2
-                op = process_key_dissipator(dissipator.center_right[k], center_spin)
+                op = torch.from_numpy(process_key_dissipator(dissipator.center_right[k], center_spin)).to(device)
 
                 innerright = expand(op, index + offset, dims)
 
@@ -133,16 +168,16 @@ def superoperator_from_dissipator(dissipator, indexes, dims, offset=0, ncenters=
         right = left
 
     if left is None and right is not None:
-        left = np.eye(right.shape[0], dtype=np.complex128)
+        left = torch.eye(right.shape[0], dtype=right.dtype, device=right.device)
     elif right is None and left is not None:
-        right = np.eye(left.shape[0], dtype=np.complex128)
+        right = torch.eye(left.shape[0], dtype=left.dtype, device=left.device)
     elif right is None and left is None:
         return 0
 
     return simple_dissipator(left, right) * dissipator.rate
 
 
-def incoherent_superoperator(spins, dims=None, offset=0):
+def incoherent_superoperator(spins, dims=None, offset=0, device="cpu"):
     r"""
     Generate dissipators for all bath spins in the cluster.
     Args:
@@ -159,7 +194,7 @@ def incoherent_superoperator(spins, dims=None, offset=0):
     add = 0
     for index, b in enumerate(spins):
         if b.so:
-            add += collapse_superoperator(b.so, index + offset, dims)
+            add += collapse_superoperator(b.so, index + offset, dims, device=device)
 
     return add
 
@@ -190,7 +225,7 @@ def projected_coherent_superoperator(hamiltonian0, hamiltonian1):
     Returns:
         ndarray with shape (N*N, N*N): Superoperator corresponding to the coherent evolution of the cluster.
     """
-    eye = np.eye(hamiltonian0.shape[0], dtype=np.complex128)
+    eye = torch.eye(hamiltonian0.shape[0], dtype=hamiltonian0.dtype, device=hamiltonian0.device)
     return -1j * (op_to_supop(hamiltonian0, eye) - op_to_supop(eye, hamiltonian1))
 
 
@@ -239,7 +274,7 @@ def op_to_supop(left_operator, right_operator):
     Returns:
         ndarray with shape (n*n,n*n): Resulting Liouvillian superoperator.
     """
-    return np.kron(left_operator, right_operator.T)
+    return torch.kron(left_operator, right_operator.T.contiguous())
 
 
 class LindbladgCCE(gCCE):
@@ -500,21 +535,21 @@ def propagate_superpropagators(u_before_pi, u_after_pi, number):
     Returns:
         ndarray with shape (n*n,n*n): Superoperator representation of the propagator including all :math:`\pi`-pulses.
     """
-    v_he = np.matmul(u_after_pi, u_before_pi, dtype=np.complex128)
+    v_he = torch.matmul(u_after_pi, u_before_pi)
 
     if number == 1:
         return v_he
 
-    v_he_reversed = np.matmul(u_before_pi, u_after_pi, dtype=np.complex128)
-    v_cp = np.matmul(v_he_reversed, v_he, dtype=np.complex128)  # v0 @ v1 @ v1 @ v0
+    v_he_reversed = torch.matmul(u_before_pi, u_after_pi)
+    v_cp = torch.matmul(v_he_reversed, v_he)  # v0 @ v1 @ v1 @ v0
 
     if number == 2:
         return v_cp
 
-    nonunitary = np.linalg.matrix_power(v_cp, number // 2)
+    nonunitary = torch.linalg.matrix_power(v_cp, number // 2)
 
     if number % 2 == 1:
-        nonunitary = np.matmul(v_he, nonunitary)
+        nonunitary = torch.matmul(v_he, nonunitary)
 
     return nonunitary
 
@@ -539,6 +574,7 @@ class LindbladCCE(CCE):
         super().__init__(*args, **kwargs)
 
     def preprocess(self):
+        self.timespace = torch.from_numpy(self.timespace).to(self.device)
         super().preprocess()
 
     def postprocess(self):
@@ -562,13 +598,19 @@ class LindbladCCE(CCE):
         """
         self.get_hamiltonian_variable_bath_state(index)
 
-        ha = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, alpha)
+        ha_a = projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, alpha)
+        ha_a = torch.from_numpy(ha_a).to(self.device)
+        hb_a = projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, beta)
+        hb_a = torch.from_numpy(hb_a).to(self.device)
 
-        hb = self.hamiltonian + projected_addition(self.base_hamiltonian.vectors, self.cluster, self.center, beta)
+        ha = self.hamiltonian + ha_a
+        hb = self.hamiltonian + hb_a
 
-        addition = incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions)
+        addition = incoherent_superoperator(self.cluster, self.base_hamiltonian.dimensions, device=self.device)
         if self.cluster.linmap:
-            addition += custom_superoperator(self.cluster, self.base_hamiltonian.dimensions, offset=0)
+            addition += custom_superoperator(self.cluster, self.base_hamiltonian.dimensions, offset=0, device=self.device)
+        if isinstance(addition, int):
+            addition = torch.tensor(addition, device=self.device)
 
         self.superoperator = projected_coherent_superoperator(ha, hb) + addition
 
@@ -608,10 +650,10 @@ class LindbladCCE(CCE):
 
         v01 = simple_incoherent_propagator(delays, self.superoperator)
         vs = {(tuple(key_alpha), tuple(key_beta)): v01}
-        nonunitary = np.eye(v01.shape[1], dtype=np.complex128)
+        nonunitary = torch.eye(v01.shape[1], dtype=v01.dtype, device=v01.device)
 
         for p, rotation in zip(self.pulses, rotations):
-            nonunitary = np.matmul(v01, nonunitary)
+            nonunitary = torch.matmul(v01, nonunitary)
             nonunitary = _rotmul(rotation, nonunitary)
 
             if p.bath_names is not None:
@@ -629,7 +671,7 @@ class LindbladCCE(CCE):
 
                 vs[(tuple(key_alpha), tuple(key_beta))] = v01
 
-            nonunitary = np.matmul(v01, nonunitary)
+            nonunitary = torch.matmul(v01, nonunitary)
 
         return nonunitary
 
@@ -643,7 +685,7 @@ class LindbladCCE(CCE):
         self.get_superoperator(alpha=key_alpha, beta=key_beta, index=ps_counter)
         rotations = [op_to_supop(rot, rot.conj().T) if rot is not None else None for rot in self.rotations]
 
-        eval01, evec01 = np.linalg.eigh(self.superoperator * PI2)
+        eval01, evec01 = torch.linalg.eigh(self.superoperator * PI2)
 
         # for timesteps, rotation in zip(pulses.delays, pulses.rotations):
         eval_evec = {(tuple(key_alpha), tuple(key_beta)): (eval01, evec01)}
@@ -651,13 +693,13 @@ class LindbladCCE(CCE):
         nonunitary = None
 
         for p, delay, rotation in zip(self.pulses, self.delays, rotations):
-            if np.any(delay):
-                eigen_exp = np.exp(-1j * np.outer(delay, eval01), dtype=np.complex128)
-                u01 = np.matmul(np.einsum("...ij,...j->...ij", evec01, eigen_exp, dtype=np.complex128), evec01.conj().T)
+            if torch.any(delay).item():
+                eigen_exp = torch.exp(-1j * torch.outer(delay, eval01))
+                u01 = torch.matmul(torch.einsum("...ij,...j->...ij", evec01, eigen_exp), evec01.conj().T)
 
                 times += delay
 
-                nonunitary = _rotmul(rotation, u01) if nonunitary is None else np.matmul(u01, _rotmul(rotation, nonunitary))
+                nonunitary = _rotmul(rotation, u01) if nonunitary is None else torch.matmul(u01, _rotmul(rotation, nonunitary))
             else:
                 nonunitary = _rotmul(rotation, nonunitary)
 
@@ -671,22 +713,24 @@ class LindbladCCE(CCE):
                 eval01, evec01 = eval_evec[(tuple(key_alpha), tuple(key_beta))]
             except KeyError:
                 self.get_superoperator(alpha=key_alpha, beta=key_beta, index=ps_counter)
-                eval01, evec01 = np.linalg.eigh(self.superoperator * PI2)
+                eval01, evec01 = torch.linalg.eigh(self.superoperator * PI2)
 
                 eval_evec[(tuple(key_alpha), tuple(key_beta))] = eval01, evec01
 
-        which = np.isclose(self.timespace, times)
+        if isinstance(times, int):
+            times = torch.tensor(0, device=self.timespace.device, dtype=self.timespace.dtype)
+        which = torch.isclose(self.timespace, times)
         if ((self.timespace - times)[~which] >= 0).all():
 
-            eigen_exp = np.exp(-1j * np.outer(self.timespace - times, eval01), dtype=np.complex128)
-            u01 = np.matmul(np.einsum("...ij,...j->...ij", evec01, eigen_exp, dtype=np.complex128), evec01.conj().T)
+            eigen_exp = torch.exp(-1j * torch.outer(self.timespace - times, eval01))
+            u01 = torch.matmul(torch.einsum("...ij,...j->...ij", evec01, eigen_exp), evec01.conj().T)
 
-            nonunitary = np.matmul(u01, nonunitary)
+            nonunitary = torch.matmul(u01, nonunitary)
 
-        elif not which.all():
+        elif not which.all().item():
             raise ValueError(
                 f"Pulse sequence time steps add up to larger than total times"
-                f"{np.argwhere((self.timespace - times) < 0)} are longer than total time."
+                f"{torch.argwhere((self.timespace - times) < 0)} are longer than total time."
             )
 
         return nonunitary
@@ -710,14 +754,15 @@ class LindbladCCE(CCE):
             initial_state = outer(initial_state, initial_state)
 
         initial_state = mat_to_vec(initial_state)
+        initial_state = torch.from_numpy(initial_state).to(self.device).to(self.superoperator.dtype)
         non_unitary_evolution = self.super_propagator()
 
         result = non_unitary_evolution @ initial_state
         result = vec_to_mat(result)
 
         if self.store_states:
-            self.cluster_evolved_states = result.copy()
+            self.cluster_evolved_states = result.cpu.numpy().copy()
 
-        result = np.trace(result, axis1=1, axis2=2)
+        result = torch.diagonal(result, dim1=1, dim2=2).sum(-1)
 
-        return result
+        return result.cpu().numpy()

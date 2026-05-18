@@ -1,8 +1,27 @@
 import warnings
 
 import numpy as np
+import os
 from numba import jit
 from numba.typed import List
+import torch
+
+
+def config_torch(nthread=1):
+    torch.set_num_threads(nthread)
+    torch.enable_grad(False)
+
+
+def get_local_rank(method="slurm"):
+    local_rank = None
+    if method == "slurm":
+        local_rank = os.environ.get("SLURM_LOCALID")
+    else:
+        raise NotImplementedError(f"Method {method} is not implemented.")
+    if local_rank is not None:
+        return int(local_rank)
+    else:
+        raise RuntimeError("Cannot determine local rank.")
 
 
 def rotmatrix(initial_vector, final_vector):

@@ -18,6 +18,7 @@ dependencies = [
     "ase",
     "pandas",
     "numba>=0.56",
+    "torch>=2.0.0",
 ]
 
 [tool.setuptools.package-data]
