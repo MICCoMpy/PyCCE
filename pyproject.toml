@@ -18,6 +18,8 @@ dependencies = [
     "ase",
     "pandas",
     "numba>=0.56",
+    "mpi4py",
+    "tqdm",
     "torch>=2.0.0",
 ]
 
