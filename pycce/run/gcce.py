@@ -8,7 +8,7 @@ from pycce.utilities import shorten_dimensions, outer
 
 
 def rotation_propagator(u, rotations):
-    """
+    r"""
     Generate the propagator from the simple propagator and set of :math:`2\tau` equispaced rotation operators.
 
     .. note::
@@ -137,9 +137,6 @@ class gCCE(RunObject):
         elif self.normalized:
             self.normalization = self.process_dm(self.normalization)
 
-        # else:
-        #     density_matrix = self.center.eigenvectors.conj().T @ density_matrix @ self.center.eigenvectors
-
     def process_dm(self, density_matrix):
         """
         Obtain the result from the density matrices.
@@ -172,9 +169,6 @@ class gCCE(RunObject):
             self.result = self.result / self.normalization
 
         super().postprocess()
-
-        # else:
-        #     self.result = self.center.eigenvectors @ self.result @ self.center.eigenvectors.conj().T
 
     def generate_hamiltonian(self):
         """
@@ -361,176 +355,3 @@ class gCCE(RunObject):
             )
 
         return full_u
-
-
-# def propagator(timespace, hamiltonian,
-#                pulses=None, as_delay=False):
-
-#     evalues, evec = np.linalg.eigh(hamiltonian * PI2)
-#
-#     if not pulses:
-#
-#         eigexp = np.exp(-1j * np.outer(timespace, evalues),
-#                         dtype=np.complex128)
-#
-#         u = np.matmul(np.einsum('ij,kj->kij', evec, eigexp, dtype=np.complex128),
-#                       evec.conj().T)
-#
-#         return u
-#
-#     else:
-#
-#         if pulses.delays is None:
-#             if not as_delay:
-#                 n = len(pulses)
-#                 timespace = timespace / (2 * n)
-#
-#             eigexp = np.exp(-1j * np.outer(timespace, evalues),
-#                             dtype=np.complex128)
-#
-#             u = np.matmul(np.einsum('ij,kj->kij', evec, eigexp, dtype=np.complex128),
-#                           evec.conj().T)
-#             U = np.eye(u.shape[1], dtype=np.complex128)
-#
-#             for rotation in pulses.rotations:
-#                 U = np.matmul(u, U)
-#                 if rotation is not None:
-#                     U = np.matmul(rotation, U)
-#                 U = np.matmul(u, U)
-#
-#             return U
-#
-#         U = None
-#
-#         times = 0
-#         for timesteps, rotation in zip(pulses.delays, pulses.rotations):
-#
-#             eigexp = np.exp(-1j * np.outer(timesteps, evalues),
-#                             dtype=np.complex128)
-#
-#             u = np.matmul(np.einsum('...ij,...j->...ij', evec, eigexp, dtype=np.complex128),
-#                           evec.conj().T)
-#             times += timesteps
-#
-#             if U is None:
-#                 if rotation is not None:
-#                     U = np.matmul(rotation, u)
-#                 else:
-#                     U = u
-#
-#             else:
-#                 U = np.matmul(u, U)
-#                 if rotation is not None:
-#                     U = np.matmul(rotation, U)
-#
-#         which = np.isclose(timespace, times)
-#
-#         if ((timespace - times)[~which] >= 0).all():
-#             eigexp = np.exp(-1j * np.outer(timespace - times, evalues),
-#                             dtype=np.complex128)
-#
-#             u = np.matmul(np.einsum('ij,kj->kij', evec, eigexp, dtype=np.complex128),
-#                           evec.conj().T)
-#
-#             U = np.matmul(u, U)
-#         elif not which.all():
-#             raise ValueError(f"Pulse sequence time steps add up to larger than total times. Delays at"
-#                              f"{timespace[(timespace - times) < 0]} ms are longer than total time.")
-#     return U
-#
-#
-# def jit_propagator_advanced(timespace, hamiltonian,
-#                             total_delays, total_rotations):
-#     evalues, evec = np.linalg.eigh(hamiltonian * PI2)
-#
-#     times = np.zeros(timespace.shape)
-#     propagators = np.zeros(timespace.shape + hamiltonian.shape)
-#     eye = np.eye(hamiltonian.shape[0], dtype=np.complex128)
-#
-#     for index in range(timespace.size):
-#         u = eye
-#
-#         total_time = timespace[index]
-#         delays = total_delays[:, index]
-#
-#         applicable_rotations = delays <= total_time
-#         delays = delays[applicable_rotations]
-#         rotations = total_rotations[applicable_rotations]
-#         order = np.argsort(delays)
-#         passed_time = 0
-#
-#         for i in order:
-#             rotation = rotations[i]
-#             t = delays[i] - passed_time
-#             if t:
-#                 eigexp = np.exp(-1j * t * evalues, dtype=np.complex128)
-#                 u = (evec @ np.diag(eigexp) @ evec.conj().T) @ u
-#                 passed_time = delays[i]
-#
-#             if not (rotation == eye).all():
-#                 u = rotation @ u
-#
-#         propagators[index] = u
-#
-#     return propagators
-
-#
-# def compute_dm(initial_state, H, timespace, pulse_sequence=None, as_delay=False, states=None, ncenters=1):
-#     """
-#     Function to compute density matrix of the central spin, given Hamiltonian H.
-#
-#     Args:
-#         initial_state (ndarray): Initial density matrix of central spin.
-#
-#         H (ndarray): Cluster Hamiltonian.
-#
-#         timespace (ndarray): Time points at which to compute density matrix.
-#
-#         pulse_sequence (Sequence): Sequence of pulses.
-#
-#         as_delay (bool):
-#             True if time points are delay between pulses, False if time points are total time.
-#
-#         states (ndarray): ndarray of bath states in any accepted format.
-#
-#         ncenters (int): Number of central spins.
-#
-#     Returns:
-#         ndarray: Array of density matrices evaluated at all time points in timespace.
-#     """
-#     center_shape = initial_state.shape
-#     dimensions = shorten_dimensions(H.dimensions, ncenters)
-#
-#     initial_state = generate_initial_state(dimensions, states=states, central_state=initial_state)
-#     dm = full_dm(initial_state, H, timespace, pulse_sequence=pulse_sequence, as_delay=as_delay)
-#     initial_shape = dm.shape
-#     dm.shape = (initial_shape[0], *dimensions, *dimensions)
-#     for d in range(len(dimensions) + 1, 2, -1):  # The last one is el spin
-#         dm = np.trace(dm, axis1=1, axis2=d)
-#         if dm.shape[1:] == center_shape:  # break if shape is the same
-#             break
-#     return dm
-#
-#
-# def full_dm(dm0, H, timespace, pulse_sequence=None, as_delay=False):
-#     """
-#     A function to compute density matrix of the cluster, using hamiltonian H
-#     from the initial density matrix of the cluster.
-#
-#     Args:
-#         dm0 (ndarray):
-#             Initial density matrix of the cluster
-#         H (ndarray):
-#             Cluster Hamiltonian
-#         timespace (ndarray): Time points at which to compute coherence function.
-#         pulse_sequence (Sequence): Sequence of pulses.
-#
-#         as_delay (bool):
-#             True if time points are delay between pulses, False if time points are total time. Ignored if delays
-#             are provided in the ``pulse_sequence``.
-#
-#     Returns:
-#         ndarray: Array of density matrices of the cluster, evaluated at the time points from timespace.
-#     """
-#     dm = 0
-#     return dm

@@ -54,9 +54,6 @@ def read_orca(fname, isotopes=None, types=None, center=None, find_isotopes=True,
         atom_index = int(re.sub(r"\D", "", sline[1]))
         atom_name = re.sub(r"\d+", "", sline[1])
 
-        # assert atoms[atom_index]['N'] == atom_name, (f"Name mismatch at {atom_index}{atom_name}"
-        #                                              f" {atoms[atom_index]['N']} expected")
-
         try:
             n = find_first_index("Raw HFC matrix", lines, start=ind) + 2
             tensor = []

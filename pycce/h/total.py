@@ -1,4 +1,3 @@
-from pycce.sm import _smc
 from pycce.sm import dimensions_spinvectors
 from pycce.utilities import expand
 from ..bath.map import process_key_operator

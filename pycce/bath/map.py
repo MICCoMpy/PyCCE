@@ -4,7 +4,7 @@ from collections.abc import MutableMapping
 from pycce.constants import PI2
 from pycce.sm import _smc
 import numpy as np
-from pycce.utilities import commute, kroncommute
+from pycce.utilities import kroncommute
 from scipy.sparse._sputils import isintlike
 
 two_layer_dict = lambda: defaultdict(dict)
@@ -95,8 +95,6 @@ class InteractionMap(MutableMapping):
         self._data = None
 
     def __setitem__(self, key, value):
-        # value = np.asarray(value, dtype=np.float64)
-
         if value.size == 9:
             value = value.reshape(3, 3)
         a, b = _index(key)
@@ -168,11 +166,6 @@ class InteractionMap(MutableMapping):
     def __repr__(self):
         return f"{type(self).__name__}({self.mapping})"
 
-    # def update(self, **kwargs):
-    #     # Prevent direct usage of update
-    #     raise NotImplementedError("Direct modification to InteractionMap element "
-    #                               "is not allowed.")
-
     def keys(self):
         return self.mapping.keys()
 
@@ -183,7 +176,6 @@ class InteractionMap(MutableMapping):
         self.indexes = np.fromiter((ind for pair in self.mapping.keys() for ind in pair), dtype=np.int32).reshape(-1, 2)
 
     def __gen_data(self):
-        # length = self.indexes.shape[0]
         length = self.indexes.shape[0]
         s = self._data_shape
         self._data = np.zeros((length, *s), dtype=np.float64)
@@ -456,11 +448,6 @@ class LindbladianMap(MutableMapping):
               for which the tensors are stored.
         """
         return self._indexes
-
-    # def update(self, **kwargs):
-    #     # Prevent direct usage of update
-    #     raise NotImplementedError("Direct modification to InteractionMap element "
-    #                               "is not allowed.")
 
     def keys(self):
         return self.mapping.keys()

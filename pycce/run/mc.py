@@ -3,7 +3,6 @@ import functools
 import numpy as np
 from numpy import ma as ma
 from pycce.utilities import gen_state_list
-from numba.typed import List
 
 
 def generate_bath_state(bath, nbstates, seed=None, parallel=False):

@@ -1,16 +1,12 @@
 import numpy as np
 import scipy
-from numpy import ma as ma
-from pycce.bath.array import BathArray
 from pycce.bath.map import process_key_operator, process_key_dissipator
 from pycce.constants import PI2
 from pycce.h import total_hamiltonian, projected_addition
-from pycce.run.base import RunObject, generate_initial_state, simple_propagator
+from pycce.run.base import generate_initial_state
 from pycce.utilities import shorten_dimensions, outer, expand
 from pycce.run.gcce import gCCE, rotation_propagator
 from pycce.run.cce import CCE, _rotmul, _gen_key
-
-from pycce.sm import _smc
 
 
 def simple_incoherent_propagator(timespace, lindbladian):
@@ -545,7 +541,7 @@ class LindbladCCE(CCE):
         super().postprocess()
 
     def get_superoperator(self, alpha=True, beta=False, return_two=False, index=0):
-        """
+        r"""
         Generate superoperator for the given state of the cluster.
         Args:
             alpha (bool or list): Set of indexes defining the curent state of the qubit state :math:`\ket{0}`
