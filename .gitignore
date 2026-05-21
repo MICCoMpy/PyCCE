@@ -19,3 +19,4 @@ files.txt
 .*.swp
 .DS_Store
 .ipynb_checkpoints
+.coverage

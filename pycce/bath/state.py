@@ -27,19 +27,16 @@ class BathState:
 
         if isinstance(item, tuple):
             if Ellipsis in item:
-                # self.__in_need_of_checking[item] = True
                 return self.state.__getitem__(item)
 
             try:
                 key = item[0]
                 within = item[1:]
-                # self.__in_need_of_checking[key] = True
                 return self.state.__getitem__(key)[within]
 
             except IndexError:
                 pass
 
-        # self.__in_need_of_checking[item] = True
         return self.state.__getitem__(item)
 
     def __setitem__(self, key, value):
@@ -239,12 +236,10 @@ class BathState:
         """
         ndarray: Bool property. True if given element was initialized as a state, False otherwise.
         """
-        # if self._in_need_of_checking.any():
-        #     self._has_state[self._in_need_of_checking] = False
         return self._data["hs"]
 
     def project(self, rotation=None):
-        """
+        r"""
         Generate projections of bath states on :math:`S_z`.
 
         Args:
@@ -379,20 +374,11 @@ def project_bath_states(states, single=False, rotation=None):
             sz = rotation.conj().T @ sz @ rotation
 
         if len(ndstates.shape) == 2 + (not single):
-            # projected_bath_state = np.empty((ndstates.shape[0], 3))
-
-            # projected_bath_state[:, 0] = np.trace(np.matmul(ndstates, _smc[spin].x), axis1=-2, axis2=-1)
-            # projected_bath_state[:, 1] = np.trace(np.matmul(ndstates, _smc[spin].y), axis1=-2, axis2=-1)
             projected_bath_state = np.trace(np.matmul(ndstates, sz), axis1=-2, axis2=-1).real  # [:, 2]
-
         else:
             # Assume vectors
             z_psi = np.einsum("ij,...j->...i", sz, ndstates)
             projected_bath_state = np.einsum("...j,...j->...", ndstates.conj(), z_psi).real
-            # projected_bath_state = ndstates
-
-    # if len(projected_bath_state.shape) > 1 and not np.any(projected_bath_state[:, :2]):
-    #     projected_bath_state = projected_bath_state[:, 2]
 
     return projected_bath_state
 

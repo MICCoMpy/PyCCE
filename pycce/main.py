@@ -15,7 +15,7 @@ import warnings
 import numpy as np
 from pycce.io.xyz import read_xyz
 
-from .bath.array import BathArray, SpinDict, broadcast_array
+from .bath.array import BathArray, broadcast_array
 from .bath.cube import Cube
 from .center import CenterArray
 from .constants import ELECTRON_GYRO

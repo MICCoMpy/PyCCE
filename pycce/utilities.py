@@ -154,7 +154,7 @@ def shorten_dimensions(dimensions, central_number):
 
 @jit(cache=True, nopython=True)
 def outer(s1, s2):
-    """
+    r"""
     Outer product of two complex vectors :math:`\ket{s_1}\bra{s_2}`.
 
     Args:
@@ -346,7 +346,7 @@ def vector_from_s(s, d):
 
 
 def commute(M, dim):
-    """
+    r"""
     Converts the tensor product of Matrix (M = A \otimes B) to (E= A \otimes I \otimes B)
     Args:
         M(ndarray with shape (dim[i], dim[i])): Inital matrix (A \otimes B) .

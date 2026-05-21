@@ -213,7 +213,7 @@ class Center:
         _attr_arr_setter(self, "_detuning", detune)
 
     def add_single_jump(self, operator, rate=1, units="rad", square_root=False, which=None):
-        """
+        r"""
         Add single-spin jump operator for the spin to be used in the Lindbladian master equation CCE.
 
         Args:

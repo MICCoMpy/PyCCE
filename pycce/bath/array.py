@@ -694,7 +694,7 @@ class BathArray(np.ndarray):
             self.linmap[tuple(indexes)] = dissipator
 
     def add_single_jump(self, operator, rate=1, units="rad", square_root=False, which=None):
-        """
+        r"""
         Add single-spin jump operator for the given type of spins to be used in the Lindbladian master equation CCE.
 
         Args:
@@ -1923,7 +1923,7 @@ __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file
 filepath = os.path.join(__location__, "isotopes.txt")
 all_spins = pd.read_csv(
     filepath,
-    sep="\s+",
+    sep=r"\s+",
     header=None,
     comment="%",
     names=["protons", "nucleons", "radioactive", "symbol", "name", "spin", "g", "conc", "q"],

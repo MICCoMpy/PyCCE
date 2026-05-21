@@ -1,36 +1,13 @@
 import operator
 
 import numpy as np
-import pycce.center
 from pycce import dimensions_spinvectors
-from pycce.h import total_hamiltonian, conditional_hyperfine, Hamiltonian, bath_hamiltonian
+from pycce.h import total_hamiltonian, conditional_hyperfine, bath_hamiltonian
 from pycce.run.base import RunObject, simple_propagator, generate_initial_state
 
 _rows = None
 _cols = None
 _newcols = None
-
-
-# def _gen_indexes(size):
-#     r = np.arange(size)
-#     global _rows
-#     global _cols
-#     global _newcols
-#
-#     _rows = np.concatenate([r[:i] for i in range(r.size, 0, -1)])
-#     _cols = np.concatenate([r[i:] for i in range(r.size, )])
-#     _newcols = np.concatenate([np.ones(i, dtype=int) * (r.size - i) for i in range(r.size, 0, -1)])
-#
-#     if equispaced:
-#         if _rows is None:
-#             _gen_indexes(corr.size)
-#
-#         density_matrix = np.zeros((corr.size, corr.size), dtype=np.complex128)
-#         density_matrix[_rows, _newcols] = np.triu(corr[np.newaxis, :] - corr[:, np.newaxis])[_rows, _cols]
-#         top = density_matrix.sum(axis=0)
-#         bottom = np.count_nonzero(density_matrix, axis=0)
-#         bottom[bottom == 0] = 1
-#         corr = top / bottom
 
 
 def correlation_it_j0(operator_i, operator_j, dm0_expanded, U):

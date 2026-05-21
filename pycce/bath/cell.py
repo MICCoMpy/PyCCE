@@ -375,7 +375,6 @@ class BathCell:
         anumber = int(size * np.linalg.norm(bxc) / (bxc @ self.cell[:, 0]) + 1)
         bnumber = int(size * np.linalg.norm(cxa) / (cxa @ self.cell[:, 1]) + 1)
         cnumber = int(size * np.linalg.norm(axb) / (axb @ self.cell[:, 2]) + 1)
-        # print(anumber, bnumber, cnumber)
 
         dt = np.dtype([("N", np.str_, 16), ("xyz", np.float64, (3,))])
         atoms = []
@@ -385,7 +384,6 @@ class BathCell:
             nsites = len(self.atoms[a])
             # Cartesian of those positions
             sites_xyz = np.asarray(self.atoms[a]) @ self.cell.T
-            # print(sites_xyz)
 
             maxind = np.array([anumber, bnumber, cnumber, nsites], dtype=np.int32)
 
@@ -698,15 +696,9 @@ def defect(cell, atoms, add=None, remove=None):
             position_cc = np.asarray(removals[1])  # Given in the cell coordinates
 
             position = cell @ position_cc
-            # print(name, position)
-            # print(np.core.defchararray.find(bath['N'], name) != -1)
             offsets = np.linalg.norm((atoms["xyz"] - position), axis=1)
-            # print(offsets <= err_range)
             where += np.logical_and(np.core.defchararray.find(atoms["N"], name) != -1, offsets <= err_range)
     if np.count_nonzero(where):
-        # print('I see {} removals'.format(np.count_nonzero(where)))
-        # print('Removing: \n', bath[where])
-
         defective_atoms = defective_atoms[~where]
 
     if add is not None and isinstance(add[0], str):
@@ -717,7 +709,6 @@ def defect(cell, atoms, add=None, remove=None):
 
         newentry = np.array((name, position), dtype=dt)
 
-        # print('Adding: \n', newentry)
         defective_atoms = np.append(defective_atoms, newentry)
 
     elif add is not None:
@@ -732,8 +723,6 @@ def defect(cell, atoms, add=None, remove=None):
             newentry = np.array((name, position), dtype=dt)
 
             newlist.append(newentry)
-
-        # print('Adding: \n', np.asarray(newlist))
 
         defective_atoms = np.append(defective_atoms, newlist)
 

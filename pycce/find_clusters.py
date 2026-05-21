@@ -163,12 +163,9 @@ def find_subclusters(maximum_order, graph, labels, n_components, strong=False):
     clusters = {}
     for k in range(1, maximum_order + 1):
         clusters[k] = []
-    # print('Number of disjointed clusters is {}'.format(n_components))
     for component in range(n_components):
         vert_pos = labels == component
         vertices = np.nonzero(vert_pos)[0]
-
-        # print('{} cluster contains {} components'.format(component, ncomp))
 
         subclusters = {1: vertices[:, np.newaxis]}
 

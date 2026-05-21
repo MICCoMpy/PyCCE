@@ -1,8 +1,8 @@
 import numpy as np
-from numba import jit, types  #  generated_jit,
+from numba import jit
 
 from pycce.constants import HBAR_MU0_O4PI, PI2, ELECTRON_GYRO
-from pycce.utilities import tensor_vdot, vec_tensor_vec, expand, commute
+from pycce.utilities import tensor_vdot, vec_tensor_vec, commute
 from numba.extending import overload
 
 
@@ -27,9 +27,6 @@ def expanded_single(ivec, gyro, mfield, self_tensor, detuning=0.0):
 
     if ivec[2, 0, 0].real > 0.5:
         hself = vec_tensor_vec(ivec, self_tensor, ivec)
-
-        # v_ivec = np.einsum('ij,jkl->ikl', self_tensor, ivec, dtype=np.complex128)
-        # hself = np.einsum('lij,ljk->ik', ivec, v_ivec, dtype=np.complex128)
 
     if detuning:
         hself += detuning * ivec[2]
