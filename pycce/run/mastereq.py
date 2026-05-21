@@ -1,4 +1,5 @@
 import numpy as np
+import scipy
 from pycce.bath.map import process_key_operator, process_key_dissipator
 from pycce.constants import PI2
 from pycce.h import total_hamiltonian, projected_addition
@@ -21,13 +22,15 @@ def simple_incoherent_propagator(timespace, lindbladian):
         ndarray with shape (n, N, N): Master equation propagators, evaluated at each timepoint. Use with vector form
             of density matrix.
     """
-    # Using eig is faster than expm for non-Hermitian L
-    # return scipy.linalg.expm(timespace[:, np.newaxis, np.newaxis] * lindbladian[np.newaxis, :] * PI2)
-
-    evals, V = np.linalg.eig(lindbladian * PI2)
-    Vinv = np.linalg.inv(V)
-    eigexp = np.exp(np.outer(timespace, evals))
-    return (V[None] * eigexp[:, None, :]) @ Vinv
+    # Non-Hermitian L, eig + inv faster than expm
+    try:
+        evals, V = np.linalg.eig(lindbladian * PI2)
+        Vinv = np.linalg.inv(V)
+        eigexp = np.exp(np.outer(timespace, evals))
+        return (V[None] * eigexp[:, None, :]) @ Vinv
+    except np.linalg.LinAlgError as e:
+        print(f"eig + inv failed: {e}, falling back to expm")
+        return scipy.linalg.expm(timespace[:, np.newaxis, np.newaxis] * lindbladian[np.newaxis, :] * PI2)
 
 
 def simple_dissipator(left, right):
