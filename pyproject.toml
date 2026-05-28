@@ -18,6 +18,7 @@ dependencies = [
     "ase",
     "pandas",
     "numba>=0.56",
+    "tqdm",
 ]
 
 [tool.setuptools.package-data]
