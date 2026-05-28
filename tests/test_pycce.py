@@ -8,8 +8,10 @@ import pycce as pc
 @pytest.mark.parametrize("method", ["cce", "gcce"])
 @pytest.mark.parametrize("nbstates", [None, 2])
 def test_cce_gcce(order, pulses, method, nbstates):
+    seed = 513
+
     # Bath spin array
-    bath = pc.random_bath("13C", 100, 1000, seed=1)
+    bath = pc.random_bath("13C", 100, 1000, seed=seed)
 
     # Define simulator object
     calc = pc.Simulator(
@@ -28,8 +30,7 @@ def test_cce_gcce(order, pulses, method, nbstates):
     ts = np.linspace(0, 0.2, 11)
 
     # Compute coherence
-    test = np.abs(calc.compute(ts, method=method, nbstates=nbstates))
-    np.savetxt(f"ref_order{order}_pulses{pulses}_{method}_nbstates{nbstates}.txt", test)
+    test = np.abs(calc.compute(ts, method=method, nbstates=nbstates, seed=seed))
     ref = np.loadtxt(f"ref_order{order}_pulses{pulses}_{method}_nbstates{nbstates}.txt", dtype=np.complex128)
 
     assert np.allclose(test, ref)
@@ -40,8 +41,10 @@ def test_cce_gcce(order, pulses, method, nbstates):
 @pytest.mark.parametrize("method", ["mecce"])
 @pytest.mark.parametrize("nbstates", [None, 2])
 def test_mecce(order, pulses, method, nbstates):
+    seed = 528
+
     # Bath spin array
-    bath = pc.random_bath("e", [5e3, 5e3, 5e3], density=1e16, density_units="cm-3", seed=2)  # Density in 1/cm^3
+    bath = pc.random_bath("e", [5e3, 5e3, 5e3], density=1e16, density_units="cm-3", seed=seed)  # Density in 1/cm^3
 
     # Center array
     center = pc.CenterArray(spin=1 / 2, alpha=[1, 0], beta=[0, 1])
@@ -61,8 +64,7 @@ def test_mecce(order, pulses, method, nbstates):
     ts = np.linspace(0, 2, 11)
 
     # Compute coherence
-    test = np.abs(calc.compute(ts, method=method, nbstates=nbstates))
-    np.savetxt(f"ref_order{order}_pulses{pulses}_{method}_nbstates{nbstates}.txt", test)
+    test = np.abs(calc.compute(ts, method=method, nbstates=nbstates, seed=seed))
     ref = np.loadtxt(f"ref_order{order}_pulses{pulses}_{method}_nbstates{nbstates}.txt", dtype=np.complex128)
 
     assert np.allclose(test, ref)
