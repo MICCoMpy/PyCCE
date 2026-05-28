@@ -87,11 +87,6 @@ This is a major update. If you find any issues ot bugs, please let us know as so
 Installation
 ------------
 
-The recommended way to install **PyCCE** is to use **pip**::
-
-    $ pip install pycce
-
-Otherwise you can install **PyCCE** directly using the source code.
 First clone the repository::
 
     $ git clone https://github.com/MICCoMpy/PyCCE.git
@@ -103,19 +98,21 @@ Then, execute **pip** in the folder containing **pyproject.toml**::
 Requirements
 ------------
 
-The following modules are required to run **PyCCE**.
+The following Python packages are required to run **PyCCE**.
 
-* `Python <https://www.python.org/>`_ (version >= 3.9).
+* `Python <https://www.python.org/>`_ (version >= 3.9)
 
-* `NumPy <https://numpy.org/>`_ (version >= 1.16).
+* `NumPy <https://numpy.org/>`_ (version >= 1.16)
 
-* `SciPy <https://scipy.org/>`_ (version >= 1.10).
+* `SciPy <https://scipy.org/>`_ (version >= 1.10)
 
-* `Numba <https://numba.pydata.org/>`_ (version >= 0.56).
+* `Numba <https://numba.pydata.org/>`_ (version >= 0.56)
 
-* `Atomic Simulation Environment (ASE) <https://ase-lib.org/>`_.
+* `Atomic Simulation Environment (ASE) <https://ase-lib.org/>`_
 
-* `Pandas <https://pandas.pydata.org/>`_.
+* `Pandas <https://pandas.pydata.org/>`_
+
+* `tqdm <https://tqdm.github.io/>`_
 
 **PyCCE** inherently supports parallelization with the **mpi4py** package, which requires the installation of MPI.
 **mpi4py** is not required for serial calculations.
