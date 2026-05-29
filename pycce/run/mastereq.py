@@ -22,16 +22,26 @@ def simple_incoherent_propagator(timespace, lindbladian):
         ndarray with shape (n, N, N): Master equation propagators, evaluated at each timepoint. Use with vector form
             of density matrix.
     """
-    return scipy.linalg.expm(timespace[:, np.newaxis, np.newaxis] * lindbladian[np.newaxis, :] * PI2)
+    L = lindbladian * PI2
 
-    # This is how I did it for coherent operator, doesn't work with non-Hermitian L
-    # evalues, evec = np.linalg.eig(lindbladian * PI2)
-    #
-    # eigexp = np.exp(np.outer(timespace, evalues),
-    #                 dtype=np.complex128)
-    #
-    # return np.matmul(np.einsum('...ij,...j->...ij', evec, eigexp, dtype=np.complex128),
-    #                  evec.conj().T)
+    # Non-Hermitian L, eig + inv faster than expm
+    try:
+        evals, V = np.linalg.eig(L)
+        # Reject ill-conditioned V
+        condV = np.linalg.cond(V)
+        if not np.isfinite(condV) or condV > 1e6:
+            raise np.linalg.LinAlgError(f"Eigenvector of L ill-conditioned (cond={condV:.2e})")
+
+        Vinv = np.linalg.solve(V, np.eye(V.shape[0], dtype=V.dtype))
+        eigexp = np.exp(np.outer(timespace, evals))
+
+        if not np.all(np.isfinite(eigexp)):
+            raise np.linalg.LinAlgError("Non-finite values in exp(eigvals * t)")
+
+        return (V[None] * eigexp[:, None, :]) @ Vinv
+    except np.linalg.LinAlgError as e:
+        print(f"eig + inv failed: {e}, falling back to expm")
+        return scipy.linalg.expm(timespace[:, None, None] * L[None, :])
 
 
 def simple_dissipator(left, right):
