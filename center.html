@@ -1,0 +1,853 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central Spins &mdash; PyCCE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running the Simulations" href="simulator.html" />
+    <link rel="prev" title="Spin Bath" href="bath.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/logo_white.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theoretical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="bath.html">Spin Bath</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Central Spins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#centerarray">CenterArray</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.center.CenterArray"><code class="docutils literal notranslate"><span class="pre">CenterArray</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.add_interaction"><code class="docutils literal notranslate"><span class="pre">CenterArray.add_interaction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.add_single_jump"><code class="docutils literal notranslate"><span class="pre">CenterArray.add_single_jump()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.alpha"><code class="docutils literal notranslate"><span class="pre">CenterArray.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.beta"><code class="docutils literal notranslate"><span class="pre">CenterArray.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.energies"><code class="docutils literal notranslate"><span class="pre">CenterArray.energies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.energy_alpha"><code class="docutils literal notranslate"><span class="pre">CenterArray.energy_alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.energy_beta"><code class="docutils literal notranslate"><span class="pre">CenterArray.energy_beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.generate_projections"><code class="docutils literal notranslate"><span class="pre">CenterArray.generate_projections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.generate_sigma"><code class="docutils literal notranslate"><span class="pre">CenterArray.generate_sigma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.generate_states"><code class="docutils literal notranslate"><span class="pre">CenterArray.generate_states()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.get_energy"><code class="docutils literal notranslate"><span class="pre">CenterArray.get_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.gyro"><code class="docutils literal notranslate"><span class="pre">CenterArray.gyro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.imap"><code class="docutils literal notranslate"><span class="pre">CenterArray.imap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.point_dipole"><code class="docutils literal notranslate"><span class="pre">CenterArray.point_dipole()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.set_gyro"><code class="docutils literal notranslate"><span class="pre">CenterArray.set_gyro()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.set_zfs"><code class="docutils literal notranslate"><span class="pre">CenterArray.set_zfs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.CenterArray.state"><code class="docutils literal notranslate"><span class="pre">CenterArray.state</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#center">Center</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycce.center.Center"><code class="docutils literal notranslate"><span class="pre">Center</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.add_single_jump"><code class="docutils literal notranslate"><span class="pre">Center.add_single_jump()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.alpha"><code class="docutils literal notranslate"><span class="pre">Center.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.alpha_index"><code class="docutils literal notranslate"><span class="pre">Center.alpha_index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.beta"><code class="docutils literal notranslate"><span class="pre">Center.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.beta_index"><code class="docutils literal notranslate"><span class="pre">Center.beta_index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.detuning"><code class="docutils literal notranslate"><span class="pre">Center.detuning</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.dim"><code class="docutils literal notranslate"><span class="pre">Center.dim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.eigenvectors"><code class="docutils literal notranslate"><span class="pre">Center.eigenvectors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.energies"><code class="docutils literal notranslate"><span class="pre">Center.energies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.generate_hamiltonian"><code class="docutils literal notranslate"><span class="pre">Center.generate_hamiltonian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.generate_sigma"><code class="docutils literal notranslate"><span class="pre">Center.generate_sigma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.generate_states"><code class="docutils literal notranslate"><span class="pre">Center.generate_states()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.gyro"><code class="docutils literal notranslate"><span class="pre">Center.gyro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.h"><code class="docutils literal notranslate"><span class="pre">Center.h</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.hamiltonian"><code class="docutils literal notranslate"><span class="pre">Center.hamiltonian</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.projections_alpha"><code class="docutils literal notranslate"><span class="pre">Center.projections_alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.projections_alpha_all"><code class="docutils literal notranslate"><span class="pre">Center.projections_alpha_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.projections_beta"><code class="docutils literal notranslate"><span class="pre">Center.projections_beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.projections_beta_all"><code class="docutils literal notranslate"><span class="pre">Center.projections_beta_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.s"><code class="docutils literal notranslate"><span class="pre">Center.s</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.set_gyro"><code class="docutils literal notranslate"><span class="pre">Center.set_gyro()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.set_zfs"><code class="docutils literal notranslate"><span class="pre">Center.set_zfs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.sigma"><code class="docutils literal notranslate"><span class="pre">Center.sigma</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.transform"><code class="docutils literal notranslate"><span class="pre">Center.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.xyz"><code class="docutils literal notranslate"><span class="pre">Center.xyz</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycce.center.Center.zfs"><code class="docutils literal notranslate"><span class="pre">Center.zfs</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simulator.html">Running the Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Hamiltonian Parameters Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dft.html">Electronic Structure Output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calculators.html">CCE Calculators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hamiltonian.html">Hamiltonian Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utility Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dftbase.html">ES Interface</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCCE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Central Spins</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/center.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="central-spins">
+<h1>Central Spins<a class="headerlink" href="#central-spins" title="Link to this heading"></a></h1>
+<section id="centerarray">
+<h2>CenterArray<a class="headerlink" href="#centerarray" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">pycce.CenterArray</span></code> - class which stores the properties of the set of central spins.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.center.CenterArray">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.center.</span></span><span class="sig-name descname"><span class="pre">CenterArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-17608.59705</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detuning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray" title="Link to this definition"></a></dt>
+<dd><p>Class, containing properties of all central spins. The properties of the each separate spin can be accessed
+as elements of the object directly. Each element of the array is an instance of the <code class="docutils literal notranslate"><span class="pre">Center</span></code> class.</p>
+<p>Examples:</p>
+<blockquote>
+<div><p>Generate array of 2 electron central spins:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">CenterArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># Array of size 2 with spins-1/2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ca</span><span class="p">)</span>
+<span class="go">CenterArray</span>
+<span class="go">(s: [0.5 0.5],</span>
+<span class="go">xyz:</span>
+<span class="go">[[0. 0. 0.]</span>
+<span class="go"> [0. 0. 0.]],</span>
+<span class="go">zfs:</span>
+<span class="go">[[[0. 0. 0.]</span>
+<span class="go">  [0. 0. 0.]</span>
+<span class="go">  [0. 0. 0.]]</span>
+<span class="go"> [[0. 0. 0.]</span>
+<span class="go">  [0. 0. 0.]</span>
+<span class="go">  [0. 0. 0.]]],</span>
+<span class="go">gyro:</span>
+<span class="go">[[[-17608.59705     -0.          -0.     ]</span>
+<span class="go">  [    -0.      -17608.59705     -0.     ]</span>
+<span class="go">  [    -0.          -0.      -17608.59705]]</span>
+<span class="go"> [[-17608.59705     -0.          -0.     ]</span>
+<span class="go">  [    -0.      -17608.59705     -0.     ]</span>
+<span class="go">  [    -0.          -0.      -17608.59705]]])</span>
+</pre></div>
+</div>
+<p>Set first two eigenstates of the combined central spin Hamiltonian as a singlie qubit state:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Change gyromagnetic ratio of the first spin:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">gyro</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ca</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">Center</span>
+<span class="go">(s: 0.5,</span>
+<span class="go">xyz:</span>
+<span class="go">[0. 0. 0.],</span>
+<span class="go">zfs:</span>
+<span class="go">[[0. 0. 0.]</span>
+<span class="go"> [0. 0. 0.]</span>
+<span class="go"> [0. 0. 0.]],</span>
+<span class="go">gyro:</span>
+<span class="go">1000.0)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>Args:</dt><dd><p>size (int): Number of central spins.</p>
+<dl>
+<dt>spin (ndarray with shape (size,)):</dt><dd><p>Total spins of the central spins.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All center spin properties are broadcasted to the total size of the center array,
+provided by <code class="docutils literal notranslate"><span class="pre">size</span></code> argument, or inferred from <code class="docutils literal notranslate"><span class="pre">spin</span></code>, <code class="docutils literal notranslate"><span class="pre">position</span></code> arguments.</p>
+</div>
+</dd>
+<dt>position (ndarray with shape (size, 3)):</dt><dd><p>Cartesian coordinates in Angstrom of the central spins. Default (0., 0., 0.).</p>
+</dd>
+<dt>D (ndarray with shape (size, ) or ndarray with shape (n, 3, 3)):</dt><dd><p>D (longitudinal splitting) parameters of central spins
+in ZFS tensor of central spin in kHz.</p>
+<p><em>OR</em></p>
+<p>Total ZFS tensor. Default 0.</p>
+</dd>
+<dt>E (ndarray with shape (size, )):</dt><dd><p>E (transverse splitting) parameters of central spins
+in ZFS tensor of central spin in kHz.
+Default 0. Ignored if <code class="docutils literal notranslate"><span class="pre">D</span></code> is None or tensor.</p>
+</dd>
+<dt>gyro (ndarray with shape (size, ) or ndarray with shape (size, 3, 3))):</dt><dd><p>Gyromagnetic ratios of the central spins in rad / ms / G.</p>
+<p><em>OR</em></p>
+<p>Tensors describing central spins interactions with the magnetic field.</p>
+<p>Default -17608.597050 kHz * rad / G - gyromagnetic ratio of the free electron spin.</p>
+</dd>
+<dt>imap (dict or InteractionMap or ndarray with shape (3, 3)):</dt><dd><p>Dict-like object containing interaction tensors between the central spins of the structure {(i, j): T_ij}.
+Where i, j are positional indexes of the central spins. If provided as an ndarray with shape (3, 3),
+assumes the same interactions between all pairs of central spins in the array.
+If provided with shape (size * (size - 1) / 2, 3, 3), assigns the interactions to the ordered pairs:
+<code class="docutils literal notranslate"><span class="pre">{(0,</span> <span class="pre">1):</span> <span class="pre">imap[0],</span> <span class="pre">(0,</span> <span class="pre">2):</span> <span class="pre">imap[1]</span> <span class="pre">...</span> <span class="pre">(size</span> <span class="pre">-</span> <span class="pre">2,</span> <span class="pre">size</span> <span class="pre">-</span> <span class="pre">1):</span> <span class="pre">imap[-1]}</span></code></p>
+</dd>
+<dt>alpha (int or ndarray with shape (S, )):</dt><dd><p><span class="math notranslate nohighlight">\(\ket{0}\)</span> state of the qubit in the product space of all central spins,
+or the index of eigenstate to be used as one.</p>
+<p>Default is <strong>None</strong>.</p>
+</dd>
+<dt>beta (int or ndarray with shape (S, )):</dt><dd><p><span class="math notranslate nohighlight">\(\ket{1}\)</span> state of the qubit in the product space of all central spins,
+or the index of eigenstate to be used as one.</p>
+<p>Default is <strong>None</strong>.</p>
+</dd>
+<dt>detuning (ndarray with shape (size, )): Energy detunings from the Zeeman splitting in kHz,</dt><dd><p>included as an extra <span class="math notranslate nohighlight">\(+\omega \hat S_z\)</span> term in the Hamiltonian,
+where <span class="math notranslate nohighlight">\(\omega\)</span> is the detuning.</p>
+<p>Default is 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.add_interaction">
+<span class="sig-name descname"><span class="pre">add_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.add_interaction" title="Link to this definition"></a></dt>
+<dd><p>Add interactions tensor between bath spins with indexes <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>i (int or ndarray (n,) ):</dt><dd><p>Index of the first spin in the pair or array of the indexes of the first spins in n pairs.</p>
+</dd>
+<dt>j (int or ndarray with shape (n,)):</dt><dd><p>Index of the second spin in the pair or array of the indexes of the second spins in n pairs.</p>
+</dd>
+<dt>tensor (ndarray with shape (3,3) or (n, 3,3)):</dt><dd><p>Interaction tensor between the spins i and j or array of tensors.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.add_single_jump">
+<span class="sig-name descname"><span class="pre">add_single_jump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.add_single_jump" title="Link to this definition"></a></dt>
+<dd><p>Add single-spin jump operator for the spin to be used in the Lindbladian master equation CCE.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>operator (str or ndarray with shape (dim, dim)): Definition of the operator. Can be either of the following:</dt><dd><ul class="simple">
+<li><p>Pair of integers defining the Sven operator.</p></li>
+<li><p>String where each symbol corresponds to the spin matrix or operation between them.
+Allowed symbols: <code class="docutils literal notranslate"><span class="pre">xyz+</span></code>. If there is nothing between symbols,
+assume multiplication of the operators.
+If there is a <code class="docutils literal notranslate"><span class="pre">+</span></code> symbol, assume summation between terms. For example, <code class="docutils literal notranslate"><span class="pre">xx+z</span></code> would correspond to
+the operator <span class="math notranslate nohighlight">\(\hat S_x \hat S_x + \hat S_z\)</span>.</p></li>
+<li><p>String equal to <code class="docutils literal notranslate"><span class="pre">A</span></code>. Then assumes that the correct matrix form of the operator has been provided
+by the user.</p></li>
+</ul>
+</dd>
+</dl>
+<p>rate (float): Rate associated with the given jump operator. By default, is given in rad ms^-1.
+units (str): Units of the rate, can be either rad (for radial frequency units) or deg</p>
+<blockquote>
+<div><p>(for rotational frequency).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>square_root (bool): True if the rate is given as a square root of the rate (to match how one sets up</dt><dd><p>collapse operators in Qutip). Default False.</p>
+</dd>
+<dt>which (int): For which central spin in the center array add the jump operator. Default is None - if</dt><dd><p>there is only one central spin then the jump operator is added, otherwise the exception is raised.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.alpha">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#pycce.center.CenterArray.alpha" title="Link to this definition"></a></dt>
+<dd><p>ndarray or int: <span class="math notranslate nohighlight">\(\ket{0}\)</span> qubit state of the central spin in <span class="math notranslate nohighlight">\(S_z\)</span> basis</p>
+<p><strong>OR</strong> index of the energy state to be considered as one.</p>
+<p>If not provided in the <code class="docutils literal notranslate"><span class="pre">CentralArray</span></code> instance, returns the tensor product of all <code class="docutils literal notranslate"><span class="pre">alpha</span></code> states of
+each element of the array. If there are undefined <code class="docutils literal notranslate"><span class="pre">alpha</span></code> states of the elements of the array,
+raises an error.</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span> <span class="o">=</span> <span class="n">CenterArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># Array of size 2 with spins-1/2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+<span class="go">[0.+0.j 0.+0.j 1.+0.j 0.+0.j]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.beta">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#pycce.center.CenterArray.beta" title="Link to this definition"></a></dt>
+<dd><p>ndarray or int: <span class="math notranslate nohighlight">\(\ket{1}\)</span> qubit state of the central spin in <span class="math notranslate nohighlight">\(S_z\)</span> basis</p>
+<p><strong>OR</strong> index of the energy state to be considered as one.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.energies">
+<span class="sig-name descname"><span class="pre">energies</span></span><a class="headerlink" href="#pycce.center.CenterArray.energies" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (n, ): Energy of each eingenstate of the central spin Hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.energy_alpha">
+<span class="sig-name descname"><span class="pre">energy_alpha</span></span><a class="headerlink" href="#pycce.center.CenterArray.energy_alpha" title="Link to this definition"></a></dt>
+<dd><p>float: Energy of the alpha state. Generated by <code class="docutils literal notranslate"><span class="pre">.generate_projections</span></code> call if <code class="docutils literal notranslate"><span class="pre">second_order=True</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.energy_beta">
+<span class="sig-name descname"><span class="pre">energy_beta</span></span><a class="headerlink" href="#pycce.center.CenterArray.energy_beta" title="Link to this definition"></a></dt>
+<dd><p>float: Energy of the beta state. Generated by <code class="docutils literal notranslate"><span class="pre">.generate_projections</span></code> call if <code class="docutils literal notranslate"><span class="pre">second_order=True</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.generate_projections">
+<span class="sig-name descname"><span class="pre">generate_projections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">second_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.generate_projections" title="Link to this definition"></a></dt>
+<dd><p>Generate vectors with the spin projections of the spin states:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[[\bra{a}\hat{S}_x\ket{a}, \bra{a}\hat{S}_y\ket{a}, \bra{a}\hat{S}_z\ket{a}],\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\ket{a}\)</span> and  is alpha or beta qubit state.
+They are stored in the <code class="docutils literal notranslate"><span class="pre">.projections_alpha</span></code> and <code class="docutils literal notranslate"><span class="pre">.projections_beta</span></code> respectively.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">second_order</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, also generates matrix elements of qubit states and all
+other eigenstates of the central spin Hamiltonian, used in computing second order couplings between bath spins:</p>
+<div class="math notranslate nohighlight">
+\[[\bra{a}\hat{S}_x\ket{b}, \bra{a}\hat{S}_y\ket{b}, \bra{a}\hat{S}_z\ket{b}],\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ket{a}\)</span> is qubit level and <span class="math notranslate nohighlight">\(\ket{b}\)</span> are all other energy levels.</p>
+<p>This function is called in the <code class="docutils literal notranslate"><span class="pre">CCE</span></code> routine.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>if qubit state are not eigenstates and <code class="docutils literal notranslate"><span class="pre">second_order</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, for each qubit state finds a close
+eigenstate (with minimal fidelity between two states set by <code class="docutils literal notranslate"><span class="pre">level_confidence</span></code> keyword) and uses that
+one instead of user provided.</p>
+</div>
+<dl>
+<dt>Args:</dt><dd><p>second_order (bool): True if generate properties, necessary for second order corrections.
+level_confidence (float):</p>
+<blockquote>
+<div><p>Minimum fidelity between an eigenstate and provided qubit level for them to be
+considered the same. Used only if <code class="docutils literal notranslate"><span class="pre">second_order</span> <span class="pre">==</span> <span class="pre">True</span></code>.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.generate_sigma">
+<span class="sig-name descname"><span class="pre">generate_sigma</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.generate_sigma" title="Link to this definition"></a></dt>
+<dd><p>Generate Pauli matrices of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.generate_states">
+<span class="sig-name descname"><span class="pre">generate_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_bath_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.generate_states" title="Link to this definition"></a></dt>
+<dd><p>Compute eigenstates of the central spin Hamiltonian.</p>
+<dl>
+<dt>Args:</dt><dd><p>magnetic_field (ndarray with shape (3,)): Array containing external magnetic field as (Bx, By, Bz).
+bath (BathArray with shape (m,) or ndarray with shape (m, 3, 3):</p>
+<blockquote>
+<div><p>Array of all bath spins or array of hyperfine tensors.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>projected_bath_state (ndarray with shape (m,) or (m, 3)):</dt><dd><p>Array of <span class="math notranslate nohighlight">\(I_z\)</span> projections for each bath spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.get_energy">
+<span class="sig-name descname"><span class="pre">get_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">which</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.get_energy" title="Link to this definition"></a></dt>
+<dd><p>Get energy of the qubit state.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>which (str): <code class="docutils literal notranslate"><span class="pre">alpha</span></code> for <span class="math notranslate nohighlight">\(\ket{0}\)</span> qubit state, <code class="docutils literal notranslate"><span class="pre">beta</span></code> for <span class="math notranslate nohighlight">\(\ket{1}\)</span> qubit state.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: Energy of the qubit state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.gyro">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">gyro</span></span><a class="headerlink" href="#pycce.center.CenterArray.gyro" title="Link to this definition"></a></dt>
+<dd><dl>
+<dt>ndarray with shape (3,3 ) or (n, 3, 3): Tensor describing central spin interactions</dt><dd><p>with the magnetic field or array of spins.</p>
+<p>Default -17608.597050 rad / ms / G - gyromagnetic ratio of the free electron spin.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.imap">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">imap</span></span><a class="headerlink" href="#pycce.center.CenterArray.imap" title="Link to this definition"></a></dt>
+<dd><p>InteractionMap: dict-like object, which contains interactions between central spins.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.point_dipole">
+<span class="sig-name descname"><span class="pre">point_dipole</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.point_dipole" title="Link to this definition"></a></dt>
+<dd><p>Using point-dipole approximation, generate interaction tensors between central spins.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.set_gyro">
+<span class="sig-name descname"><span class="pre">set_gyro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gyro</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.set_gyro" title="Link to this definition"></a></dt>
+<dd><p>Set gyromagnetic ratio of the central spin.</p>
+<dl>
+<dt>Args:</dt><dd><p>gyro (float or ndarray with shape (3, 3)): Gyromagnetic ratio of central spin in rad / ms / G.</p>
+<blockquote>
+<div><p><strong>OR</strong></p>
+<p>Tensor describing central spin interactions with the magnetic field.</p>
+<p>Default -17608.597050 kHz * rad / G - gyromagnetic ratio of the free electron spin.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.set_zfs">
+<span class="sig-name descname"><span class="pre">set_zfs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.CenterArray.set_zfs" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Set Zero Field Splitting of the central spin from longitudinal ZFS <em>D</em> and transverse ZFS <em>E</em>.</p>
+</div></blockquote>
+<dl>
+<dt>Args:</dt><dd><dl>
+<dt>D (float or ndarray with shape (3, 3)): D (longitudinal splitting) parameter of central spin</dt><dd><p>in ZFS tensor of central spin in kHz.</p>
+<p><strong>OR</strong></p>
+<p>Total ZFS tensor. Default 0.</p>
+</dd>
+<dt>E (float): E (transverse splitting) parameter of central spin in ZFS tensor of central spin in kHz.</dt><dd><p>Default 0. Ignored if <code class="docutils literal notranslate"><span class="pre">D</span></code> is None or tensor.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.CenterArray.state">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#pycce.center.CenterArray.state" title="Link to this definition"></a></dt>
+<dd><p>ndarray: Initial state of the qubit in gCCE simulations.
+Assumed to be <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})\)</span> unless provided.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="center">
+<h2>Center<a class="headerlink" href="#center" title="Link to this heading"></a></h2>
+<p>Documentation for the <code class="docutils literal notranslate"><span class="pre">pycce.Center</span></code> class - inner class, containing properties of a single central spin.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycce.center.Center">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pycce.center.</span></span><span class="sig-name descname"><span class="pre">Center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gyro</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-17608.59705</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detuning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center" title="Link to this definition"></a></dt>
+<dd><p>Class, which contains the properties of the single central spin. Should <em>not</em> be initialized directly - use
+<code class="docutils literal notranslate"><span class="pre">CenterArray</span></code> instead.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>position (ndarray with shape (3, )):</dt><dd><p>Cartesian coordinates in Angstrom of the central spin. Default (0., 0., 0.).</p>
+</dd>
+</dl>
+<p>spin (float): Total spin of the central spin.</p>
+<dl>
+<dt>D (float or ndarray with shape (3, )): D (longitudinal splitting) parameter of central spin</dt><dd><p>in ZFS tensor of central spin in kHz.</p>
+<p><em>OR</em></p>
+<p>Total ZFS tensor. Default 0.</p>
+</dd>
+<dt>E (float): E (transverse splitting) parameter of central spin in ZFS tensor of central spin in kHz.</dt><dd><p>Default 0. Ignored if <code class="docutils literal notranslate"><span class="pre">D</span></code> is None or tensor.</p>
+</dd>
+</dl>
+<p>gyro (float or ndarray with shape (3, 3))): Gyromagnetic ratio of central spin in rad / ms / G.</p>
+<blockquote>
+<div><p><em>OR</em></p>
+<p>Tensor describing central spin interactions with the magnetic field.</p>
+<p>Default -17608.597050 kHz * rad / G - gyromagnetic ratio of the free electron spin.</p>
+</div></blockquote>
+<dl>
+<dt>alpha (int or ndarray with shape (2*spin + 1, )):</dt><dd><p><span class="math notranslate nohighlight">\(\ket{0}\)</span> state of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis or the index of eigenstate to be used as one.</p>
+<p>Default is <strong>None</strong>.</p>
+</dd>
+<dt>beta (int or ndarray with shape (2*spin + 1, )):</dt><dd><p><span class="math notranslate nohighlight">\(\ket{1}\)</span> state of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis or the index of eigenstate to be used as one.</p>
+<p>Default is <strong>None</strong>.</p>
+</dd>
+<dt>detuning (float): Energy detuning from the zeeman splitting in kHz,</dt><dd><p>included as an extra <span class="math notranslate nohighlight">\(+\omega \hat S_z\)</span> term in the Hamiltonian,
+where <span class="math notranslate nohighlight">\(\omega\)</span> is the detuning.</p>
+<p>Default 0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.add_single_jump">
+<span class="sig-name descname"><span class="pre">add_single_jump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.add_single_jump" title="Link to this definition"></a></dt>
+<dd><p>Add single-spin jump operator for the spin to be used in the Lindbladian master equation CCE.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>operator (str or ndarray with shape (dim, dim)): Definition of the operator. Can be either of the following:</dt><dd><ul class="simple">
+<li><p>Pair of integers defining the Sven operator.</p></li>
+<li><p>String where each symbol corresponds to the spin matrix or operation between them.
+Allowed symbols: <code class="docutils literal notranslate"><span class="pre">xyz+</span></code>. If there is nothing between symbols,
+assume multiplication of the operators.
+If there is a <code class="docutils literal notranslate"><span class="pre">+</span></code> symbol, assume summation between terms. For example, <code class="docutils literal notranslate"><span class="pre">xx+z</span></code> would correspond to
+the operator <span class="math notranslate nohighlight">\(\hat S_x \hat S_x + \hat S_z\)</span>.</p></li>
+<li><p>String equal to <code class="docutils literal notranslate"><span class="pre">A</span></code>. Then assumes that the correct matrix form of the operator has been provided
+by the user.</p></li>
+</ul>
+</dd>
+</dl>
+<p>rate (float): Rate associated with the given jump operator. By default, is given in rad ms^-1.
+units (str): Units of the rate, can be either rad (for radial frequency units) or deg</p>
+<blockquote>
+<div><p>(for rotational frequency).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>square_root (bool): True if the rate is given as a square root of the rate (to match how one sets up</dt><dd><p>collapse operators in Qutip). Default False.</p>
+</dd>
+<dt>which (int): For which central spin in the center array add the jump operator. Default is None - if</dt><dd><p>there is only one central spin then the jump operator is added, otherwise the exception is raised.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.alpha">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#pycce.center.Center.alpha" title="Link to this definition"></a></dt>
+<dd><p>ndarray or int: <span class="math notranslate nohighlight">\(\ket{0}\)</span> qubit state of the central spin in <span class="math notranslate nohighlight">\(S_z\)</span> basis</p>
+<p><strong>OR</strong></p>
+<p>index of the energy state to be considered as one.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.alpha_index">
+<span class="sig-name descname"><span class="pre">alpha_index</span></span><a class="headerlink" href="#pycce.center.Center.alpha_index" title="Link to this definition"></a></dt>
+<dd><p>int: Index of the central spin Hamiltonian eigen state, chosen as alpha state of the qubit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.beta">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#pycce.center.Center.beta" title="Link to this definition"></a></dt>
+<dd><p>ndarray or int: <span class="math notranslate nohighlight">\(\ket{1}\)</span> qubit state of the central spin in <span class="math notranslate nohighlight">\(S_z\)</span> basis</p>
+<p><strong>OR</strong></p>
+<p>index of the energy state to be considered as one.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.beta_index">
+<span class="sig-name descname"><span class="pre">beta_index</span></span><a class="headerlink" href="#pycce.center.Center.beta_index" title="Link to this definition"></a></dt>
+<dd><p>int: Index of the central spin Hamiltonian eigen state, chosen as beta state of the qubit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.detuning">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">detuning</span></span><a class="headerlink" href="#pycce.center.Center.detuning" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3, ): Position of the central spin in Cartesian coordinates.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#pycce.center.Center.dim" title="Link to this definition"></a></dt>
+<dd><p>int or ndarray with shape (n, ): Dimensions of the central spin or array of spins.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.eigenvectors">
+<span class="sig-name descname"><span class="pre">eigenvectors</span></span><a class="headerlink" href="#pycce.center.Center.eigenvectors" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (2s-1, 2s-1): Eigenstates of the central spin Hamiltonian.
+Each <em>i</em>-th column of the array is an eigenvector of the corresponding <em>i</em>-th energy value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.energies">
+<span class="sig-name descname"><span class="pre">energies</span></span><a class="headerlink" href="#pycce.center.Center.energies" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (2s-1,): Array of the central spin Hamiltonian eigen energies.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.generate_hamiltonian">
+<span class="sig-name descname"><span class="pre">generate_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_bath_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.generate_hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Generate central spin Hamiltonian.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>magnetic_field (ndarray with shape (3, ) or func):</dt><dd><p>Magnetic field of type <code class="docutils literal notranslate"><span class="pre">magnetic_field</span> <span class="pre">=</span> <span class="pre">np.array([Bx,</span> <span class="pre">By,</span> <span class="pre">Bz])</span></code>
+or callable with signature <code class="docutils literal notranslate"><span class="pre">magnetic_field(pos)</span></code>, where <code class="docutils literal notranslate"><span class="pre">pos</span></code> is ndarray with shape (3, ) with the
+position of the spin.</p>
+</dd>
+<dt>bath (BathArray with shape (n,) or ndarray with shape (n, 3, 3)):</dt><dd><p>Array of bath spins or hyperfine tensors.</p>
+</dd>
+</dl>
+<p>projected_bath_state (ndarray with shape (n, )): <span class="math notranslate nohighlight">\(S_z\)</span> projections of the bath spin states.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>Hamiltonian: Central spin Hamiltonian, including</dt><dd><p>first order contributions from the bath spins.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.generate_sigma">
+<span class="sig-name descname"><span class="pre">generate_sigma</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.generate_sigma" title="Link to this definition"></a></dt>
+<dd><p>Generate Pauli matrices of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.generate_states">
+<span class="sig-name descname"><span class="pre">generate_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magnetic_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_bath_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.generate_states" title="Link to this definition"></a></dt>
+<dd><p>Compute eigenstates of the central spin Hamiltonian.</p>
+<dl>
+<dt>Args:</dt><dd><p>magnetic_field (ndarray with shape (3,)): Array containing external magnetic field as (Bx, By, Bz).
+bath (BathArray with shape (m,) or ndarray with shape (m, 3, 3):</p>
+<blockquote>
+<div><p>Array of all bath spins or array of hyperfine tensors.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>projected_bath_state (ndarray with shape (m,) or (m, 3)):</dt><dd><p>Array of <span class="math notranslate nohighlight">\(I_z\)</span> projections for each bath spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.gyro">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">gyro</span></span><a class="headerlink" href="#pycce.center.Center.gyro" title="Link to this definition"></a></dt>
+<dd><dl>
+<dt>ndarray with shape (3,3 ) or (n, 3, 3): Tensor describing central spin interactions</dt><dd><p>with the magnetic field or array of spins.</p>
+<p>Default -17608.597050 rad / ms / G - gyromagnetic ratio of the free electron spin.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.h">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#pycce.center.Center.h" title="Link to this definition"></a></dt>
+<dd><p>dict: Dictionary with additional spin Hamiltonian parameters.
+Key denotes the product of spin operators as:</p>
+<p>Either a string containing <code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">+,</span> <span class="pre">-</span></code>  where each symbol is a corresponding spin operator:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> == <span class="math notranslate nohighlight">\(S_x\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> == <span class="math notranslate nohighlight">\(S_y\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code> == <span class="math notranslate nohighlight">\(S_z\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code> == <span class="math notranslate nohighlight">\(S_+\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">m</span></code> == <span class="math notranslate nohighlight">\(S_-\)</span></p></li>
+</ul>
+</div></blockquote>
+<p>Several symbols is a product of those spin operators.</p>
+<p>Or a tuple with indexes (k, q) for Stevens operators
+(see <a class="reference external" href="https://www.easyspin.org/documentation/stevensoperators.html">https://www.easyspin.org/documentation/stevensoperators.html</a>).</p>
+<p>The item is the coupling parameter in float.</p>
+<p>Examples:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">d['pm']</span> <span class="pre">=</span> <span class="pre">2000</span></code> corresponds to the Hamiltonian term
+<span class="math notranslate nohighlight">\(\hat H_{add} = A \hat S_+ \hat S_-\)</span> with <span class="math notranslate nohighlight">\(A = 2\)</span> MHz.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d[2,</span> <span class="pre">0]</span> <span class="pre">=</span> <span class="pre">1.5e6</span></code> corresponds to Stevens operator
+<span class="math notranslate nohighlight">\(B^q_k \hat O^q_k = 3 \hat S_z - s(s+1) \hat I\)</span>
+with <span class="math notranslate nohighlight">\(k = 2\)</span>, <span class="math notranslate nohighlight">\(q = 0\)</span>, and <span class="math notranslate nohighlight">\(B^q_k = 1.5\)</span> GHz.</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.hamiltonian">
+<span class="sig-name descname"><span class="pre">hamiltonian</span></span><a class="headerlink" href="#pycce.center.Center.hamiltonian" title="Link to this definition"></a></dt>
+<dd><p>Hamiltonian: Central spin Hamiltonian.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.projections_alpha">
+<span class="sig-name descname"><span class="pre">projections_alpha</span></span><a class="headerlink" href="#pycce.center.Center.projections_alpha" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3,): Vector with spin operator matrix elements
+of type <span class="math notranslate nohighlight">\([\bra{0}\hat S_x\ket{0}, \bra{0}\hat S_y\ket{0}, \bra{0}\hat S_z\ket{0}]\)</span>, where
+<span class="math notranslate nohighlight">\(\ket{0}\)</span> is the alpha qubit state. Generated by <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.projections_alpha_all">
+<span class="sig-name descname"><span class="pre">projections_alpha_all</span></span><a class="headerlink" href="#pycce.center.Center.projections_alpha_all" title="Link to this definition"></a></dt>
+<dd><dl>
+<dt>ndarray with shape (2s-1, 3):</dt><dd><p>Array of vectors of the central spin matrix elements of form:</p>
+<div class="math notranslate nohighlight">
+\[[\bra{0}\hat{S}_x\ket{j}, \bra{0}\hat{S}_y\ket{j}, \bra{0}\hat{S}_z\ket{j}],\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ket{0}\)</span> is the alpha qubit state, and <span class="math notranslate nohighlight">\(\ket{j}\)</span> are all states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.projections_beta">
+<span class="sig-name descname"><span class="pre">projections_beta</span></span><a class="headerlink" href="#pycce.center.Center.projections_beta" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3,): Vector with spin operator matrix elements
+of type <span class="math notranslate nohighlight">\([\bra{1}\hat S_x\ket{1}, \bra{1}\hat S_y\ket{1}, \bra{1}\hat S_z\ket{1}]\)</span>, where
+<span class="math notranslate nohighlight">\(\ket{1}\)</span> is the beta qubit state. Generated by <code class="docutils literal notranslate"><span class="pre">CenterArray</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycce.center.Center.projections_beta_all">
+<span class="sig-name descname"><span class="pre">projections_beta_all</span></span><a class="headerlink" href="#pycce.center.Center.projections_beta_all" title="Link to this definition"></a></dt>
+<dd><dl>
+<dt>ndarray with shape (2s-1, 3):</dt><dd><p>Array of vectors of the central spin matrix elements of form:</p>
+<div class="math notranslate nohighlight">
+\[[\bra{1}\hat{S}_x\ket{j}, \bra{1}\hat{S}_y\ket{j}, \bra{1}\hat{S}_z\ket{j}],\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ket{1}\)</span> is the beta qubit state, and <span class="math notranslate nohighlight">\(\ket{j}\)</span> are all states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.s">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#pycce.center.Center.s" title="Link to this definition"></a></dt>
+<dd><p>float or ndarray with shape (n, ): Total spin of the central spin or array of spins.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.set_gyro">
+<span class="sig-name descname"><span class="pre">set_gyro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gyro</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.set_gyro" title="Link to this definition"></a></dt>
+<dd><p>Set gyromagnetic ratio of the central spin.</p>
+<dl>
+<dt>Args:</dt><dd><p>gyro (float or ndarray with shape (3, 3)): Gyromagnetic ratio of central spin in rad / ms / G.</p>
+<blockquote>
+<div><p><strong>OR</strong></p>
+<p>Tensor describing central spin interactions with the magnetic field.</p>
+<p>Default -17608.597050 kHz * rad / G - gyromagnetic ratio of the free electron spin.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.set_zfs">
+<span class="sig-name descname"><span class="pre">set_zfs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.set_zfs" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Set Zero Field Splitting of the central spin from longitudinal ZFS <em>D</em> and transverse ZFS <em>E</em>.</p>
+</div></blockquote>
+<dl>
+<dt>Args:</dt><dd><dl>
+<dt>D (float or ndarray with shape (3, 3)): D (longitudinal splitting) parameter of central spin</dt><dd><p>in ZFS tensor of central spin in kHz.</p>
+<p><strong>OR</strong></p>
+<p>Total ZFS tensor. Default 0.</p>
+</dd>
+<dt>E (float): E (transverse splitting) parameter of central spin in ZFS tensor of central spin in kHz.</dt><dd><p>Default 0. Ignored if <code class="docutils literal notranslate"><span class="pre">D</span></code> is None or tensor.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.sigma">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">sigma</span></span><a class="headerlink" href="#pycce.center.Center.sigma" title="Link to this definition"></a></dt>
+<dd><p>dict: Dictionary with Pauli matrices of the qubit in <span class="math notranslate nohighlight">\(S_z\)</span> basis.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycce.center.Center.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'col'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycce.center.Center.transform" title="Link to this definition"></a></dt>
+<dd><p>Apply coordinate transformation to the central spin.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>rotation (ndarray with shape (3, 3)): Rotation matrix.
+style (str): Can be ‘row’ or ‘col’. Determines how rotation matrix is initialized.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.xyz">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">xyz</span></span><a class="headerlink" href="#pycce.center.Center.xyz" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3, ): Position of the central spin in Cartesian coordinates.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycce.center.Center.zfs">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">zfs</span></span><a class="headerlink" href="#pycce.center.Center.zfs" title="Link to this definition"></a></dt>
+<dd><p>ndarray with shape (3, 3) or (n, 3, 3): Zero field splitting tensor of the central spin or array of spins.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bath.html" class="btn btn-neutral float-left" title="Spin Bath" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simulator.html" class="btn btn-neutral float-right" title="Running the Simulations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, University of Chicago.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
