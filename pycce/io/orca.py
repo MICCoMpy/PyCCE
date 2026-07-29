@@ -7,6 +7,62 @@ from pycce.constants import MHZ_TO_KHZ, EFG_CONVERSION
 
 from .base import DFTCoordinates, find_first_index, yield_index, set_isotopes
 
+#: Section headers carrying the hyperfine matrix. ORCA 5 prints "Raw HFC
+#: matrix"; ORCA 6 renamed it to "Total HFC matrix". Both are accepted so a
+#: single reader works across versions.
+HFC_HEADERS = ("Raw HFC matrix", "Total HFC matrix")
+
+#: Section headers carrying the electric field gradient matrix, same rename.
+EFG_HEADERS = ("Raw EFG matrix", "Total EFG matrix")
+
+
+def _read_matrix(lines, start, headers, conversion):
+    """Read the first 3x3 matrix printed after any of ``headers``.
+
+    ORCA 5 and ORCA 6 differ both in the header text and in whether a
+    ruler line follows it, so the matrix is located by scanning forward
+    for the first three consecutive rows of three numbers rather than by
+    a fixed offset.
+
+    Args:
+        lines (list of str): Lines of the ORCA output.
+        start (int): Index to start searching from.
+        headers (tuple of str): Accepted section headers.
+        conversion (float): Factor applied to every parsed element.
+
+    Returns:
+        list: 3x3 nested list of converted values.
+
+    Raises:
+        KeyError: If no header matched, or no matrix followed it.
+    """
+    index = None
+    for header in headers:
+        try:
+            index = find_first_index(header, lines, start=start)
+            break
+        except KeyError:
+            continue
+    if index is None:
+        raise KeyError(f"Could not find any of {headers}")
+
+    tensor = []
+    for line in lines[index + 1 : index + 8]:
+        row = line.split()
+        if len(row) != 3:
+            if tensor:
+                break
+            continue
+        try:
+            tensor.append([float(x) * conversion for x in row])
+        except ValueError:
+            if tensor:
+                break
+            continue
+        if len(tensor) == 3:
+            return tensor
+    raise KeyError(f"Could not read a 3x3 matrix after {headers}")
+
 
 def read_orca(fname, isotopes=None, types=None, center=None, find_isotopes=True, rotation_matrix=None, rm_style="col"):
     r"""
@@ -55,24 +111,14 @@ def read_orca(fname, isotopes=None, types=None, center=None, find_isotopes=True,
         atom_name = re.sub(r"\d+", "", sline[1])
 
         try:
-            n = find_first_index("Raw HFC matrix", lines, start=ind) + 2
-            tensor = []
-            for _ in range(3):
-                line = lines[n]
-                tensor.append([float(x) * MHZ_TO_KHZ for x in line.split()])
-                n += 1
+            tensor = _read_matrix(lines, ind, HFC_HEADERS, MHZ_TO_KHZ)
             hyperfines.append(tensor)
             a_indexes.append(atom_index)
         except KeyError:
             pass
 
         try:
-            n = find_first_index("Raw EFG matrix", lines, start=ind) + 1
-            tensor = []
-            for _ in range(3):
-                line = lines[n]
-                tensor.append([float(x) * EFG_CONVERSION for x in line.split()])
-                n += 1
+            tensor = _read_matrix(lines, ind, EFG_HEADERS, EFG_CONVERSION)
             efgs.append(tensor)
             q_indexes.append(atom_index)
         except KeyError:
